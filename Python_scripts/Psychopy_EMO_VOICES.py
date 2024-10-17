@@ -37,10 +37,12 @@ class voices(Parente):
         self.trial_type=[]
         self.stim_file=[]
         self.reaction = []
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_EMO_VOICES'))
+        self.dossier_files = os.path.join(self.dossier, 'emo_voices')
         self.port = port
         self.image_stim = visual.ImageStim(
             win=self.win,
-            image="Input/Paradigme_EMO_VOICES/oreille.png",
+            image=os.path.join(self.dossier,'oreille.png'),
             pos=(0, 0)
         )
         self.baudrate = baudrate
@@ -75,17 +77,17 @@ class voices(Parente):
                 tsv_writer.writerow([onset[i], duration[i], trial_type[i], reaction[i], file_stimuli[i]])
 
     def lancement(self):
-        texts = super().inputs_texts("Input/Paradigme_EMO_VOICES/"+self.launching)
+        texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger)
         super().file_init(self.filename, self.filename_csv,
                           ['onset', 'duration', 'trial_type', 'reaction','stim_file' ])
-        self.voices = self.reading("Input/Paradigme_EMO_VOICES/"+self.file)
+        self.voices = self.reading(os.path.join(self.dossier, self.file))
         if self.random:
             random.shuffle(self.voices)
         super().wait_for_trigger(self.trigger)
         self.global_timer.reset()
         for x in self.voices:
-            custom_sound = sound.Sound("Input/Paradigme_EMO_VOICES/emo_voices/"+x)
+            custom_sound = sound.Sound(os.path.join(self.dossier_files, x))
             clicked = False
             clicked_time = "None"
             custom_sound.Sound= x
@@ -124,8 +126,10 @@ class voices(Parente):
                 reaction = super().float_to_csv(reaction)
             super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), trial_type, reaction, stim_file])
         super().the_end(self.win)
+        super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
         core.quit()
+
 
 
 if __name__ == "__main__":
@@ -147,6 +151,7 @@ if __name__ == "__main__":
     parser.add_argument("--largeur", type=float, required=True, help="Largeur du rectangle")
 
     args = parser.parse_args()
+    print(args)
     paradigm = voices(args.duration, args.betweenstimuli, args.file, args.output_file, args.port, args.baudrate,
                       args.trigger, args.activation, args.hauteur, args.largeur, args.random, args.launching)
     paradigm.lancement()

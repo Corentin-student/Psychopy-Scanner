@@ -12,12 +12,15 @@ import serial
 
 class static_image(Parente):
     def __init__(self, duration, betweenstimuli, file, zoom, output, port, baudrate, trigger, activation, hauteur,
-                 largeur, random, launching):
+                 largeur, random, launching, sigma):
         self.duration = duration #args.duration, args.betweenstimuli, args.file, args.zoom, args.port, args.baudrate, args.trigger  ,args.output_file)
         self.betweenstimuli = betweenstimuli
         self.file = file
         self.zoom = zoom
         self.click_times = []
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'Input', 'Paradigme_images_statiques'))
+        self.dossier_image = os.path.join(self.dossier,'stim_static')
+
         self.win = visual.Window(size=(800, 600), fullscr=True, units="norm")
         self.win.winHandle.activate()
         self.mouse = event.Mouse(win=self.win)
@@ -29,6 +32,7 @@ class static_image(Parente):
         self.baudrate = baudrate
         self.trigger = trigger
         self.launching = launching
+        self.sigma = sigma
         if activation == "True":
             self.activation = True
         else:
@@ -57,7 +61,7 @@ class static_image(Parente):
         return filenames, angles
 
     def static_images_psychopy(self, chemin, duration, betweenstimuli):
-        chemin = "Input/Paradigme_images_statiques/" + chemin
+        chemin = os.path.join(self.dossier, chemin)
         images, orientation = self.reading(chemin)
         super().file_init(self.filename, self.filename_csv,
                           ['onset', 'duration', 'trial_type', 'angle', 'reaction', 'stim_file'])
@@ -84,7 +88,7 @@ class static_image(Parente):
         liste_image_win = []
         count = 0
         for image in images:
-            image_path = "Input/Paradigme_images_statiques/stim_static/" + image
+            image_path = os.path.join(self.dossier_image,image)
             image_stim = visual.ImageStim(
                 win=self.win,
                 image=image_path,
@@ -101,8 +105,7 @@ class static_image(Parente):
             stimuli_liste.append(image)
             stimuli_liste.append("Fixation")
             count += 1
-
-        texts = super().inputs_texts("Input/Paradigme_images_statiques/"+self.launching)
+        texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts,self.trigger)
         super().wait_for_trigger(self.trigger)
         self.global_timer.reset()
@@ -110,7 +113,8 @@ class static_image(Parente):
         self.win.flip()
         timer.reset()
         onset = self.global_timer.getTime()
-        while timer.getTime() < random.uniform(betweenstimuli-0.5,betweenstimuli+0.5):
+        random_gauss = random.gauss(self.betweenstimuli, self.sigma)
+        while timer.getTime() < random_gauss:
             pass
         time_long = timer.getTime()
         trial_type = "Fixation"
@@ -146,7 +150,8 @@ class static_image(Parente):
             self.win.flip()
             onset = self.global_timer.getTime()
             timer.reset()
-            while timer.getTime() < random.uniform(betweenstimuli-0.5, betweenstimuli+0.5):
+            random_gauss = random.gauss(self.betweenstimuli, self.sigma)
+            while timer.getTime() < random_gauss:
                 pass
             time_long = timer.getTime()
             stimuli = "None"
@@ -218,6 +223,8 @@ class static_image(Parente):
             count+=1
         for x in liste_lm:
             stimuli[x] = "None"
+        super().writting_prt(self.filename_csv, "trial_type")
+
 
 
 
@@ -231,6 +238,8 @@ if __name__ == "__main__":
     parser.add_argument("--activation", type=str, required=True, help="Pour le boitier avec les EEG")
     parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
     parser.add_argument("--launching", type=str, help="Chemin vers le fichier de mots", required=False)
+    parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
+
 
 
 
@@ -241,7 +250,8 @@ if __name__ == "__main__":
     parser.add_argument("--largeur", type=float, required=True, help="Largeur du rectangle")
 
     args = parser.parse_args()
+    print(args)
     images = static_image(args.duration, args.betweenstimuli, args.file, args.zoom, args.output_file,
                           args.port, args.baudrate, args.trigger, args.activation, args.hauteur,
-                          args.largeur, args.random, args.launching)
+                          args.largeur, args.random, args.launching, args.sigma)
     images.lancement()

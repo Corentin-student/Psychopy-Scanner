@@ -5,6 +5,7 @@ import serial
 import argparse
 
 from PIL import Image
+import tempfile
 from psychopy import visual, core, event
 from Paradigme_parent import Parente
 
@@ -14,30 +15,34 @@ class launch_cyberball(Parente) :
 
         self.win = visual.Window(size=(800, 600), units="norm", fullscr=True)
         self.win.winHandle.activate()
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Cyberball'))
+        self.dossier_image = os.path.join(self.dossier, 'Banque_personnage')
 
-        self.image1 = visual.ImageStim(win=self.win, image='Input/Cyberball/Banque_personnage/waiting.png', pos=[0, -0.5])
-        self.image2 = visual.ImageStim(win=self.win, image='Input/Cyberball/Banque_personnage/waiting.png', pos=[-0.5, 0.5])
-        self.image3 = visual.ImageStim(win=self.win, image='Input/Cyberball/Banque_personnage/waiting.png', pos=[0.5, 0.5])
+        waiting_png = os.path.join(self.dossier_image, 'waiting.png')
+        self.image1 = visual.ImageStim(win=self.win, image=waiting_png, pos=[0, -0.5])
+        self.image2 = visual.ImageStim(win=self.win, image=waiting_png, pos=[-0.5, 0.5])
+        self.image3 = visual.ImageStim(win=self.win, image=waiting_png, pos=[0.5, 0.5])
 
-        image = Image.open('Input/Cyberball/'+photo)
+        image = Image.open(os.path.join(self.dossier, photo))
+
         largeur_actuelle, hauteur_actuelle = image.size
         hauteur, largeur = self.redimension(hauteur_actuelle, largeur_actuelle)
         image_redimensionnee = image.resize((int(largeur), int(hauteur)), Image.LANCZOS)
 
-        if os.path.exists('Input/Cyberball/photo'):
-            os.remove('Input/Cyberball/photo')
-        image_redimensionnee.save('Input/Cyberball/photo.jpg')
+        temp_dir = tempfile.gettempdir()
+        temp_file_path = os.path.join(temp_dir, 'photo_temp.jpg')
+        image_redimensionnee.save(temp_file_path)
 
-        self.photo1 = visual.ImageStim(win=self.win, image='Input/Cyberball/photo', pos=[0.3, -0.7])
-        self.photo2 = visual.ImageStim(win=self.win, image='Input/Cyberball/Femme2.jpg', pos=[-0.8, 0.5], size=0.2)
-        self.photo3 = visual.ImageStim(win=self.win, image='Input/Cyberball/Homme1.jpg', pos=[0.8, 0.5], size=0.2)
+        self.photo1 = visual.ImageStim(win=self.win, image='../Input/Cyberball/photo', pos=[0.3, -0.7])
+        self.photo2 = visual.ImageStim(win=self.win, image=os.path.join(self.dossier, 'Femme2.jpg'), pos=[-0.8, 0.5], size=0.2)
+        self.photo3 = visual.ImageStim(win=self.win, image=os.path.join(self.dossier, 'Homme1.jpg'), pos=[0.8, 0.5], size=0.2)
 
 
         self.text1 = visual.TextStim(win=self.win, text=patient_name, pos=[0, -0.8], color=(-1, -1, -1))
         self.text2 = visual.TextStim(win=self.win, text="Jeanne", pos=[-0.5, 0.8], color=(-1, -1, -1))
         self.text3 = visual.TextStim(win=self.win, text="Paul", pos=[0.5, 0.8], color=(-1, -1, -1))
 
-        self.ball = visual.ImageStim(win=self.win, image='Input/Cyberball/Banque_personnage/ball.png', pos=[0, 0], size=0.1)
+        self.ball = visual.ImageStim(win=self.win, image=os.path.join(self.dossier_image, 'ball.png'), pos=[0, 0], size=0.1)
 
         self.player1 = {"image" : self.image1, "sens": "gauche", "right": "droite", "left": "gauche"}
         self.player2 = {"image" : self.image2, "sens": "droite"}
@@ -106,26 +111,26 @@ class launch_cyberball(Parente) :
             core.wait(duration / steps)
 
     def ball_receptie(self, player):
-        path = "Input/Cyberball/Banque_personnage/"
-        player["image"].image = path+"lancement_"+player["sens"]+".png"
+        player["image"].image = os.path.join(self.dossier_image,'lancement_'+player["sens"]+'.png')
         self.draw_all()
         self.win.flip()
         core.wait(0.3)
-        player["image"].image = path+"lancer_"+player["sens"]+".png"
+        player["image"].image = os.path.join(self.dossier_image,'lancer_'+player["sens"]+'.png')
         self.draw_all()
         self.win.flip()
         core.wait(0.2)
-        player["image"].image = path+"waiting.png"
+        player["image"].image = os.path.join(self.dossier_image,"waiting.png")
 
     def reception (self, player):
-        path = "Input/Cyberball/Banque_personnage/"
-        player["image"].image = path+"waiting_ball.png"
+
+        player["image"].image = os.path.join(self.dossier_image,'waiting_ball.png')
         self.draw_all()
         self.win.flip()
 
 
     def lancement(self):
-        texts = super().inputs_texts("Input/Cyberball/"+self.launching)
+
+        texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts,self.trigger)
         super().wait_for_trigger(self.trigger)
         texte = visual.TextStim(self.win, color=[1, 1, 1], alignText="left", wrapWidth=1.5, font='Arial')
@@ -161,6 +166,7 @@ class launch_cyberball(Parente) :
                 pass
         self.game()
         super().the_end(self.win)
+
 
 
     def game (self):
@@ -289,7 +295,7 @@ if __name__ == "__main__":
     parser.add_argument("--output_file", type=str, required=True, help="Nom du fichier d'output")
     parser.add_argument('--trigger', type=str, required=True, help="caractère pour lancer le programme")
     args = parser.parse_args()
-
+    print(args)
     C=launch_cyberball(args.premiere_phase,args.transition,args.exclusion,args.minimum,args.maximum,
                        args.patient_name, args.filePath, args.launching, args.trigger)
     C.lancement()

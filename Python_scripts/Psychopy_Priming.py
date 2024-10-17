@@ -46,6 +46,9 @@ class Priming(Parente):
         self.stim_file = []
         self.keys = []
         self.block_type = []
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_Priming'))
+        self.dossier_files = os.path.join(self.dossier, 'stim_static')
+
         self.port = port
         self.baudrate = baudrate
         self.trigger = trigger
@@ -58,8 +61,8 @@ class Priming(Parente):
         else:
             self.random = False
 
-        self.ordre=self.reading("Input/Paradigme_Priming/"+self.file)
-        self.real_groups = self.real_reading("Input/Paradigme_Priming/" + self.file)
+        self.ordre=self.reading(os.path.join(self.dossier, self.file))
+        self.real_groups = self.real_reading(os.path.join(self.dossier, self.file))
         self.copy_real_groups = copy.deepcopy(self.real_groups)
         rect_width = largeur
         rect_height = hauteur
@@ -84,7 +87,7 @@ class Priming(Parente):
             groupes.append(groupe_actuel)
         return groupes
     def lancement(self):
-        texts = super().inputs_texts("Input/Paradigme_Priming/" + self.launching)
+        texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().file_init(self.filename, self.filename_csv,
                           ['onset', 'duration', "reaction", "block_index" ,'stim_file','trial_type' ])
         super().launching_texts(self.win, texts, self.trigger)
@@ -109,6 +112,8 @@ class Priming(Parente):
                 y = x % index_of_groups
                 self.show_block(y, 2)
         super().the_end(self.win)
+        super().writting_prt(self.filename_csv, "trial_type")
+
 
     def reading(self,filename):
         with open(filename, "r") as fichier:
@@ -142,7 +147,7 @@ class Priming(Parente):
                 toshow.append(stimuli)
         liste_image_win=[]
         for image in toshow:
-            image_path = "Input/Paradigme_priming/stim_static/" + image
+            image_path = os.path.join(self.dossier_files, image)
             image_stim = visual.ImageStim(
                 win=self.win,
                 image=image_path,

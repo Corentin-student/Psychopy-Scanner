@@ -2,16 +2,17 @@ import csv
 import os
 import re
 import time
+import random
 from abc import ABC, abstractmethod
 from datetime import datetime
 from psychopy import event, visual, core
-
+import writtingprt as  wr
 import serial
 
 
 class Parente(ABC):
     def preprocessing_tsv_csv(self, filename):
-        output_dir = '../Fichiers_output'
+        output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'Fichiers_output'))
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         current_date = datetime.now().strftime("%Y-%m-%d")
@@ -27,7 +28,7 @@ class Parente(ABC):
         return filename, filename_csv
 
     def preprocessing_tsv(self, filename):
-        output_dir = '../Fichiers_output'
+        output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..' 'Fichiers_output'))
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         current_date = datetime.now().strftime("%Y-%m-%d")
@@ -75,14 +76,11 @@ class Parente(ABC):
         texte = visual.TextStim(win, text="End/Fin/Ende", color=[1, 1, 1], alignText="center", wrapWidth=1.5, font='Arial')
         texte.draw()
         win.flip()
-        core.wait(30)
+        core.wait(5)
 
     def the_end2 (self, win):
         texte = visual.TextStim(win, text="Merci beaucoup d'avoir réalisé cette tâche \n \n Ne bougez pas, on vous parle dans quelques secondes. ",
-                                color=[1, 1, 1], alignText="center", wrapWidth=1.5,
-
-
-                                font='Arial')
+                                color=[1, 1, 1], alignText="center", wrapWidth=1.5, font='Arial')
         texte.draw()
         win.flip()
         core.wait(4)
@@ -111,12 +109,20 @@ class Parente(ABC):
             csv_writer.writerow(columns)
 
     def write_tsv_csv(self, filename, filename_csv, rows):
-        with open(filename, mode='a', newline='') as file1:
+        with open(filename, mode='a', newline='', encoding='utf-8') as file1:
             csv_writer = csv.writer(file1, delimiter=';')
             csv_writer.writerow(rows)
 
-        with open(filename_csv, mode='a', newline='') as file1:
+        with open(filename_csv, mode='a', newline='', encoding='utf-8') as file1:
             csv_writer = csv.writer(file1, delimiter=';')
             csv_writer.writerow(rows)
     def float_to_csv(self, value):
         return str(value).replace('.', ',')
+
+    def writting_prt(self, filename, col="trial_type"):
+        instance = wr.writtingprt()
+        basics = {}
+        basics["filename"] = filename
+        basics["result"] = instance.analyze_trial_types(filename, col)
+        file = filename.split(".csv")[0]+".prt"
+        instance.create_experiment_file(file, basics)

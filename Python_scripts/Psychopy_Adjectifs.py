@@ -15,9 +15,11 @@ from Paradigme_parent import Parente
 class Adjectifs(Parente):
 
     def __init__(self, duration, betweenstimuli, zoom, blocks, entrainement, per_block, filepath, output, port, baudrate,
-                 trigger, activation, hauteur, largeur, random, launching, scanner):
-        self.words = self.reading("Input/Paradigme_Adjectifs/"+filepath)
-        self.entrainement_words = self.reading("Input/Paradigme_Adjectifs/entrainement.txt")
+                 trigger, activation, hauteur, largeur, random, launching):
+
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_Adjectifs'))
+        self.words = self.reading( os.path.join(self.dossier, filepath))
+        self.entrainement_words = self.reading( os.path.join(self.dossier, 'entrainement.txt'))
         self.me_entrainement = self.entrainement_words.copy()
         self.friend_entrainement = self.entrainement_words.copy()
         self.syllable_entrainement = self.entrainement_words.copy()
@@ -58,14 +60,10 @@ class Adjectifs(Parente):
             self.random = True
         else:
             self.random = False
-        if scanner == "True":
-            self.scanner = True
-        else:
-            self.scanner = False
 
         self.win = visual.Window(size=(800, 600), fullscr=True , units="norm")
         self.win.winHandle.activate()
-        self.explication_texts = super().inputs_texts("Input/Paradigme_Adjectifs/"+self.launching)
+        self.explication_texts = super().inputs_texts( os.path.join(self.dossier, self.launching))
 
         event.globalKeys.add(key='escape', func=self.win.close)
 
@@ -130,11 +128,12 @@ class Adjectifs(Parente):
         texte.draw()
         self.win.flip()
         super().proper_waitkey(self.trigger)
-        if self.scanner:
-            super().wait_for_trigger(self.trigger)
+        super().wait_for_trigger(self.trigger)
         self.global_timer.reset()
 
         self.blocks()
+        super().writting_prt(self.filename_csv, "block_type")
+
 
 
     def debut_me(self):
@@ -376,7 +375,6 @@ if __name__ == "__main__":
     parser.add_argument("--per_block", type=int, required=True, help="Nombre d'adjectifs pas block")
     parser.add_argument("--activation", type=str, required=True, help="Pour le boitier avec les EEG")
     parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
-    parser.add_argument("--scanner", type=str, required=True, help="scanner")
 
 
 
@@ -389,7 +387,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     paradigm = Adjectifs(args.duration, args.betweenstimuli, args.zoom, args.blocks, args.entrainement, args.per_block,
                          args.file, args.output_file, args.port, args.baudrate, args.trigger, args.activation,
-                        args.hauteur, args.largeur, args.random, args.launching, args.scanner)
+                        args.hauteur, args.largeur, args.random, args.launching)
     paradigm.lancement()
     paradigm.fin()
 

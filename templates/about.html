@@ -65,17 +65,18 @@
 
     <div class="sidenav">
         <h2 class="h2-sidenav">Paradigme</h2>
-        <a href="#" onclick="changeMainContent('home')">Mots défilants</a>
-        <a href="#" onclick="changeMainContent('about')">Images statiques défilantes</a>
-        <a href="#" onclick="changeMainContent('contact')">Images mouvantes défilantes</a>
         <a href="#" onclick="changeMainContent('long_text')">Adjectifs positifs/négatifs</a>
+        <a href="#" onclick="changeMainContent('Audition')">Audition</a>
+        <a href="#" onclick="changeMainContent('cyberball')">Cyberball</a>
         <a href="#" onclick="changeMainContent('emo_faces_nav')">EMO faces</a>
         <a href="#" onclick="changeMainContent('emo_voice_nav')">EMO voices</a>
-        <a href="#" onclick="changeMainContent('stroop')">Stroop</a>
+        <a href="#" onclick="changeMainContent('contact')">Images mouvantes défilantes</a>
+        <a href="#" onclick="changeMainContent('about')">Images statiques défilantes</a>
         <a href="#" onclick="changeMainContent('localizer')">Localizer</a>
-        <a href="#" onclick="changeMainContent('cyberball')">Cyberball</a>
+        <a href="#" onclick="changeMainContent('home')">Mots défilants</a>
         <a href="#" onclick="changeMainContent('repetition_priming')">Repetition Priming</a>
-        <a href="#" onclick="changeMainContent('Audition')">Audition</a>
+        <a href="#" onclick="changeMainContent('stroop')">Stroop</a>
+
 
         <a> </a>
 
@@ -188,6 +189,10 @@
                                     <input  type="checkbox" id="random-image" value="option1" style=" height: 50px">
                                 </div>
                                 <div class="input-container">
+                                    <h3> Écart type </h3>
+                                    <input id="sigma-image" type="text" placeholder="par exemple: 0.5">
+                                </div>
+                                <div class="input-container">
                                     <h3></h3>
                                     <button class="submit" onclick="submitImages()">Submit</button>
                                 </div>
@@ -219,6 +224,10 @@
                                 <div class="input-container">
                                     <h3> Ordre aléatoire </h3>
                                     <input  type="checkbox" id="random-video" value="option1" style=" height: 50px">
+                                </div>
+                                <div class="input-container">
+                                    <h3> Écart type </h3>
+                                    <input id="sigma-video" type="text" placeholder="par exemple: 0.5">
                                 </div>
                                 <div class="input-container">
                                     <h3></h3>
@@ -266,10 +275,6 @@
                                     <h3> Ordre aléatoire </h3>
                                     <input  type="checkbox" id="random-adj" value="option1" style=" height: 50px">
                                 </div>
-                                <div class="input-container">
-                                    <h3> Scanner </h3>
-                                    <input  type="checkbox" id="ifscanner" value="option1" style=" height: 50px">
-                                </div>
                             </div>
                             <div class= "input-group">
                                 <div class="input-container">
@@ -305,6 +310,10 @@
                                 <div class="input-container">
                                     <h3> Ordre aléatoire </h3>
                                     <input  type="checkbox" id="random-emo-face" value="option1" style=" height: 50px">
+                                </div>
+                                <div class="input-container">
+                                    <h3> Écart type </h3>
+                                    <input id="sigma-emo-face" type="text" placeholder="par exemple: 0.5">
                                 </div>
                                 <div class="input-container">
                                     <h3></h3>
@@ -376,6 +385,10 @@
                                 <div class="input-container">
                                     <h3> Ordre aléatoire </h3>
                                     <input  type="checkbox" id="random-stroop" value="option1" style=" height: 50px">
+                                </div>
+                                <div class="input-container">
+                                    <h3> Écart type </h3>
+                                    <input id="sigma-stroop" type="text" placeholder="par exemple: 0.5">
                                 </div>
                                 <div class="input-container">
                                     <h3></h3>
@@ -533,11 +546,15 @@
                                     <h3>Durée entre les stimuli</h3>
                                     <input type="text" id="betweenstimuli-audition" placeholder="par exemple: 7">
                                 </div>
-                            </div>
-                            <div class="input-group">
                                 <div class="input-container">
                                     <h3> Ordre aléatoire </h3>
                                     <input  type="checkbox" id="random-audition" value="Option1" style=" height: 50px">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <div class="input-container">
+                                    <h3> Écart type </h3>
+                                    <input id="sigma-audition" type="text" placeholder="par exemple: 0.5">
                                 </div>
                                 <div class="input-container">
                                     <h3>Sélectionner un paradigme déjà existant</h3>
@@ -738,6 +755,7 @@
                 let launching_text =  fileLaunching.value.split('\\').pop();
                 const activation = document.getElementById("option1").checked;
                 const random = document.getElementById("random-emo-face").checked;
+                const sigma = document.getElementById("sigma-emo-face").value || 'Non spécifié';
 
 
                 let port = document.getElementById('resultPort').textContent.trim();
@@ -776,6 +794,7 @@
                         activation: activation,
                         random: random,
                         baudrate: baudrate,
+                        sigma: sigma,
                         trigger: trigger,
                         hauteur: hauteur,
                         largeur: largeur,
@@ -798,11 +817,12 @@
                 let fileName = fileInput.value.split('\\').pop();  // Cela extraira uniquement le nom du fichier.
                 const zoom = document.getElementById('zoom-stroop').value || 'Non spécifié';
                 const output_file = document.getElementById('patientName').textContent;
-                const choice = document.getElementById('choice').value || 'Non spécifié'
+                const choice = document.getElementById('choice').value || 'Non spécifié';
                 const fileLaunching = document.getElementById('launching_text');
                 let launching_text =  fileLaunching.value.split('\\').pop();
                 const activation = document.getElementById("option1").checked;
                 const random = document.getElementById("random-stroop").checked;
+                const sigma = document.getElementById("sigma-stroop").value || 'Non spécifié';
 
 
                 let port = document.getElementById('resultPort').textContent.trim();
@@ -841,6 +861,7 @@
                         port: port,
                         activation: activation,
                         random: random,
+                        sigma: sigma,
                         baudrate: baudrate,
                         trigger: trigger,
                         hauteur: hauteur,
@@ -935,6 +956,7 @@
                 let fileName = fileInput.value.split('\\').pop();  // Cela extraira uniquement le nom du fichier.
                 const fileInput1 = document.getElementById('fileinput-audition1');
                 let fileName1 = fileInput1.value.split('\\').pop();  // Cela extraira uniquement le nom du fichier.
+                const sigma = document.getElementById('sigma-audition').value || 'Non spécifié';
 
                 let port = document.getElementById('resultPort').textContent.trim();
                 let baudrate = document.getElementById('resultBaudrate').textContent;
@@ -966,6 +988,7 @@
                         activation: activation,
                         launching_text: launching_text,
                         random: random,
+                        sigma: sigma,
                         baudrate: baudrate,
                         fileName: fileName,
                         ASound: fileName1,
@@ -1061,7 +1084,6 @@
                 let fileName = fileInput.value.split('\\').pop();  // Cela extraira uniquement le nom du fichier.
                 const activation = document.getElementById("option1").checked;
                 const random = document.getElementById("random-adj").checked;
-                const scanner = document.getElementById("ifscanner").checked;
                 const fileLaunching = document.getElementById('launching_text');
                 let launching_text =  fileLaunching.value.split('\\').pop();
 
@@ -1104,7 +1126,6 @@
                         launching_text: launching_text,
                         activation: activation,
                         random: random,
-                        scanner: scanner,
                         baudrate: baudrate,
                         trigger: trigger,
                         hauteur: hauteur,
@@ -1185,6 +1206,7 @@
             let largeur = document.getElementById('largeur').value || '0';
             const fileLaunching = document.getElementById('launching_text');
             let launching_text =  fileLaunching.value.split('\\').pop();
+            const sigma = document.getElementById("sigma-image").value || 'Non spécifié';
 
             let port = document.getElementById('resultPort').textContent.trim();
             let baudrate = document.getElementById('resultBaudrate').textContent;
@@ -1221,6 +1243,7 @@
                     launching_text: launching_text,
                     activation: activation,
                     random: random,
+                    sigma: sigma,
                     baudrate: baudrate,
                     trigger: trigger,
                     hauteur: hauteur,
@@ -1243,9 +1266,10 @@
             const fileInput = document.getElementById('fileinput-video');
             const zoom = document.getElementById('zoom-video').value || 'Non spécifié';
             const output_file = document.getElementById('patientName').textContent;
-            let fileName = fileInput.value.split('\\').pop();  // Cela extraira uniquement le nom du fichier.
+            let fileName = fileInput.value.split('\\').pop();
             const activation = document.getElementById("option1").checked;
             const random = document.getElementById("random-video").checked;
+            const sigma = document.getElementById('sigma-video').value || 'Non spécifié';
 
             let port = document.getElementById('resultPort').textContent.trim();
             let baudrate = document.getElementById('resultBaudrate').textContent;
@@ -1287,6 +1311,7 @@
                     launching_text: launching_text,
                     activation: activation,
                     random: random,
+                    sigma: sigma,
                     baudrate: baudrate,
                     trigger: trigger,
                     hauteur: hauteur,

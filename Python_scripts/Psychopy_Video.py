@@ -7,20 +7,24 @@ import time
 from datetime import datetime
 
 from psychopy import visual, core, event, logging
-logging.console.setLevel(logging.DEBUG)
 import serial
 from Paradigme_parent import Parente
 import gc  # Garbage Collector
+import sys
+
 
 
 
 class VideoPsycho(Parente):
     def __init__(self, duration, betweenstimuli, file, zoom, output, port, baudrate, trigger, activation,
-                 hauteur, largeur, random, launching):
+                 hauteur, largeur, random, launching, sigma):
         self.duration = duration
         self.betweenstimuli = betweenstimuli
-        self.file = file
         self.filename, self.filename_csv = super().preprocessing_tsv_csv(output)
+
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'Input', 'Paradigme_video'))
+        self.dossier_files = os.path.join(self.dossier,'newstimuli')
+        self.file = os.path.join(self.dossier,file)
 
         self.zoom = zoom
         self.output = output
@@ -28,6 +32,7 @@ class VideoPsycho(Parente):
         self.launching = launching
         self.baudrate = baudrate
         self.trigger = trigger
+        self.sigma = sigma
         if activation == "True":
             self.activation = True
         else:
@@ -64,7 +69,7 @@ class VideoPsycho(Parente):
         if self.random:
             random.shuffle(videos)
         file = copy.copy(videos)
-        videos = ["Input/Paradigme_video/newstimuli/" + v for v in videos]
+        videos = [os.path.join(self.dossier_files, v) for v in videos]
 
         # Ajouter la gestion de l'échappement pour fermer proprement la fenêtre
         event.globalKeys.add(key='escape', func=self.win.close)
@@ -78,7 +83,7 @@ class VideoPsycho(Parente):
             units='height'
         )
 
-        texts = super().inputs_texts("Input/Paradigme_video/" + self.launching)
+        texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger)
         super().wait_for_trigger(self.trigger)
 
@@ -94,8 +99,8 @@ class VideoPsycho(Parente):
                 self.win.flip()
                 timer.reset()
                 apparition = global_timer.getTime()
-
-                while timer.getTime() < random.uniform(between_stimuli - 0.5, between_stimuli + 0.5):
+                random_gaussian = random.gauss(self.betweenstimuli, self.sigma)
+                while timer.getTime() < random_gaussian:
                     pass
                 longueur = timer.getTime()
                 stimuli = "Fixation"
@@ -155,6 +160,7 @@ class VideoPsycho(Parente):
         super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), super().float_to_csv(longueur), stimuli, "None"])
 
         super().the_end(self.win)
+        super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
 
         return longueur_stimuli, apparition_stimuli, stimuli_liste
@@ -173,6 +179,8 @@ if __name__ == "__main__":
     parser.add_argument("--output_file", type=str, required=True, help="Nom du fichier d'output")
     parser.add_argument("--activation", type=str, required=True, help="Pour le boitier avec les EEG")
     parser.add_argument("--launching", type=str, help="Chemin vers le fichier de mots", required=False)
+    parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
+
 
 
     parser.add_argument('--port', type=str, required=False, help="Port")
@@ -184,7 +192,8 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
-    videos= VideoPsycho(args.duration, args.betweenstimuli, "Input/Paradigme_video/"+args.file, args.zoom,
+    print(args)
+    videos= VideoPsycho(args.duration, args.betweenstimuli, args.file, args.zoom,
                          args.output_file, args.port, args.baudrate, args.trigger, args.activation,
-                        args.hauteur, args.largeur, args.random, args.launching)
+                        args.hauteur, args.largeur, args.random, args.launching, args.sigma)
     videos.lancement()

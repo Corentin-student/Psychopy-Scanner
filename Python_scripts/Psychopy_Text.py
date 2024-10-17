@@ -28,6 +28,7 @@ class PsychoPyParadigm(Parente):
         self.baudrate = baudrate
         self.trigger = trigger
         self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_mots'))
         self.win = visual.Window(size=(800, 600), fullscr=True, color=[-1, -1, -1], units="norm")
         self.win.winHandle.activate()
         self.cross_stim = visual.ShapeStim(
@@ -69,7 +70,7 @@ class PsychoPyParadigm(Parente):
             super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), stimuli, trial_type])
 
     def reading(self, filename):
-        filename = "Input/Paradigme_mots/" + filename
+        filename = os.path.join(self.dossier, filename)
         with open(filename, "r") as fichier:
             ma_liste = [line.strip() for line in fichier]
         return ma_liste
@@ -80,7 +81,7 @@ class PsychoPyParadigm(Parente):
                                 lineColor='white')
         self.rect.pos = (self.win.size[0] / 2 - self.rect_width / 2, self.win.size[1] / 2 - self.rect_height / 2)
         event.globalKeys.add(key='escape', func=self.win.close)
-        texts = super().inputs_texts("Input/Paradigme_mots/"+self.launching)
+        texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts,self.trigger)
         super().wait_for_trigger(self.trigger)
         self.global_timer.reset()
@@ -127,6 +128,7 @@ class PsychoPyParadigm(Parente):
         time_long = self.timer.getTime()
         super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), stimuli, trial_type])
         super().the_end(self.win)
+        super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
 
     def pas_un_stimuli(self, stimuli):
@@ -160,6 +162,7 @@ class PsychoPyParadigm(Parente):
         else:
             self.words = [word.strip() for word in self.words.split(',')]
         self.words_psychopy()
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")

@@ -14,12 +14,14 @@ class Emo_Face(Parente):
 
 
     def __init__(self, duration, betweenstimuli, filepath, output, port, baudrate, trigger, activation, hauteur,
-                 largeur, zoom, random, launching):
+                 largeur, zoom, random, launching, sigma):
         self.onset = []
         self.duration = []
         self.stimuli_file =[]
         self.trial_type = []
         self.click_times = []  # Pour stocker les temps de clic
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_EMO_FACE'))
+        self.dossier_file = os.path.join(self.dossier,'EMO_faces_list')
         self.stimuli_duration = duration
         self.betweenstimuli = betweenstimuli
         self.filepath = filepath
@@ -29,6 +31,7 @@ class Emo_Face(Parente):
         self.zoom = zoom
         self.trigger = trigger
         self.launching = launching
+        self.sigma = sigma
         self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
         self.win = visual.Window(size=(800, 600), fullscr=True, units="norm")
         self.win.winHandle.activate()
@@ -80,7 +83,7 @@ class Emo_Face(Parente):
         )
 
         images = []
-        images_files = self.reading("Input/Paradigme_EMO_FACE/"+self.filepath)
+        images_files = self.reading(os.path.join(self.dossier, self.filepath))
         if self.random:
             random.shuffle(images_files)
 
@@ -88,7 +91,7 @@ class Emo_Face(Parente):
             image_stim = visual.ImageStim(
                 win=self.win,
                 pos=(0, 0),
-                image = "Input/Paradigme_EMO_FACE/EMO_faces_list/"+image,
+                image = os.path.join(self.dossier_file, image),
                 size=None
             )
             base_width, base_height = image_stim.size  # Taille par défaut de l'image
@@ -97,18 +100,19 @@ class Emo_Face(Parente):
             # Ajuster la taille en fonction du facteur de zoom
             image_stim.size = (base_width * zoom_factor, base_height * zoom_factor)
             images.append(image_stim)
-
-        texts = super().inputs_texts("Input/Paradigme_EMO_FACE/"+self.launching)
+        texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger)
         super().wait_for_trigger(self.trigger)
         global_timer = core.Clock()
         timer = core.Clock()
+        image_stim_count = 0
         for image_stim in images:
             timer.reset()
             cross_stim.draw()
             self.win.flip()
             onset = global_timer.getTime()
-            while timer.getTime() < random.uniform(self.betweenstimuli-0.5, self.betweenstimuli+0.5):
+            random_gauss = random.gauss(self.betweenstimuli, self.sigma)
+            while timer.getTime() < random_gauss:
                 pass
             long_time = timer.getTime()
             click_times = "None"
@@ -134,16 +138,19 @@ class Emo_Face(Parente):
                         clicked = True  # Empêcher l'enregistrement de clics multiple
             click_times = clicked_time
             long_time = timer.getTime()
-            stimuli_file = image_stim.image[40:]
+            stimuli_file = images_files[image_stim_count]
             trial_type = "Stimuli"
             if click_times != "None":
                 click_times = super().float_to_csv(click_times)
             super().write_tsv_csv(self.filename, self.filename_csv,
                                   [super().float_to_csv(onset), super().float_to_csv(long_time), trial_type, click_times, stimuli_file])
+            image_stim_count+=1
 
         super().the_end(self.win)
+        super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
         core.quit()
+
 
 
 if __name__ == "__main__":
@@ -156,6 +163,8 @@ if __name__ == "__main__":
     parser.add_argument("--zoom", type=float, required=True, help="Pourcentage Zoom")
     parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
     parser.add_argument("--launching", type=str, help="Chemin vers le fichier de mots", required=False)
+    parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
+
 
 
 
@@ -168,9 +177,10 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
+    print(args)
     paradigm = Emo_Face(args.duration, args.betweenstimuli, args.file,
                         args.output_file, args.port, args.baudrate, args.trigger, args.activation,
-                        args.hauteur, args.largeur, args.zoom, args.random, args.launching)
+                        args.hauteur, args.largeur, args.zoom, args.random, args.launching, args.sigma)
     paradigm.lancement()
 
 

@@ -45,6 +45,8 @@ class Localizer(Parente):
         self.groups = defaultdict(list)
         self.keys = []
         self.block_type = []
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_LOCALIZER'))
+        self.dossier_image = os.path.join(self.dossier, 'images')
         self.port = port
         self.baudrate = baudrate
         self.trigger = trigger
@@ -57,8 +59,8 @@ class Localizer(Parente):
         else:
             self.random = False
 
-        self.ordre=self.reading("Input/Paradigme_LOCALIZER/"+self.file)
-        self.real_groups = self.real_reading("Input/Paradigme_LOCALIZER/"+self.file)
+        self.ordre=self.reading(os.path.join(self.dossier, self.file))
+        self.real_groups = self.real_reading(os.path.join(self.dossier,self.file))
         self.copy_real_groups = copy.deepcopy(self.real_groups)
         rect_width = largeur
         rect_height = hauteur
@@ -68,7 +70,7 @@ class Localizer(Parente):
         self.rect.pos = (self.win.size[0] / 2 - rect_width / 2, self.win.size[1] / 2 - rect_height / 2)
 
     def lancement(self):
-        texts = super().inputs_texts("Input/Paradigme_LOCALIZER/"+self.launching)
+        texts = super().inputs_texts(os.path.join(self.dossier,self.launching))
         super().file_init(self.filename, self.filename_csv,
                           ['onset', 'duration', "block_index" ,'stim_file','trial_type' ])
         super().launching_texts(self.win, texts, self.trigger)
@@ -94,6 +96,8 @@ class Localizer(Parente):
                 y = x%index_of_groups
                 self.show_block(y,self.number_per_block)
         super().the_end(self.win)
+        super().writting_prt(self.filename_csv, "trial_type")
+
 
     def reading(self,filename):
         with open(filename, "r") as fichier:
@@ -145,7 +149,7 @@ class Localizer(Parente):
                 toshow.append(stimuli)
         liste_image_win=[]
         for image in toshow:
-            image_path = "Input/Paradigme_LOCALIZER/images/" + image
+            image_path = os.path.join(self.dossier_image, image)
             image_stim = visual.ImageStim(
                 win=self.win,
                 image=image_path,

@@ -15,7 +15,7 @@ from Paradigme_parent import Parente
 
 class Colors(Parente):
     def __init__(self, duration, betweenstimuli, zoom, langage, filepath, output, port, baudrate, trigger, activation,
-                 hauteur, largeur, random, launching):
+                 hauteur, largeur, random, launching, sigma):
         self.win = visual.Window(size=(800, 600), fullscr=True, color="black", units="norm")
         self.win.winHandle.activate()
         event.globalKeys.add(key='escape', func=self.win.close)
@@ -23,6 +23,7 @@ class Colors(Parente):
         self.stimuli_duration = duration  # durée de l'enregistrement en secondes
         self.betweenstimuli = betweenstimuli
         self.zoom = zoom
+        self.sigma = sigma
         self.filepath = filepath
         self.output = output
         self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
@@ -38,6 +39,9 @@ class Colors(Parente):
         self.record_index = 0
         self.baudrate = baudrate
         self.trigger = trigger
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_Couleur'))
+        self.dossier_colors = os.path.join(self.dossier, 'colors')
+
         if activation == "True":
             self.activation = True
         else:
@@ -103,9 +107,9 @@ class Colors(Parente):
 
     def lancement(self):
         super().file_init(self.filename,self.filename_csv, ['onset', 'duration', 'stimuli', 'trial_type', 'response','time_before_starting_to_answer'] )
-        texts= super().inputs_texts("Input/Paradigme_Couleur/"+self.launching)
+        texts= super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts,self.trigger)
-        words, colors, stimuli_names=self.reading("Input/Paradigme_Couleur/"+self.filepath)
+        words, colors, stimuli_names=self.reading(os.path.join(self.dossier, self.filepath))
         if self.random:
             combined = list(zip(words, colors, stimuli_names))
             random.shuffle(combined)
@@ -122,7 +126,8 @@ class Colors(Parente):
             self.win.flip()
             onset = self.global_timer.getTime()
             self.timer.reset()
-            while self.timer.getTime() < self.betweenstimuli:
+            random_gauss = random.gauss(self.betweenstimuli, self.sigma)
+            while self.timer.getTime() < random_gauss:
                 pass
             time_long = self.timer.getTime()
             stimuli = "Cross"
@@ -165,8 +170,10 @@ class Colors(Parente):
             count+=1
 
         super().the_end(self.win)
+        super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
         core.quit()
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")
@@ -179,6 +186,8 @@ if __name__ == "__main__":
     parser.add_argument("--choice", type=str, required=True, help="Choix de la langue")
     parser.add_argument("--activation", type=str, required=True, help="Pour le boitier avec les EEG")
     parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
+    parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
+
 
 
     parser.add_argument('--port', type=str, required=False, help="Port")
@@ -190,7 +199,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     colors = Colors(args.duration, args.betweenstimuli, args.zoom, args.choice, args.file, args.output_file,
                     args.port, args.baudrate, args.trigger, args.activation,
-                        args.hauteur, args.largeur, args.random, args.launching).lancement()
+                        args.hauteur, args.largeur, args.random, args.launching, args.sigma).lancement()
 
 
 #Colors(duration=2,betweenstimuli=1,zoom=10,filepath="colors_list.txt", output="wififi").lancement()
