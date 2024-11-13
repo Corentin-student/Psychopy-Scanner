@@ -79,9 +79,28 @@ class Parente(ABC):
         core.wait(5)
 
     def the_end2 (self, win):
-        texte = visual.TextStim(win, text="Merci beaucoup d'avoir réalisé cette tâche \n \n Ne bougez pas, on vous parle dans quelques secondes. ",
+        texte = visual.TextStim(win, text="Merci beaucoup d'avoir réalisé cette tâche. \n \n Ne bougez pas, on vous parle dans quelques secondes. ",
                                 color=[1, 1, 1], alignText="center", wrapWidth=1.5, font='Arial')
         texte.draw()
+        win.flip()
+        core.wait(4)
+
+    def the_end3 (self, win):
+        line = visual.ShapeStim(
+            win,
+            vertices=[(0, 1), (0, -1)], 
+            lineWidth=5,
+            lineColor='white',
+            closeShape=False
+        )
+
+        text_fr = visual.TextStim(win, pos=(0.5, 0), text="Merci beaucoup d'avoir réalisé \n cette tâche. \n \n Ne bougez pas, \n on vous parle dans quelques \n secondes. ",
+                                color=[1, 1, 1], alignText="center", wrapWidth=1.5, font='Arial')
+        text_nl = visual.TextStim(win, pos=(-0.5, 0), text="Hartelijk dank voor het voltooien \n  van deze taak. \n \n Beweeg je niet, \n we spreken je over een paar \n seconden.",
+                                  color=[1, 1, 1], alignText="center", wrapWidth=1.5, font='Arial')
+        line.draw()
+        text_fr.draw()
+        text_nl.draw()
         win.flip()
         core.wait(4)
     def send_character(self, port, baud_rate):
