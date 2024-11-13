@@ -49,7 +49,6 @@ class Adjectifs(Parente):
         self.baudrate = baudrate
         self.trigger = trigger
         self.global_timer = core.Clock()
-        self.timer = core.Clock()
         self.filename, self.filename_csv = super().preprocessing_tsv_csv(output)
 
         if activation == "True":
@@ -124,7 +123,7 @@ class Adjectifs(Parente):
         self.entrainement()
         texte.text = self.experience_text
         super().file_init(self.filename, self.filename_csv,
-                          ['onset', 'duration', 'block_type', 'word', 'key', 'response_time'])
+                          ['onset', 'block_type', 'word', 'key', 'response_time'])
         texte.draw()
         self.win.flip()
         super().proper_waitkey(self.trigger)
@@ -132,37 +131,45 @@ class Adjectifs(Parente):
         self.global_timer.reset()
 
         self.blocks()
+        super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "block_type")
+
 
 
 
     def debut_me(self):
         texte_block = visual.TextStim(self.win, text=self.Me_shortcue, color=[1, 1, 1], alignText="center", wrapWidth=1.5, font="Arial")
-        clock = core.Clock()
         texte_block.draw()
         self.win.flip()
-        while clock.getTime() < 3:
+        onset = self.global_timer.getTime()
+        while self.global_timer.getTime() < onset + 3:
             pass
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(onset), "Instruciton", "None", "None", "None"])
 
     def debut_friend(self):
         texte_block = visual.TextStim(self.win, text=self.Friend_shortcue, color=[1, 1, 1], alignText="center", wrapWidth=1.5, font="Arial")
-        clock = core.Clock()
         texte_block.draw()
         self.win.flip()
-        while clock.getTime() < 3:
+        onset = self.global_timer.getTime()
+        while self.global_timer.getTime() < onset + 3:
             pass
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(onset), "Instruciton", "None", "None", "None"])
 
     def debut_syllabe(self):
         texte_block = visual.TextStim(self.win, text=self.Syllabe_shortcue, color=[1, 1, 1], alignText="center", wrapWidth=1.5, font="Arial")
-        clock = core.Clock()
         texte_block.draw()
         self.win.flip()
-        while clock.getTime() < 3:
+        onset = self.global_timer.getTime()
+        while self.global_timer.getTime() < onset + 3:
             pass
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(onset), "Instruciton", "None", "None", "None"])
 
 
 
-    def show_1_word(self, mot , block_type):
+    def show_1_word(self, mot , block_type, nottraining=True):
         texte_5_words = visual.TextStim(self.win, color=[1, 1, 1], wrapWidth=1.5, font="Arial", height=0.1 + (0.004*self.zoom))
         texte_5_words.text = mot
         texte_5_words.draw()
@@ -173,23 +180,21 @@ class Adjectifs(Parente):
             super().send_character(self.port, self.baudrate)
         response_time="None"
         k="None"
-        self.timer.reset()
-        while self.timer.getTime() < self.stimuli_duration:  # Limite de temps de 4 secondes
+        actual_time = self.global_timer.getTime()
+        while self.global_timer.getTime() < actual_time + self.stimuli_duration:  # Limite de temps de 4 secondes
             if k=="None":
                 key = event.getKeys()
                 #d=1, q=2, c=3, b=4
                 if "d" in key or "q" in key or 'c' in key or "b" in key  or "1" in key or "2" in key or "3" in key or "4" in key or "&" in key or "é" in key or "#" in key or "'" in key:
                     k = self.hashmapvaleurs.get(key[0])
-                    response_time=self.timer.getTime()
+                    response_time=self.global_timer.getTime() - actual_time
                     texte_5_words.text=" "
                     texte_5_words.draw()
                     self.win.flip()
-        time_long = self.timer.getTime()
         if response_time!="None":
             response_time=super().float_to_csv(response_time)
-        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), block_type, mot, k, response_time])
-
-
+        if nottraining:
+            super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), block_type, mot, k, response_time])
         self.win.flip()
 
 
@@ -214,25 +219,11 @@ class Adjectifs(Parente):
                 else:
                     mot = self.syllabe_blocks[0]
                 self.syllabe_blocks.remove(mot)
-            self.show_1_word(mot, block_type)
+            self.show_1_word(mot, block_type, nottraining=True)
             self.shown_words.append(mot)
             self.order_blocks.append(block_type)
             self.show_words(count-1,block_type)
 
-
-    def write_tsv(self,):
-        filename= self.output
-        filename = super().preprocessing_tsv(filename)
-
-        with open(filename, mode='w', newline='') as file:
-            tsv_writer = csv.writer(file, delimiter='\t')
-            tsv_writer.writerow(['block_type', 'word', 'response', 'response_time'])
-            pred = 0
-            count = 0
-            for i in range(len(self.shown_words)):
-                tsv_writer.writerow(
-                    [self.order_blocks[i], self.shown_words[i], self.response[i], self.reaction_time[i]])
-                count += 1
 
     def entrainement_show_words(self, count, block_type):
         if count !=0:
@@ -255,7 +246,7 @@ class Adjectifs(Parente):
                 else:
                     mot = self.syllable_entrainement[0]
                 self.syllable_entrainement.remove(mot)
-            self.show_1_word(mot, block_type)
+            self.show_1_word(mot, block_type, False)
             self.entrainement_show_words(count-1,block_type)
 
     def entrainement(self):
@@ -293,19 +284,17 @@ class Adjectifs(Parente):
 
             cross_stim.draw()
             self.win.flip()
-            onset = self.global_timer.getTime()
             fixation_duration = self.betweenstimuli
-            self.timer.reset()
-            while self.timer.getTime() < fixation_duration:
+            actual_time = self.global_timer.getTime()
+            while self.global_timer.getTime() < actual_time + fixation_duration:
                 cross_stim.draw()
                 self.win.flip()
-            time_long = self.timer.getTime()
             block_type = "Fixation"
             mot = "None"
             key = "None"
             response_time = "None"
-            super().write_tsv_csv(self.filename, self.filename_csv,
-                                  [super().float_to_csv(onset), super().float_to_csv(time_long), block_type, mot, key, response_time])
+            #super().write_tsv_csv(self.filename, self.filename_csv,
+                                 # [super().float_to_csv(onset), block_type, mot, key, response_time])
 
     def blocks(self):
         cross_stim = visual.ShapeStim(
@@ -345,17 +334,16 @@ class Adjectifs(Parente):
             cross_stim.draw()
             self.win.flip()
             onset = self.global_timer.getTime()
-            self.timer.reset()
-            while self.timer.getTime() < fixation_duration:
+            actual_time = self.global_timer.getTime()
+            while self.global_timer.getTime() < actual_time + fixation_duration:
                 cross_stim.draw()
                 self.win.flip()
-            time_long = self.timer.getTime()
             block_type = "Fixation"
             mot = "None"
             key = "None"
             response_time = "None"
             super().write_tsv_csv(self.filename, self.filename_csv,
-                                  [super().float_to_csv(onset), super().float_to_csv(time_long), block_type, mot, key, response_time])
+                                  [super().float_to_csv(onset), block_type, mot, key, response_time])
 
     def fin(self):
         super().the_end(self.win)

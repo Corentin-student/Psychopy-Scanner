@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
 <body>
     <header class="header">
+        <div class="lang">
+            <a id="lang-nl" href="#">NL</a>
+            <span id="lang-icon" class="material-symbols-outlined">toggle_on</span>
+            <a id="lang-fr" href="#" class="selected">FR</a>
+        </div>
         <h1 class="header-center">Ion's Psychopy</h1>
         <div class="header-right">
             <button class ="navbutton"  onclick="document.getElementById('launching_text').click()">Starting text</button>
@@ -1327,6 +1333,25 @@
                 console.error('Error:', error);
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleIcon = document.getElementById('lang-icon');
+            const langNL = document.getElementById('lang-nl');
+            const langFR = document.getElementById('lang-fr');
+
+
+            if (toggleIcon) {
+                toggleIcon.addEventListener('click', function () {
+                    window.location.href = '/nl/about';
+                });
+            }
+
+            if (langNL) {
+                langNL.addEventListener('click', function () {
+                    window.location.href = '/nl/about';
+                });
+            }
+        })
         </script>
     </main>
 </body>

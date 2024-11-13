@@ -252,6 +252,110 @@ h2 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.grand-cadre {
+  width: 90%; /* Largeur du cadre */
+  height: 400px; /* Hauteur du cadre */
+  background-color: white; /* Couleur de fond blanche */
+  border: 2px solid black; /* Bordure noire de 2px */
+  padding: 10px; /* Espace intérieur pour ne pas coller le texte à la bordure */
+  overflow: auto; /* Pour gérer le débordement si le contenu dépasse la taille du cadre */
+}
+
+.suite-bouttons{
+    display: flex; /* Active Flexbox */
+    justify-content: space-between; /* Espace égal entre chaque bouton */
+    width: 90%; /* Le conteneur prend toute la largeur de la page */
+    padding: 10px; /* Un peu de padding pour éviter que les boutons collent aux bords */
+    box-sizing: border-box;
+    border: none;
+}
+
+.boutton-de-la-suite{
+    flex: 1; /* Les boutons prennent tous une largeur égale */
+    margin: 0 10px; /* Un espace entre les boutons */
+    padding: 10px;
+    background-color: rgba(40, 93, 1, 0.58);
+    color: white;
+}
+
+.overlay-index {
+  display: none; /* Cacher l'overlay par défaut */
+  position: fixed; /* Fixer l'overlay par rapport à la fenêtre */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent */
+  z-index: 1000; /* Au-dessus de tous les autres éléments */
+}
+
+.overlay-content-index {
+    background-color: white;
+    margin-left: 10%;
+    margin-top: 5%;
+    /*margin: 15% auto; /* Centrer le contenu verticalement */
+    padding: 20px;
+    width: 80%; /* Largeur du contenu */
+    height: 30%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.stimulus-table {
+  width: 100%; /* Le tableau prend toute la largeur du cadre */
+  border-collapse: collapse; /* Enlève l'espacement entre les bordures des cellules */
+}
+
+.stimulus-table th, .stimulus-table td {
+  border: 1px solid black; /* Bordure pour chaque cellule */
+  padding: 10px; /* Espace autour du contenu dans les cellules */
+  text-align: left; /* Aligne le texte à gauche */
+}
+
+.stimulus-table th {
+  background-color: #f2f2f2; /* Couleur de fond des en-têtes */
+}
+
+.fermer {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 30px;
+  cursor: pointer;
+  color: black;
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 40; /* Adjust size as needed */
+    font-size: 40px !important; /* Ensures size compatibility */
+    vertical-align: middle; /* Aligns icon with text */
+    cursor: pointer;
+}
+
+.lang {
+    margin-left: 30px;
+}
+.lang a {
+    color: #777;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.lang a:hover {
+    text-decoration: underline;
+}
+
+.lang .selected {
+    font-weight: bold !important;
+    color: #fff !important;
+}
+
+
 /* Ajout des media queries pour les résolutions plus petites */
 @media (max-width: 1920px) {
     .checkbox_style {

@@ -33,7 +33,7 @@ class launch_cyberball(Parente) :
         temp_file_path = os.path.join(temp_dir, 'photo_temp.jpg')
         image_redimensionnee.save(temp_file_path)
 
-        self.photo1 = visual.ImageStim(win=self.win, image='../Input/Cyberball/photo', pos=[0.3, -0.7])
+        self.photo1 = visual.ImageStim(win=self.win, image=temp_file_path, pos=[0.3, -0.7])
         self.photo2 = visual.ImageStim(win=self.win, image=os.path.join(self.dossier, 'Femme2.jpg'), pos=[-0.8, 0.5], size=0.2)
         self.photo3 = visual.ImageStim(win=self.win, image=os.path.join(self.dossier, 'Homme1.jpg'), pos=[0.8, 0.5], size=0.2)
 
@@ -281,7 +281,7 @@ class launch_cyberball(Parente) :
 
 
 if __name__ == "__main__":
-
+    print("quepassa?")
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")
     parser.add_argument("--premiere_phase", type=float, required=True, help="Durée en secondes de la première phase")
     parser.add_argument("--exclusion", type=float, required=True, help="Durée en secondes de la phase d'exclusion")

@@ -63,7 +63,7 @@ class Emo_Face(Parente):
 
         with open(filename, mode='w', newline='') as file:
             tsv_writer = csv.writer(file, delimiter='\t')
-            tsv_writer.writerow(['onset', 'duration', 'trial_type', 'reaction','stim_file' ])
+            tsv_writer.writerow(['onset','trial_type', 'reaction','stim_file' ])
             for i in range(len(onset)):
                 tsv_writer.writerow([onset[i], duration[i], trial_type[i], reaction[i], file_stimuli[i]])
 
@@ -71,7 +71,7 @@ class Emo_Face(Parente):
         self.mouse = event.Mouse(win=self.win)
         event.globalKeys.add(key='escape', func=self.win.close)
         super().file_init(self.filename, self.filename_csv,
-                          ['onset', 'duration', 'trial_type', 'reaction','stim_file' ])
+                          ['onset', 'trial_type', 'reaction','stim_file' ])
 
         cross_stim = visual.ShapeStim(
             win=self.win,
@@ -104,49 +104,48 @@ class Emo_Face(Parente):
         super().launching_texts(self.win, texts, self.trigger)
         super().wait_for_trigger(self.trigger)
         global_timer = core.Clock()
-        timer = core.Clock()
         image_stim_count = 0
         for image_stim in images:
-            timer.reset()
             cross_stim.draw()
             self.win.flip()
             onset = global_timer.getTime()
             random_gauss = random.gauss(self.betweenstimuli, self.sigma)
-            while timer.getTime() < random_gauss:
+            while global_timer.getTime() < onset+random_gauss:
                 pass
-            long_time = timer.getTime()
             click_times = "None"
             stimuli_file = "None"
             trial_type = "Fixation"
             super().write_tsv_csv(self.filename, self.filename_csv,
-                                  [super().float_to_csv(onset), super().float_to_csv(long_time), trial_type, click_times, stimuli_file])
+                                  [super().float_to_csv(onset), trial_type, click_times, stimuli_file])
             clicked = False  # Variable pour vérifier si un clic a été détecté
             clicked_time = "None"
-            timer.reset()
             image_stim.draw()
             self.rect.draw()
             self.win.flip()
             if self.activation:
                 super().send_character(self.port,self.baudrate)
             onset = global_timer.getTime()
-            while timer.getTime() < self.stimuli_duration:
+            while global_timer.getTime() < onset + self.stimuli_duration:
                 button = self.mouse.getPressed()  # Mise à jour de l'état des boutons de la souris
                 if any(button):
                     if not clicked:  # Vérifier si c'est le premier clic détecté
-                        clicked_time = timer.getTime()
+                        clicked_time = global_timer.getTime() - onset
                         print("Clic détecté à :", clicked_time, "secondes")
                         clicked = True  # Empêcher l'enregistrement de clics multiple
             click_times = clicked_time
-            long_time = timer.getTime()
             stimuli_file = images_files[image_stim_count]
             trial_type = "Stimuli"
             if click_times != "None":
                 click_times = super().float_to_csv(click_times)
             super().write_tsv_csv(self.filename, self.filename_csv,
-                                  [super().float_to_csv(onset), super().float_to_csv(long_time), trial_type, click_times, stimuli_file])
+                                  [super().float_to_csv(onset), trial_type, click_times, stimuli_file])
             image_stim_count+=1
 
         super().the_end(self.win)
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(global_timer.getTime()), "END", "None", "None", "None",
+                               "None"])
+        super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
         core.quit()
@@ -182,5 +181,5 @@ if __name__ == "__main__":
                         args.output_file, args.port, args.baudrate, args.trigger, args.activation,
                         args.hauteur, args.largeur, args.zoom, args.random, args.launching, args.sigma)
     paradigm.lancement()
-
+ds
 

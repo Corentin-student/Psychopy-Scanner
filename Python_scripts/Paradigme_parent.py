@@ -119,10 +119,39 @@ class Parente(ABC):
     def float_to_csv(self, value):
         return str(value).replace('.', ',')
 
+    def adding_duration (self, input, input2):
+        self.adding_duration1(input)
+        self.adding_duration1(input2)
+    def adding_duration1(self,input_file):
+        with open(input_file, mode='r', newline='') as csvfile:
+            reader = csv.DictReader(csvfile, delimiter=';')
+            rows = list(reader)
+
+        for row in rows:
+            row['onset'] = float(row['onset'].replace(',', '.')) * 1000  # Transformer en millisecondes
+            row['onset'] = round(row['onset'])  # Arrondir les onsets
+
+        durations = []
+        for i in range(len(rows) - 1):
+            onset_current = rows[i]['onset']
+            onset_next = rows[i + 1]['onset']
+            duration = onset_next - onset_current
+            durations.append(duration)
+        durations.append(None)
+        for i, row in enumerate(rows):
+            row['duration'] = durations[i]
+        rows.pop()
+
+        with open(input_file, mode='w', newline='') as csvfile:
+            fieldnames = reader.fieldnames + ['duration']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=';')
+            writer.writeheader()
+            writer.writerows(rows)
     def writting_prt(self, filename, col="trial_type"):
         instance = wr.writtingprt()
         basics = {}
         basics["filename"] = filename
         basics["result"] = instance.analyze_trial_types(filename, col)
+        basics["result"] = instance.adjust_onsets_to_start_at_zero(basics["result"])
         file = filename.split(".csv")[0]+".prt"
         instance.create_experiment_file(file, basics)

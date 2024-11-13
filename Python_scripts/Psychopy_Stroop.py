@@ -30,7 +30,6 @@ class Colors(Parente):
         self.dirname = self.filename[:self.filename.find(".tsv")]
         os.makedirs(self.dirname, exist_ok=True)
         self.threshold = 1000  # seuil pour détecter le début de la parole (à ajuster selon votre micro/environnement)
-        self.timer = core.Clock()  # création de l'horloge
         self.global_timer = core.Clock()
         self.patient_id = output
         self.launching = launching
@@ -106,7 +105,7 @@ class Colors(Parente):
                 return "None/pas reconnu"
 
     def lancement(self):
-        super().file_init(self.filename,self.filename_csv, ['onset', 'duration', 'stimuli', 'trial_type', 'response','time_before_starting_to_answer'] )
+        super().file_init(self.filename,self.filename_csv, ['onset', 'stimuli', 'trial_type', 'response','time_before_starting_to_answer'] )
         texts= super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts,self.trigger)
         words, colors, stimuli_names=self.reading(os.path.join(self.dossier, self.filepath))
@@ -125,28 +124,24 @@ class Colors(Parente):
             self.cross_stim.draw()
             self.win.flip()
             onset = self.global_timer.getTime()
-            self.timer.reset()
             random_gauss = random.gauss(self.betweenstimuli, self.sigma)
-            while self.timer.getTime() < random_gauss:
+            while self.global_timer.getTime() < onset + random_gauss:
                 pass
-            time_long = self.timer.getTime()
             stimuli = "Cross"
             reaction = "None"
             trial = "Fixation"
             super().write_tsv_csv(self.filename, self.filename_csv,
-                                  [super().float_to_csv(onset), super().float_to_csv(time_long), stimuli, trial, reaction, reaction])
+                                  [super().float_to_csv(onset), stimuli, trial, reaction, reaction])
             text_stim.text=mot
             text_stim.color=colors[count]
             text_stim.draw()
             self.rect.draw()
             self.win.flip()
             onset = self.global_timer.getTime()
-            self.timer.reset()
             recording = sd.rec(int(self.stimuli_duration *self.fs), samplerate=self.fs, channels=1, dtype='int16')
             if self.activation:
                 super().send_character(self.port,self.baudrate)
             sd.wait()
-            time_long = self.timer.getTime()
             stimuli = stimuli_names[count]
             trial = "Stimuli"
             start_time = None
@@ -166,10 +161,14 @@ class Colors(Parente):
             if reaction != "None":
                 super().float_to_csv(reaction)
             super().write_tsv_csv(self.filename, self.filename_csv,
-                                  [super().float_to_csv(onset), super().float_to_csv(time_long), stimuli, trial, self.reconnaissance(record), reaction])
+                                  [super().float_to_csv(onset), stimuli, trial, self.reconnaissance(record), reaction])
             count+=1
 
         super().the_end(self.win)
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
+                               "None"])
+        super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
         core.quit()

@@ -1,0 +1,261 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.header {
+    display: flex;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-color: rgba(33, 114, 1, 0.41);
+    height: 12%;
+}
+
+.header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    white-space: nowrap;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.input-group {
+    display: flex;
+    gap: 20px;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    height: 35px;
+    padding: 5px 5px;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+
+
+.grand-cadre {
+  width: 90%; /* Largeur du cadre */
+  height: 400px; /* Hauteur du cadre */
+  background-color: white; /* Couleur de fond blanche */
+  border: 2px solid rgba(33, 114, 1, 0.41); /* Bordure noire de 2px */
+  padding: 10px; /* Espace intérieur pour ne pas coller le texte à la bordure */
+  overflow: auto; /* Pour gérer le débordement si le contenu dépasse la taille du cadre */
+}
+
+.en_dessous_cadre {
+    position: absolute; /* Pour le positionner par rapport au conteneur parent */
+    right: 8%;           /* Alignement à droite */
+    bottom: -50px;      /* Placer en dessous du cadre */
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#main-container {
+    position: relative; /* Nécessaire pour que l'élément enfant soit positionné par rapport à ce conteneur */
+}
+
+.en_dessous_cadre:hover {
+    background-color: #45a049;
+}
+
+.suite-bouttons{
+    display: flex; /* Active Flexbox */
+    justify-content: space-between; /* Espace égal entre chaque bouton */
+    width: 90%; /* Le conteneur prend toute la largeur de la page */
+    padding: 10px; /* Un peu de padding pour éviter que les boutons collent aux bords */
+    box-sizing: border-box;
+    border: none;
+}
+
+.boutton-de-la-suite{
+    flex: 1; /* Les boutons prennent tous une largeur égale */
+    margin: 0 10px; /* Un espace entre les boutons */
+    padding: 10px;
+    background-color: rgba(40, 93, 1, 0.58);
+    color: white;
+}
+
+.overlay-index {
+  display: none; /* Cacher l'overlay par défaut */
+  position: fixed; /* Fixer l'overlay par rapport à la fenêtre */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent */
+  z-index: 1000; /* Au-dessus de tous les autres éléments */
+}
+
+.overlay-content-index {
+    background-color: white;
+    margin-left: 10%;
+    margin-top: 5%;
+    /*margin: 15% auto; /* Centrer le contenu verticalement */
+    padding: 20px;
+    width: 80%; /* Largeur du contenu */
+    height: 30%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.stimulus-table {
+  width: 100%; /* Le tableau prend toute la largeur du cadre */
+  border-collapse: collapse; /* Enlève l'espacement entre les bordures des cellules */
+}
+
+.stimulus-table th, .stimulus-table td {
+  border: 1px solid black; /* Bordure pour chaque cellule */
+  padding: 10px; /* Espace autour du contenu dans les cellules */
+  text-align: left; /* Aligne le texte à gauche */
+}
+
+.stimulus-table th {
+  background-color: #f2f2f2; /* Couleur de fond des en-têtes */
+}
+
+.fermer {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 50px;
+  cursor: pointer;
+  color: #ff0000;
+}
+
+.supress {
+  width: 100%; /* Fait en sorte que le bouton prenne toute la largeur de la cellule */
+  height: 100%; /* Si tu veux que le bouton prenne également toute la hauteur */
+  background-color: rgba(40, 93, 1, 0.58); /* Couleur de fond (facultatif) */
+  border: none; /* Supprime la bordure (facultatif) */
+  color: #ffffff; /* Couleur du texte */
+  font-size: 18px; /* Ajuste la taille de la police si nécessaire */
+  cursor: pointer; /* Change le curseur en pointeur */
+}
+
+.button-choice {
+    background-color: rgba(40, 93, 1, 0.58);
+    color: #ffffff;
+    border-color: white;
+    margin-top: 5px;
+    height: 45px;
+}
+
+.highlight {
+    background-color: rgba(0, 255, 223, 0.58);
+}
+
+.submit {
+    background-color: rgba(40, 93, 1, 0.58);
+    margin-top: 28px !important;
+    color: white;
+    border-color: white;
+    height: 45px;
+    width: 100px;
+}
+
+
+
+
+
+/* Ajout des media queries pour les résolutions plus petites */
+@media (max-width: 1920px) {
+    .checkbox_style {
+        transform: scale(2.5); /* Réduit la taille pour les petits écrans */
+    }
+
+    .header-center {
+        font-size: 22px;
+    }
+
+    .sidenav {
+        width: 220px; /* Réduit la largeur de la sidebar */
+    }
+
+    .main-content {
+        margin-left: 230px; /* Ajuste la marge de contenu */
+    }
+
+    .button-choice, .submit, .navbutton {
+        height: 40px; /* Réduit la hauteur des boutons */
+    }
+}
+
+@media (max-width: 1366px) {
+    .checkbox_style {
+        transform: scale(2); /* Encore plus petit pour des résolutions encore plus petites */
+    }
+
+    .header-center {
+        font-size: 20px;
+    }
+
+    .sidenav {
+        width: 200px;
+    }
+
+    .main-content {
+        margin-left: 210px;
+    }
+
+    .button-choice, .submit, .navbutton {
+        height: 35px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .checkbox_style {
+        transform: scale(1.5);
+    }
+
+    .header-center {
+        font-size: 18px;
+    }
+
+    .sidenav {
+        width: 180px;
+    }
+
+    .main-content {
+        margin-left: 190px;
+    }
+
+    .button-choice, .submit, .navbutton {
+        height: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .checkbox_style {
+        transform: scale(1);
+    }
+
+    .header-center {
+        font-size: 16px;
+    }
+
+    .sidenav {
+        width: 160px;
+    }
+
+    .main-content {
+        margin-left: 170px;
+    }
+
+    .button-choice, .submit, .navbutton {
+        height: 25px;
+    }
+}

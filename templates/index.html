@@ -4,33 +4,228 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
 </head>
 <body>
 
     <header class="header">
-        <h1 class="header-center">Patient data</h1>
-        <div class="header-right">
-            <a class="additional" href="/about">Home</a>
-            Patient name
-        </div>
-
+        <h1 class="header-center">Création de Paradigme</h1>
     </header>
     <main>
+        <div style="margin-left: 5%;">
+            <h2>Ajout d'un stimulus/Croix de fixation</h2>
+            <div class="input-group">
+                <div class = "suite-bouttons">
+                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay()">Ajout d'une image</button>
+                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay()">Ajout d'une vidéo</button>
+                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay()">Ajout d'un audio</button>
+                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay()">Enregistrement de la voix</button>
+                </div>
+            </div>
 
-         <div class="sidenav">
-          <h2>Paradigme</h2>
-          <a href="#about">Mots défilants</a>
-          <a href="#services">Images statiques défilantes </a>
-          <a href="#clients">Images mouvantes défilantes</a>
+            <div class="grand-cadre">
+              <table class="stimulus-table">
+                <thead>
+                  <tr>
+                    <th>Apparition</th>
+                    <th>Durée</th>
+                    <th>Type</th>
+                    <th>Stimulus</th>
+                    <th>Angle</th>
+                    <th>Enlever</th>
+                  </tr>
+                </thead>
+                <tbody id="table-body"> <!-- ID pour cibler le corps du tableau -->
+                  <!-- Les lignes de données seront ajoutées ici -->
+                </tbody>
+              </table>
+            </div>
+            <div id="overlay-index" class="overlay-index">
+              <div class="overlay-content-index">
+                <span class="fermer" onclick="fermerOverlay()">&times;</span>
+                <h2>Paradigme pour les mots défilants</h2>
+                <div style="margin-left: 5%;">
+                    <div class="input-group">
+                        <div class="input-container">
+                            <h3>Timing d'apparition</h3>
+                            <input type="text" id="apparition-image" step="0.001" placeholder="0.000"  oninput="validateFloatInput(this)" >
+                        </div>
+                        <div class="input-container">
+                            <h3>Durée du stimulus</h3>
+                            <input type="text" id="duration-image" placeholder="par exemple: 3" >
+                        </div>
+                        <div class="input-container">
+                            <h3>Angle du stimulus (si aucun mettre 0)</h3>
+                            <input type="text" id="angle-image" placeholder="par exemple: 90">
+                        </div>
+                        <div class="input-container">
+                            <h3>Choix du stimulus</h3>
+                            <button class="button-choice" onclick="document.getElementById('fileinput').click()">Choisir un fichier</button>
+                            <input type="file" id="fileinput" style="display: none;" onchange="handleFileUpload(event)">
+                        </div>
+                        <div class="input-container">
+                            <h3></h3>
+                            <button class="submit" onclick="submitText()">Submit</button>
+                        </div>
+
+                    </div>
+                </div>
+              </div>
+            </div>
+
+            <script>
+                function ouvrirOverlay() {
+                  document.getElementById("overlay-index").style.display = "block"; // Affiche l'overlay
+                }
+
+                function fermerOverlay() {
+                  document.getElementById("overlay-index").style.display = "none"; // Cache l'overlay
+                }
+                function submitText() {
+
+                    let angleStimulus = document.getElementById("angle-image").value;
+                    const timingApparitionInput = document.getElementById("apparition-image").value
+                    const timingApparition = parseFloat(timingApparitionInput);
+                    const dureeInput = document.getElementById("duration-image").value;
+                    let dureeStimulus = parseFloat(dureeInput);
+                    const fileInput = document.getElementById('fileinput');
+                    let fileName = fileInput.value.split('\\').pop();
+                    if (angleStimulus === ""){
+                        angleStimulus = 0;
+                    }
+
+                    if (timingApparitionInput === "" || isNaN(timingApparition) || fileName === "") {
+                        alert("Veuillez remplir le timing d'apparition ou/et le fichier d'image qui sera utilisé");
+                    }
+                    else {
+
+                        // Vérifier si la durée est NaN
+                        const isDurationNaN = isNaN(dureeStimulus);
+
+                        // Vérifier s'il y a un chevauchement avec un stimulus existant
+                        const rows = document.querySelectorAll("#table-body tr");
+                        let isOverlap = false;
+                        rows.forEach(row => {
+                            const rowTiming = parseFloat(row.cells[0].textContent.slice(0, -1));
+                            const rowDuration = parseFloat(row.cells[1].textContent.slice(0, -1));
+                            const rowEnd = rowTiming + rowDuration;
+                            const rowDurationIsNaN = isNaN(rowDuration);
+                            if (isDurationNaN) {
+                                dureeStimulus = rowDuration;
+                            }
+
+                            // Conditions pour détecter un chevauchement, adaptées pour NaN
+                            if ((timingApparition >= rowTiming && timingApparition < rowEnd) || (rowTiming >= timingApparition && rowTiming < timingApparition + (isDurationNaN ? 0 : dureeStimulus))) {
+                                if (!(timingApparition === rowTiming && (dureeStimulus === rowDuration || (isDurationNaN && rowDurationIsNaN)))) {
+                                    isOverlap = true;
+                                }
+                            }
+                        });
+
+                        if (!isOverlap) {
+                            // Créer et insérer la nouvelle ligne si aucun chevauchement n'est détecté ou si les conditions spéciales NaN sont remplies
+                            const newRow = document.createElement("tr");
+                            newRow.innerHTML = `
+                                <td>${timingApparition.toFixed(3)}s</td>
+                                <td>${isDurationNaN ? 'Indéfini' : `${dureeStimulus.toFixed(3)}s`}</td>
+                                <td>Image</td>
+                                <td>${fileName}</td>
+                                <td>${angleStimulus}</td>
+                                <td><button class="supress" onclick="handleCloseClick(this)">Supprimer</button></td>
+                            `;
+
+                            // Insérer la ligne au bon endroit
+                            let inserted = false;
+                            rows.forEach(row => {
+                                const rowTiming = parseFloat(row.cells[0].textContent.slice(0, -1));
+                                if (!inserted && timingApparition < rowTiming) {
+                                    row.parentNode.insertBefore(newRow, row);
+                                    inserted = true;
+                                }
+                            });
+                            if (!inserted) {
+                                document.getElementById("table-body").appendChild(newRow);
+                            }
+
+                            // Mettre en surbrillance les doublons et réinitialiser les champs
+                            highlightDuplicateTimings();
+                            document.getElementById("angle-image").value = "";
+                            document.getElementById("apparition-image").value = "";
+                            document.getElementById("duration-image").value = "";
+                        } else {
+                            alert("Un stimulus est déjà en cours à ce moment ou il y a un chevauchement sans correspondance de durée.");
+                        }
+                    }
+                }
+
+
+
+
+                function handleFileUpload(event) {
+                  const file = event.target.files[0];
+                  if (file) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    fetch('/upload', {
+                      method: 'POST',
+                      body: formData,
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                      console.log(data);
+                    })
+                    .catch(error => {
+                      console.error('Erreur lors du téléchargement du fichier:', error);
+                    });
+                  }
+                }
+
+                function validateFloatInput(input) {
+                  // Autorise seulement les chiffres et un seul point décimal
+                  let value = input.value;
+
+                  // Supprime tous les caractères non numériques ou plus d'un point
+                  if (!/^\d*\.?\d*$/.test(value)) {
+                    input.value = value.slice(0, -1); // Retire le dernier caractère s'il est incorrect
+                  }
+                }
+
+                function handleCloseClick(button) {
+                    const row = button.closest("tr");
+                    row.remove();
+                }
+
+                function highlightDuplicateTimings() {
+                    const rows = document.querySelectorAll("#table-body tr");
+                    const timingCounts = {};
+
+                    // Compter les occurrences de chaque timing
+                    rows.forEach(row => {
+                        const timing = row.cells[0].textContent.trim();
+                        if (timingCounts[timing]) {
+                            timingCounts[timing].push(row);
+                        } else {
+                            timingCounts[timing] = [row];
+                        }
+                    });
+
+                    // Parcourir le dictionnaire pour mettre en surbrillance les doublons
+                    Object.values(timingCounts).forEach(group => {
+                        if (group.length > 1) {
+                            group.forEach(row => {
+                                row.classList.add("highlight");
+                            });
+                        }
+                    });
+                }
+
+
+
+
+            </script>
+
         </div>
-        <section class="image-section">
-            <form action = "/mypsycho" >
-                <button>Test</button>
-            </form>
-        </section>
-
-        <!--<p>Ceci est la page d'accueil de votre application Flask.</p>-->
     </main>
 </body>
 </html>

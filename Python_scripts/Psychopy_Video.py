@@ -64,14 +64,13 @@ class VideoPsycho(Parente):
         apparition_stimuli = []
         longueur_stimuli = []
         stimuli_liste = []
-        super().file_init(self.filename, self.filename_csv,['onset', 'duration', 'trial_type', 'stim_file'])
+        super().file_init(self.filename, self.filename_csv,['onset', 'trial_type', 'stim_file'])
         videos = self.reading(chemin)
         if self.random:
             random.shuffle(videos)
         file = copy.copy(videos)
         videos = [os.path.join(self.dossier_files, v) for v in videos]
 
-        # Ajouter la gestion de l'échappement pour fermer proprement la fenêtre
         event.globalKeys.add(key='escape', func=self.win.close)
 
         cross_stim = visual.ShapeStim(
@@ -88,23 +87,22 @@ class VideoPsycho(Parente):
         super().wait_for_trigger(self.trigger)
 
         global_timer = core.Clock()
-        timer = core.Clock()
         thezoom = 0.7 + (0.012 * self.zoom)
 
         for x, video_path in enumerate(videos):
             try:
+                print("onveut voir ça ")
                 print(x)
                 print(video_path)
+                print("oooooooooooooooooooooooooooooooooooooooooooooooooo")
                 cross_stim.draw()
                 self.win.flip()
-                timer.reset()
                 apparition = global_timer.getTime()
                 random_gaussian = random.gauss(self.betweenstimuli, self.sigma)
-                while timer.getTime() < random_gaussian:
+                while global_timer.getTime() < apparition + random_gaussian:
                     pass
-                longueur = timer.getTime()
                 stimuli = "Fixation"
-                super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), super().float_to_csv(longueur), stimuli, "None"])
+                super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), stimuli, "None"])
                 movie_stim = visual.MovieStim(
                     win=self.win,
                     filename=video_path,
@@ -117,20 +115,17 @@ class VideoPsycho(Parente):
                     units='norm',
                 )
 
-                timer.reset()
-
                 apparition = global_timer.getTime()
                 if self.activation:
                     super().send_character(self.port, self.baudrate)
                 movie_stim.play()
 
-                while timer.getTime() < duration:
+                while global_timer.getTime() < apparition + duration:
                     self.rect.draw()
                     movie_stim.draw()
                     self.win.flip()
-                longueur = timer.getTime()
                 stimuli = file[x]
-                super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), super().float_to_csv(longueur), "Stimuli", stimuli])
+                super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), "Stimuli", stimuli])
 
 
                 if movie_stim is not None:
@@ -149,17 +144,19 @@ class VideoPsycho(Parente):
                 pass
 
 
-        apparition = global_timer.getTime()
         cross_stim.draw()
         self.win.flip()
-        timer.reset()
-        while timer.getTime() < between_stimuli:
+        apparition = global_timer.getTime()
+        while global_timer.getTime() < apparition + between_stimuli:
             pass
-        longueur = timer.getTime()
         stimuli = "Fixation"
-        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), super().float_to_csv(longueur), stimuli, "None"])
+        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), stimuli, "None"])
 
         super().the_end(self.win)
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(global_timer.getTime()), "END", "None", "None", "None",
+                               "None"])
+        super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
 

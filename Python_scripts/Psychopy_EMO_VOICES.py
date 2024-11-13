@@ -29,7 +29,6 @@ class voices(Parente):
         self.betweenstimuli = betweenstimuli
         self.output = output
         self.launching = launching
-        self.timer = core.Clock()
         self.global_timer = core.Clock()
         self.voices=[]
         self.onset=[]
@@ -72,7 +71,7 @@ class voices(Parente):
         filename = super().preprocessing_tsv(filename)
         with open(filename, mode='w', newline='') as file:
             tsv_writer = csv.writer(file, delimiter='\t')
-            tsv_writer.writerow(['onset', 'duration', 'trial_type', 'reaction','stim_file' ])
+            tsv_writer.writerow(['onset', 'trial_type', 'reaction','stim_file' ])
             for i in range(len(onset)):
                 tsv_writer.writerow([onset[i], duration[i], trial_type[i], reaction[i], file_stimuli[i]])
 
@@ -80,7 +79,7 @@ class voices(Parente):
         texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger)
         super().file_init(self.filename, self.filename_csv,
-                          ['onset', 'duration', 'trial_type', 'reaction','stim_file' ])
+                          ['onset', 'trial_type', 'reaction','stim_file' ])
         self.voices = self.reading(os.path.join(self.dossier, self.file))
         if self.random:
             random.shuffle(self.voices)
@@ -91,41 +90,41 @@ class voices(Parente):
             clicked = False
             clicked_time = "None"
             custom_sound.Sound= x
-            self.timer.reset()
             self.cross_stim.draw()
             self.win.flip()
             onset = self.global_timer.getTime()
-            while self.timer.getTime() < random.uniform(self.betweenstimuli-0.5,self.betweenstimuli+0.5):
+            while self.global_timer.getTime() < onset + self.betweenstimuli:
                 pass
-            time_long = self.timer.getTime()
             trial_type = "Fixation"
             stim_file = "None"
             reaction = "None"
-            super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), trial_type, reaction, stim_file])
+            super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), trial_type, reaction, stim_file])
 
             self.image_stim.draw()
             self.rect.draw()
-            self.timer.reset()
             self.win.flip()
             if self.activation:
                 super().send_character(self.port,self.baudrate)
             custom_sound.play()
             onset = self.global_timer.getTime()
-            while self.timer.getTime()<custom_sound.getDuration():
+            while self.global_timer.getTime() < onset + custom_sound.getDuration():
                 button = self.mouse.getPressed()
                 if any(button):
                     if not clicked:
-                        clicked_time = self.timer.getTime()
+                        clicked_time = self.global_timer.getTime() - onset
                         print("Clic détecté à :", clicked_time, "secondes")
                         clicked = True
-            time_long = self.timer.getTime()
             trial_type = "Stimuli"
             stim_file = x
             reaction = clicked_time
             if reaction != "None":
                 reaction = super().float_to_csv(reaction)
-            super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), trial_type, reaction, stim_file])
+            super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), trial_type, reaction, stim_file])
         super().the_end(self.win)
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
+                               "None"])
+        super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
         core.quit()

@@ -14,7 +14,6 @@ import soundfile as sf
 import writtingprt as wr
 from Paradigme_parent import Parente
 
-
 class Audition(Parente):
     def __init__(self, duration, output, filepath, betweenstimuli, random, trigger, launching, hauteur,
                  largeur, son, sigma):
@@ -30,8 +29,6 @@ class Audition(Parente):
         self.record_index=0
         self.sound = son
         self.trigger = trigger
-        self.timer = core.Clock()
-        self.stimuli_timer = core.Clock()
         self.global_timer = core.Clock()
         pygame.mixer.init()
         self.reaction = "None"
@@ -49,7 +46,7 @@ class Audition(Parente):
         self.win.winHandle.activate()
         self.cross_stim = visual.ShapeStim(
             win=self.win,
-            vertices=((0, -0.03), (0, 0.03), (0, 0), (-0.03, 0), (0.03, 0)),  # Utilisation d'unités normalisées
+            vertices=((0, -0.03), (0, 0.03), (0, 0), (-0.03, 0), (0.03, 0)),
             lineWidth=3,
             closeShape=False,
             lineColor="white",
@@ -57,19 +54,13 @@ class Audition(Parente):
         )
         self.image_gauche = visual.ImageStim(self.win, pos=(-0.5, 0))
         self.image_droite = visual.ImageStim(self.win, pos=(0.5, 0))
-        if random == "True":
-            self.random = True
-        else:
-            self.random = False
+        self.random = random == "True"
         rect_width = largeur
         rect_height = hauteur
         self.rect = visual.Rect(self.win, width=rect_width, height=rect_height, fillColor='white', lineColor='white',
                                 units='pix')
         self.rect.pos = (self.win.size[0] / 2 - rect_width / 2, self.win.size[1] / 2 - rect_height / 2)
         event.globalKeys.add(key='escape', func=self.win.close)
-        self.duration = []
-        self.onset = []
-        self.type = []
 
     def reading(self, filename):
         image1 = []
@@ -96,10 +87,7 @@ class Audition(Parente):
         else:
             print("Aucune parole détectée.")
             self.reaction = "None"
-        print("okk?")
         record = os.path.join(self.dirname, f"record{self.record_index}.wav")
-        print("ici ?")
-        print(record)
         self.record_index += 1
         sf.write(record, recording, self.fs)
 
@@ -111,14 +99,9 @@ class Audition(Parente):
         self.cross_stim.draw()
         self.win.flip()
         onset = self.global_timer.getTime()
-        self.timer.reset()
-        random_gauss = random.gauss(self.betweenstimuli, self.sigma)
-        while self.timer.getTime() < random_gauss:
-            pass
-        stimulus_duration = self.timer.getTime()
-        super().write_tsv_csv(self.filename, self.filename_csv,
-                                  [super().float_to_csv(onset), super().float_to_csv(stimulus_duration), 'Fixation', 'Cross', 'None', 'None', 'None'])
-
+        wait_time = random.gauss(self.betweenstimuli, self.sigma)
+        core.wait(wait_time)
+        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), "Fixation", "Cross", "None", "None", "None"])
         self.image_droite.image = os.path.join(self.dossier_image, droite+'.PNG')
         self.image_gauche.image = os.path.join(self.dossier_image, gauche+'.PNG')
         self.image_gauche.draw()
@@ -127,27 +110,26 @@ class Audition(Parente):
         duration.text = "-"
         duration.height = 0.6
         duration.draw()
-        self.stimuli_timer.reset()
         self.win.flip()
         onset = self.global_timer.getTime()
-        self.timer.reset()
+        core.wait(2)
         duration.height = 0.2
-        while self.timer.getTime()<2:
-            pass
-        duration.text=str(int(self.stimuli_duration))
+        duration.text = str(int(self.stimuli_duration))
         self.image_gauche.draw()
         self.image_droite.draw()
         self.rect.draw()
         duration.draw()
-        self.timer.reset()
         self.win.flip()
-        timer_inside = core.Clock()
         compteur = int(self.stimuli_duration)
-        while self.timer.getTime() < self.stimuli_duration:
-            timer_inside.reset()
-            while timer_inside.getTime() < 1:
-                pass
-            compteur-=1
+        actual_time = self.global_timer.getTime()
+        while self.global_timer.getTime() < actual_time + self.stimuli_duration:
+            # Calcule le temps restant
+            time_remaining = actual_time + self.stimuli_duration - self.global_timer.getTime()
+            # Attends seulement le temps restant, mais s'assure que ce soit plus précis
+            core.wait(min(time_remaining, 1))  # Attente maximale de 1 seconde ou moins
+
+            # Mise à jour du compteur et affichage
+            compteur -= 1
             duration.text = str(compteur)
             self.image_gauche.draw()
             self.image_droite.draw()
@@ -167,21 +149,8 @@ class Audition(Parente):
             cond = "PhAudc"
         else:
             cond = "CondRest"
-        self.timer.reset()
-        while self.timer.getTime() < self.stimuli_duration:
-            for x in range (8):
-                image_path = os.path.join(self.dossier_image, 'barre'+str(x)+'.png')
-                image_stim = visual.ImageStim(
-                    win=self.win,
-                    image=image_path,
-                    pos=(0, 0)
-                )
-
-                image_stim.draw()
-                self.win.flip()
-                while self.timer.getTime() < (self.stimuli_duration/8)*(x+1):
-                    pass
-            image_path = os.path.join(self.dossier_image, 'barre'+str(8)+'.png')
+        for x in range (8):
+            image_path = os.path.join(self.dossier_image, 'barre'+str(x)+'.png')
             image_stim = visual.ImageStim(
                 win=self.win,
                 image=image_path,
@@ -190,42 +159,48 @@ class Audition(Parente):
 
             image_stim.draw()
             self.win.flip()
-        stimulus_duration = self.stimuli_timer.getTime()
+            core.wait(self.stimuli_duration/7)
+        image_path = os.path.join(self.dossier_image, 'barre'+str(8)+'.png')
+        image_stim = visual.ImageStim(
+            win=self.win,
+            image=image_path,
+            pos=(0, 0)
+        )
+
+        image_stim.draw()
+        self.win.flip()
         if gauche == "ONParler":
             audio_thread.join()
-        print(onset)
         if self.reaction != "None":
             self.reaction = super().float_to_csv(self.reaction)
-        super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(onset), super().float_to_csv(stimulus_duration), cond, stimulus, self.reaction, gauche, droite])
+        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), cond, stimulus, self.reaction, gauche, droite])
         self.reaction = "None"
         if droite == "ONEcouter":
             audio.stop()
 
     def lancement(self):
-        super().file_init(self.filename, self.filename_csv,
-                          ['onset', 'duration', 'Cond', 'stimulus', 'time_before_starting_to_answer', 'Image1', 'Image2'])
+        print("ici le son")
+        print(self.sound)
+        super().file_init(self.filename, self.filename_csv, ['onset', 'Cond', 'stimulus', 'time_before_starting_to_answer', 'Image1', 'Image2'])
         gauche, droite = self.reading(self.filepath)
-        if self.random == True:
+        if self.random:
             combined = list(zip(gauche, droite))
             random.shuffle(combined)
-            liste1_mixed, liste2_mixed = zip(*combined)
-            gauche = list(liste1_mixed)
-            droite = list(liste2_mixed)
-
+            gauche, droite = zip(*combined)
         texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger, "center")
         super().wait_for_trigger(self.trigger)
         self.global_timer.reset()
-        for x in range (len(gauche)):
+        for gauche, droite in zip(gauche, droite):
             texte_centre = visual.TextStim(self.win, text=str(self.stimuli_duration), pos=(0, 0), color=(-1, -1, -1))
-            self.affichage(texte_centre, gauche[x], droite[x])
+            self.affichage(texte_centre, gauche, droite)
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None", "None"])
         super().the_end2(self.win)
+        super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "Cond")
 
-
 if __name__ == "__main__":
-    #a = Audition(3,"bonjour","Input/Paradigme_Audition/sequence.txt",3,"True","s","instruction.txt").lancement()
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")
     parser.add_argument("--instruction", type=float, required=True, help="Durée en secondes de l'instruction")
     parser.add_argument("--duration", type=float, required=True, help="Durée en secondes des stimuli")
@@ -236,14 +211,11 @@ if __name__ == "__main__":
     parser.add_argument("--activation", type=str, required=True, help="Pour le boitier avec les EEG")
     parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
     parser.add_argument("--launching", type=str, help="Chemin vers le fichier de mots", required=False)
-    parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
-
-
-    parser.add_argument('--port', type=str, required=False, help="Port")
-    parser.add_argument('--baudrate', type=int, required=False, help="Speed port")
-    parser.add_argument('--trigger', type=str, required=False, help="caractère pour lancer le programme")
+    parser.add_argument("--sigma", type=float, required=True, help="écart type pour le random")
     parser.add_argument("--hauteur", type=float, required=True, help="hauteur du rectangle")
     parser.add_argument("--largeur", type=float, required=True, help="Largeur du rectangle")
+    parser.add_argument('--trigger', type=str, required=False, help="caractère pour lancer le programme")
+
 
     args = parser.parse_args()
     audition = Audition(args.duration, args.output_file, args.file, args.betweenstimuli,

@@ -1,15 +1,32 @@
+import os
+
 from flask import Flask, render_template, request, jsonify
 import subprocess
 import sys
+import json
 import webbrowser
 from waitress import serve
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'uploads/'
+
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return 'Aucun fichier sélectionné.', 400
+    file = request.files['file']
+    if file.filename == '':
+        return 'Aucun fichier sélectionné.', 400
+    if file:
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(file_path)  # Sauvegarder le fichier dans le dossier spécifié
+        return f'Fichier {file.filename} téléchargé avec succès à {file_path}.', 200
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    return render_template('index2.html')
 
 
 @app.route('/about')
@@ -17,6 +34,13 @@ def about():
     print("")
     return render_template('about.html')
 
+@app.route('/fr/about')
+def about_fr():
+    return render_template('about.html')  # Template en français
+
+@app.route('/nl/about')
+def about_nl():
+    return render_template('about-nl.html')  # Template en néerlandais
 
 @app.route('/')
 def home():
@@ -44,8 +68,8 @@ def submit_text():
         fixation = data.get('fixation')
         print(data)
         subprocess.run([
-            #sys.executable, 'Python_scripts/Psychopy_Text.py',
-            'Python_scripts\\Psychopy_Text.exe',
+            sys.executable, 'Python_scripts/Psychopy_Text.py',
+            #'Python_scripts\\Psychopy_Text.exe',
             '--duration', duration,
             '--words', words,
             '--file', file,
@@ -85,8 +109,8 @@ def submit_emo_voice():
         trigger = data.get('trigger')
         random = data.get('random')
         subprocess.run([
-            #sys.executable, 'Python_scripts/Psychopy_EMO_VOICES.py',
-            'Python_scripts\\Psychopy_EMO_VOICES.exe',
+            sys.executable, 'Python_scripts/Psychopy_EMO_VOICES.py',
+            #'Python_scripts\\Psychopy_EMO_VOICES.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -118,7 +142,7 @@ def submit_cyberball():
         trigger = data.get("trigger")
         launching = data.get("launching_text")
         patient_name = data.get("patient_name")
-        output_file = data.get("output_file")
+        output_file = "useless"
         filePath = data.get("filePath")
         print("ça passe")
         print(data)
@@ -142,6 +166,8 @@ def submit_cyberball():
         return jsonify({'status': 'error', 'message': str(e)})
 
 
+
+
 @app.route('/submit-emo-faces', methods=['POST'])
 def submit_emo_faces():
     try:
@@ -162,8 +188,8 @@ def submit_emo_faces():
         random = data.get('random')
         sigma = data.get('sigma')
         subprocess.run([
-            #sys.executable, 'Python_scripts/Psychopy_EMO_FACE.py',
-            'Python_scripts\\Psychopy_EMO_FACE.exe',
+            sys.executable, 'Python_scripts/Psychopy_EMO_FACE.py',
+            #'Python_scripts\\Psychopy_EMO_FACE.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -209,8 +235,8 @@ def submit_adjectifs():
         print("working here?")
         print(data)
         subprocess.run([
-            #sys.executable, 'Python_scripts/Psychopy_Adjectifs.py',
-            'Python_scripts\\Psychopy_Adjectifs.exe',
+            sys.executable, 'Python_scripts/Psychopy_Adjectifs.py',
+            #'Python_scripts\\Psychopy_Adjectifs.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -256,8 +282,8 @@ def submit_stroop():
         sigma = data.get('sigma')
         print(data)
         subprocess.run([
-            #sys.executable, 'Python_scripts/Psychopy_Stroop.py',
-            'Python_scripts\\Psychopy_Stroop.exe',
+            sys.executable, 'Python_scripts/Psychopy_Stroop.py',
+            #'Python_scripts\\Psychopy_Stroop.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -305,8 +331,8 @@ def submit_localizer():
 
         print(data)
         subprocess.run([
-            #sys.executable, 'Python_scripts/Psychopy_LOCALIZER.py',
-            'Python_scripts\\Psychopy_LOCALIZER.exe',
+            sys.executable, 'Python_scripts/Psychopy_LOCALIZER.py',
+            #'Python_scripts\\Psychopy_LOCALIZER.exe',
             '--duration', duration,
             '--blocks', blocks,
             '--per_block', per_block,
@@ -354,8 +380,8 @@ def submit_priming():
         print('in priming')
         print(data)
         subprocess.run([
-            #sys.executable, 'Python_scripts/Psychopy_Priming.py',
-            'Python_scripts\\Psychopy_Priming.exe',
+            sys.executable, 'Python_scripts/Psychopy_Priming.py',
+            #'Python_scripts\\Psychopy_Priming.exe',
             '--duration', duration,
             '--blocks', blocks,
             '--port', port,
@@ -403,8 +429,8 @@ def submit_images():
         sigma = data.get('sigma')
         print(data)
         subprocess.run([
-            #sys.executable, 'Python_scripts/Psychopy_Image.py',
-            'Python_scripts\\Psychopy_Image.exe',
+            sys.executable, 'Python_scripts/Psychopy_Image.py',
+            #'Python_scripts\\Psychopy_Image.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -448,8 +474,8 @@ def submit_videos():
         sigma = data.get('sigma')
         print(data)
         subprocess.run([
-            #sys.executable, 'Python_scripts/Psychopy_Video.py',
-            'Python_scripts\\Psychopy_Video.exe',
+            sys.executable, 'Python_scripts/Psychopy_Video.py',
+            #'Python_scripts\\Psychopy_Video.exe',
             '--duration', duration,
             '--file', file,
             '--output_file', output_file,
@@ -497,13 +523,11 @@ def submit_audition():
 
         print(data)
         subprocess.run([
-            #sys.executable, 'Python_scripts/Psychopy_Audition.py',
-            'Python_scripts\\Psychopy_Audition.exe',
+            sys.executable, 'Python_scripts/Psychopy_Audition.py',
+            #'Python_scripts\\Psychopy_Audition.exe',
             '--instruction', instruction,
             '--duration', duration,
-            '--port', port,
             '--activation', str(activation),
-            '--baudrate', str(baudrate),
             '--trigger', trigger,
             '--hauteur', hauteur,
             '--launching', launching,
@@ -522,7 +546,22 @@ def submit_audition():
         return jsonify({'status': 'error', 'message': str(e)})
 
 
+@app.route('/submit-table', methods=['POST'])
+def submit_table():
+    print("on arrive iciooooooooooooo")
+    data = request.get_json()
+    print(data)
+    json_data = json.dumps(data)
+    print(json_data)
+
+    subprocess.run([
+        sys.executable, 'Python_scripts/Psychopy_everything.py',
+        '--data', json_data
+    ])
+    return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+
+
 if __name__ == '__main__':
     webbrowser.open('http://127.0.0.1:5000')
-    # app.run(debug=True)
+    #app.run(debug=True)
     serve(app, host='0.0.0.0', port=5000)

@@ -60,25 +60,15 @@ class writtingprt:
 
 
 
-    def color_to_prt(self, color):
-        if isinstance(color, str):
-            psychopy_color = Color(color, space='rgb')
-            psychopy_rgb = psychopy_color.rgb
-        elif len(color) == 3:
-            psychopy_rgb = color
-        else:
-            return "Error"
 
-        return psychopy_to_rgb(psychopy_rgb)
-
-
-    def analyze_trial_types(self, csv_file, col="trial_type"):
+    def analyze_trial_types(self, csv_file, col="trial_type", min_gap=1):
         df = pd.read_csv(csv_file, delimiter=";")
-        df['onset'] = df['onset'].str.replace(',', '.').astype(float) * 1000
-        df['duration'] = df['duration'].str.replace(',', '.').astype(float) * 1000
 
-        df['onset'] = df['onset'].round().astype(int)
-        df['duration'] = df['duration'].round().astype(int)
+        df['onset'] = pd.to_numeric(df['onset'], errors='coerce')
+        df['duration'] = pd.to_numeric(df['duration'], errors='coerce')
+
+        df['onset'] = df['onset'].fillna(0).astype(int)
+        df['duration'] = df['duration'].fillna(0).astype(int)
         trial_type_data = {}
 
         for trial_type in df[col].unique():
@@ -89,6 +79,11 @@ class writtingprt:
                 durations = filtered_df['duration'].tolist()
                 endsets = (filtered_df['onset'] + filtered_df['duration']).tolist()
 
+                for i in range(1, len(onsets)):
+                    if onsets[i] < endsets[i - 1]:
+                        onsets[i] = endsets[i - 1]
+                    endsets[i] = onsets[i] + durations[i]
+
                 trial_type_data[trial_type] = {
                     "count": count,
                     "onsets": onsets,
@@ -98,8 +93,14 @@ class writtingprt:
 
         if 'Fixation' in df[col].unique():
             fixation_df = df[df[col] == 'Fixation']
+            onsets = fixation_df['onset'].tolist()
+            durations = fixation_df['duration'].tolist()
             endsets = (fixation_df['onset'] + fixation_df['duration']).tolist()
 
+            for i in range(1, len(onsets)):
+                if onsets[i] < endsets[i - 1]:
+                    onsets[i] = endsets[i - 1]
+                endsets[i] = onsets[i] + durations[i]
             trial_type_data['Fixation'] = {
                 "count": len(fixation_df),
                 "onsets": fixation_df['onset'].tolist(),
@@ -107,6 +108,21 @@ class writtingprt:
                 "endsets": endsets
             }
 
+        return trial_type_data
+
+    def adjust_onsets_to_start_at_zero(self,trial_type_data):
+        min_onset = None
+        min_trial_type = None
+
+        for trial_type in trial_type_data:
+            onsets = trial_type_data[trial_type]["onsets"]
+            current_min_onset = min(onsets)
+            if min_onset is None or current_min_onset < min_onset:
+                min_onset = current_min_onset
+                min_trial_type = trial_type
+
+        if min_onset is not None and min_trial_type is not None:
+            trial_type_data[min_trial_type]["onsets"][0] = 0
         return trial_type_data
 """
 csv_file = 'easy.csv'

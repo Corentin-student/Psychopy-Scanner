@@ -20,7 +20,6 @@ class PsychoPyParadigm(Parente):
         self.stimuli_apparition = []
         self.stimuli = []
         self.global_timer= core.Clock()
-        self.timer = core.Clock()
         self.launching = launching
         self.output=output
         self.port = port
@@ -61,13 +60,11 @@ class PsychoPyParadigm(Parente):
             onset = self.global_timer.getTime()
             if self.activation and words != [":; $+", " #^=-", ":?$µ", "###"]:
                 super().send_character(self.port,self.baudrate)
-            self.timer.reset()  # Réinitialiser l'horloge à chaque nouveau mot
-            while self.timer.getTime() < display_time:
+            while self.global_timer.getTime() < onset + display_time:
                 pass
-            time_long = self.timer.getTime()
             stimuli = word
             trial_type = "Stimuli"
-            super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), stimuli, trial_type])
+            super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), stimuli, trial_type])
 
     def reading(self, filename):
         filename = os.path.join(self.dossier, filename)
@@ -93,41 +90,37 @@ class PsychoPyParadigm(Parente):
         self.cross_stim.draw()
         self.win.flip()
         onset = self.global_timer.getTime()
-        self.timer.reset()
-        while self.timer.getTime() < self.fixation:
+        while self.global_timer.getTime() < onset + self.fixation:
             pass
-        time_long = self.timer.getTime()
         stimuli = "None"
         trial_type = "Fixation"
-        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), stimuli, trial_type])
+        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), stimuli, trial_type])
         self.affichage_mots(self.win, text_stim, nothinkinglist, self.duration)
         self.cross_stim.draw()
         self.win.flip()
         onset = self.global_timer.getTime()
-        self.timer.reset()
-        while self.timer.getTime() < self.fixation:
+        while self.global_timer.getTime() < onset + self.fixation:
             pass
-        time_long = self.timer.getTime()
-        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), stimuli, trial_type])
+        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), stimuli, trial_type])
         self.affichage_mots(self.win, text_stim, self.words, self.duration)
         self.cross_stim.draw()
         self.win.flip()
         onset = self.global_timer.getTime()
-        self.timer.reset()
-        while self.timer.getTime()< self.fixation:
+        while self.global_timer.getTime() < onset + self.fixation:
             pass
-        time_long = self.timer.getTime()
-        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), stimuli, trial_type])
+        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), stimuli, trial_type])
         self.affichage_mots(self.win, text_stim, nothinkinglist, self.duration)
         self.cross_stim.draw()
         self.win.flip()
-        self.timer.reset()
         onset = self.global_timer.getTime()
-        while self.timer.getTime() < self.fixation:
+        while self.global_timer.getTime() < onset + self.fixation:
             pass
-        time_long = self.timer.getTime()
-        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), super().float_to_csv(time_long), stimuli, trial_type])
+        super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), stimuli, trial_type])
         super().the_end(self.win)
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
+                               "None"])
+        super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
 
@@ -137,26 +130,10 @@ class PsychoPyParadigm(Parente):
             if char in stimuli:
                 return True
         return False
-    def write_tsv(self, filename="output1.tsv"):
-        filename = super().preprocessing_tsv(filename)
-
-        with open(filename, mode='w', newline='') as file:
-            tsv_writer = csv.writer(file, delimiter='\t')
-            tsv_writer.writerow(['onset', 'duration', 'stimuli', 'trial_type'])
-            type_stimuli = []
-            for x in range(len(self.stimuli)):
-                if self.pas_un_stimuli(self.stimuli[x]):
-                    type_stimuli.append("Noise")
-                elif self.stimuli[x] == "None":
-                    type_stimuli.append("Fixation")
-                else:
-                    type_stimuli.append("Stimuli")
-            for i in range(len(self.stimuli_apparition)):
-                tsv_writer.writerow([self.stimuli_apparition[i], self.stimuli_times[i], self.stimuli[i], type_stimuli[i]])
 
     def run(self):
         super().file_init(self.filename, self.filename_csv,
-                          ['onset', 'duration', 'stimuli', 'trial_type'])
+                          ['onset', 'stimuli', 'trial_type'])
         if self.file:
             self.words = self.reading(self.file)
         else:

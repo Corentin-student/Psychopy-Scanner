@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script></head>
+<body>
+
+    <header class="header">
+        <h1 class="header-center">Création de Paradigme</h1>
+    </header>
+    <main>
+        <div id="main-container" style="margin-left: 6%;">
+            <div id="overlay-Image" class="overlay-index">
+              <div class="overlay-content-index">
+                <span class="fermer" onclick="fermerOverlay('overlay-Image')">&times;</span>
+                <h2>Ajout d'une Image</h2>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <div class="input-group">
+                        <div class="input-container">
+                            <h3>Timing d'apparition</h3>
+                            <input type="text" id="apparition-Image" step="0.001" placeholder="0.000" oninput="validateFloatInput(this)">
+                        </div>
+                        <div class="input-container">
+                            <h3>Durée du stimulus</h3>
+                            <input type="text" id="duration-Image" placeholder="par exemple: 3">
+                        </div>
+                        <div class="input-container">
+                            <h3>Angle du stimulus (si aucun mettre 0)</h3>
+                            <input type="text" id="angle-Image" placeholder="par exemple: 90">
+                        </div>
+                        <div class="input-container">
+                            <h3>Choix du stimulus</h3>
+                            <button class="button-choice" onclick="document.getElementById('fileinput-Image').click()">Choisir un fichier</button>
+                            <input type="file" id="fileinput-Image" style="display: none;" onchange="handleFileUpload(event)">
+                        </div>
+                        <div class="input-container">
+                            <h3></h3>
+                            <button class="submit" onclick="submit('Image')">Submit</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div id="overlay-Video" class="overlay-index">
+              <div class="overlay-content-index" style="width: 65%; margin-left: auto; margin-right: auto;">
+                <span class="fermer" onclick="fermerOverlay('overlay-Video')">&times;</span>
+                <h2>Ajout d'une Vidéo</h2>
+                  <div style="display: flex; justify-content: center; align-items: center;">
+                    <div class="input-group">
+                        <div class="input-container">
+                            <h3>Timing d'apparition</h3>
+                            <input type="text" id="apparition-Video" step="0.001" placeholder="0.000" oninput="validateFloatInput(this)">
+                        </div>
+                        <div class="input-container">
+                            <h3>Durée du stimulus</h3>
+                            <input type="text" id="duration-Video" placeholder="par exemple: 3">
+                        </div>
+                        <div class="input-container">
+                            <h3>Choix du stimulus</h3>
+                            <button class="button-choice" onclick="document.getElementById('fileinput-Video').click()">Choisir un fichier</button>
+                            <input type="file" id="fileinput-Video" style="display: none;" onchange="handleFileUpload(event)">
+                        </div>
+                        <div class="input-container">
+                            <h3></h3>
+                            <button class="submit" onclick="submit('Video')">Submit</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div id="overlay-Audio" class="overlay-index">
+              <div class="overlay-content-index" style="width: 65%; margin-left: auto; margin-right: auto;">
+                <span class="fermer" onclick="fermerOverlay('overlay-Audio')">&times;</span>
+                <h2>Ajout d'une Audio</h2>
+                  <div style="display: flex; justify-content: center; align-items: center;">
+                    <div class="input-group">
+                        <div class="input-container">
+                            <h3>Timing d'apparition</h3>
+                            <input type="text" id="apparition-Audio" step="0.001" placeholder="0.000" oninput="validateFloatInput(this)">
+                        </div>
+                        <div class="input-container">
+                            <h3>Durée du stimulus</h3>
+                            <input type="text" id="duration-Audio" placeholder="par exemple: 3">
+                        </div>
+                        <div class="input-container">
+                            <h3>Choix du stimulus</h3>
+                            <button class="button-choice" onclick="document.getElementById('fileinput-Audio').click()">Choisir un fichier</button>
+                            <input type="file" id="fileinput-Audio" style="display: none;" onchange="handleFileUpload(event)">
+                        </div>
+                        <div class="input-container">
+                            <h3></h3>
+                            <button class="submit" onclick="submit('Audio')">Submit</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div id="overlay-Enregistrement" class="overlay-index">
+              <div class="overlay-content-index" style="width: 55%; margin-left: auto; margin-right: auto;">
+                <span class="fermer" onclick="fermerOverlay('overlay-Enregistrement')">&times;</span>
+                <h2>Ajout d'un Enregistrement</h2>
+                  <div style="display: flex; justify-content: center; align-items: center;">
+                    <div class="input-group">
+                        <div class="input-container">
+                            <h3>Timing d'apparition</h3>
+                            <input type="text" id="apparition-Enregistrement" step="0.001" placeholder="0.000" oninput="validateFloatInput(this)">
+                        </div>
+                        <div class="input-container">
+                            <h3>Durée du stimulus</h3>
+                            <input type="text" id="duration-Enregistrement" placeholder="par exemple: 3">
+                        </div>
+                        <div class="input-container">
+                            <h3></h3>
+                            <button class="submit" onclick="submit('Enregistrement')">Submit</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div id="overlay-Fixation" class="overlay-index">
+              <div class="overlay-content-index" style="width: 55%; margin-left: auto; margin-right: auto;">
+                <span class="fermer" onclick="fermerOverlay('overlay-Fixation')">&times;</span>
+                <h2>Ajout d'une croix de Fixation</h2>
+                  <div style="display: flex; justify-content: center; align-items: center;">
+                    <div class="input-group">
+                        <div class="input-container">
+                            <h3>Timing d'apparition</h3>
+                            <input type="text" id="apparition-Fixation" step="0.001" placeholder="0.000" oninput="validateFloatInput(this)">
+                        </div>
+                        <div class="input-container">
+                            <h3>Durée de la croix</h3>
+                            <input type="text" id="duration-Fixation" placeholder="par exemple: 3">
+                        </div>
+                        <div class="input-container">
+                            <h3></h3>
+                            <button class="submit" onclick="fixation()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div id="overlay-Holes" class="overlay-index">
+              <div class="overlay-content-index" style="width: 55%; margin-left: auto; margin-right: auto;">
+                <span class="fermer" onclick="fermerOverlay('overlay-Fixation')">&times;</span>
+                <h2>Présence de trous dans la séquence, voulez vous ajouter des croix de fixation à ces endroits?</h2>
+                  <div style="display: flex; justify-content: center; align-items: center;">
+                    <div class="input-group">
+                        <div class="input-container">
+                            <h3></h3>
+                            <button class="submit" onclick="fillHoles()">Oui</button>
+                        </div>
+                        <div class="input-container">
+                            <h3></h3>
+                            <button class="submit" onclick="fixation()">Non</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <h2></h2>
+            <div class="input-group">
+                <div class="suite-bouttons">
+                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Image')">Ajout d'une image</button>
+                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Video')">Ajout d'une vidéo</button>
+                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Audio')">Ajout d'un audio</button>
+                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Enregistrement')">Enregistrement de la voix</button>
+                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Fixation')">Croix de Fixation</button>
+                </div>
+            </div>
+
+            <div class="grand-cadre">
+              <table class="stimulus-table">
+                <thead>
+                  <tr>
+                    <th>Apparition</th>
+                    <th>Durée</th>
+                    <th>Type</th>
+                    <th>Stimulus</th>
+                    <th>Angle</th>
+                    <th>Enlever</th>
+                  </tr>
+                </thead>
+                <tbody id="table-body">
+                  <!-- Les lignes de données seront ajoutées ici -->
+                </tbody>
+              </table>
+            </div>
+            <button class="en_dessous_cadre" onclick="submitTable()">submit</button>
+        </div>
+    </main>
+</body>
+</html>
