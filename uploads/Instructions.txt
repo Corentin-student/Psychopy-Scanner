@@ -1,0 +1,31 @@
+*Vous allez jouer à jeu avec d'autres patients.
+
+Le jeu consiste à se faire des passes avec d'autres patients.
+Lorsque la balle arrivera chez vous, vous devrez la donner à un autre joueur en appuyant sur la flèche de gauche ou de droite.
+
+Si vous ne faites pas la passe, la balle sera remise au centre
+
+(Appuyez sur une touche quand vous êtes prêts)*
+
+*Vous allez maintenant rejoindre la salle d'attente*
+
+
+pyinstaller psychotest.py --add-data "C:\Program Files\PsychoPy\Lib\site-packages\psychopy;psychopy"
+
+
+    hiddenimports=['platform', 'pkg_resources', 'six', 'pyglet', 'pyglet.libs.win32'],
+
+
+pyinstaller --add-data "C:\Program Files\PsychoPy\Lib\site-packages\psychopy;psychopy" psychotest.py
+
+
+
+  WARNING: The scripts f2py.exe and numpy-config.exe are installed in 'C:\Users\coren\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+psychopy 2024.2.1 requires numpy<2.0, but you have numpy 2.1.1 which is incompatible.
+psychopy 2024.2.1 requires pyglet==1.4.11; platform_system == "Windows", but you have pyglet 2.0.17 which is incompatible.
+psychopy 2024.2.1 requires setuptools<=66.1.1, but you have setuptools 70.3.0 which is incompatible.
+accelerate 0.33.0 requires numpy<2.0.0,>=1.17, but you have numpy 2.1.1 which is incompatible.
+Successfully installed numpy-2.1.1
+

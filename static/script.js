@@ -283,8 +283,8 @@ function submitTable() {
             .catch((error) => {
                 console.error('Error:', error);
             });
-    }else {
-        alert("On avance")
+    }
+    else {
         ouvrirOverlay("overlay-Holes")
     }
 }

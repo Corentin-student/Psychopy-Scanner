@@ -88,7 +88,7 @@ class Parente(ABC):
     def the_end3 (self, win):
         line = visual.ShapeStim(
             win,
-            vertices=[(0, 1), (0, -1)], 
+            vertices=[(0, 1), (0, -1)],
             lineWidth=5,
             lineColor='white',
             closeShape=False
