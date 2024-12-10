@@ -53,10 +53,21 @@ input {
   overflow: auto; /* Pour gérer le débordement si le contenu dépasse la taille du cadre */
 }
 
+
+.button-filename {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    margin-left: 10%;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 .en_dessous_cadre {
     position: absolute; /* Pour le positionner par rapport au conteneur parent */
     right: 8%;           /* Alignement à droite */
-    bottom: -50px;      /* Placer en dessous du cadre */
+    bottom: 5px;      /* Placer en dessous du cadre */
     padding: 10px 20px;
     background-color: #4CAF50;
     color: white;
@@ -64,6 +75,38 @@ input {
     border-radius: 5px;
     cursor: pointer;
 }
+
+.container {
+    position: relative;
+    padding: 20px;
+}
+
+.box-wrapper {
+    margin-top: 20px;
+    position: relative;
+    margin-right: 40px;
+}
+
+.mini-title {
+    position: absolute;
+    top: -20px;
+    padding: 5px 10px;
+    font-size: 14px;
+    width: 150px;
+}
+
+#visible-group{
+    visibility: hidden;
+}
+
+.small-box {
+      display: inline-block; /* Adapte la taille à son contenu */
+      border: 2px solid #4CAF50; /* Bordure du cadre */
+      padding: 5px; /* Espace autour du texte */
+      margin: 10px; /* Espace entre les cadres */
+      font-size: 16px; /* Taille du texte */
+    }
+
 #main-container {
     position: relative; /* Nécessaire pour que l'élément enfant soit positionné par rapport à ce conteneur */
 }
@@ -167,7 +210,40 @@ input {
     width: 100px;
 }
 
+.sidenav {
+    width: 250px;
+    background-color: rgba(40, 93, 1, 0.58);
+    overflow-x: hidden;
+    padding-top: 20px;
+    position: fixed;
+    top: 12%;
+    left: 0;
+    height: 88%;
+    z-index: 1;
+}
 
+.sidenav a {
+    padding: 15px 8px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #e8e8e8;
+    display: block;
+}
+
+.sidenav a.active {
+    color: rgba(28, 59, 0, 0.58);
+    background-color: #f1f1f1;
+    font-weight: bold;
+}
+
+.sidenav a:hover {
+  color: #4b4b4b;
+}
+
+.h2-sidenav {
+    color: white;
+    padding: 0px 10px;
+}
 
 
 

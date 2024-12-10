@@ -13,6 +13,30 @@
     </header>
     <main>
         <div id="main-container" style="margin-left: 6%;">
+            <div id="overlay-Instructions" class="overlay-index">
+              <div class="overlay-content-index">
+                <span class="fermer" onclick="fermerOverlay('overlay-Instructions')">&times;</span>
+                <h2>Ajout d'Instructions au début du paradigme</h2>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <div class="input-group">
+                        <div class = "input-container">
+                            <h3>Fichier pour les instructions au début</h3>
+                            <button class="button-choice" onclick="document.getElementById('fileinput-Instructions').click()">Choisir un fichier d'instructions</button>
+                            <input type="file" id="fileinput-Instructions" style="display: none;" onchange="handleFileUpload(event)">
+                        </div>
+                        <div class="input-container">
+                            <h3>Fichier pour le mot de fin</h3>
+                            <button class="button-choice" onclick="document.getElementById('fileinput-End').click()">Choisir un fichier de fin</button>
+                            <input type="file" id="fileinput-End" style="display: none;" onchange="handleFileUpload(event)">
+                        </div>
+                        <div class="input-container">
+                            <h3></h3>
+                            <button class="submit" onclick="ajoutFichiers()">Suddbmit</button>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
             <div id="overlay-Image" class="overlay-index">
               <div class="overlay-content-index">
                 <span class="fermer" onclick="fermerOverlay('overlay-Image')">&times;</span>
@@ -160,9 +184,20 @@
                 </div>
               </div>
             </div>
+            <div id="overlay-filename" class="overlay-index">
+              <div class="overlay-content-index" style="width: 55%; margin-left: auto; margin-right: auto;">
+                <span class="fermer" onclick="fermerOverlay('overlay-Fixation')">&times;</span>
+                <h2>Veuillez entrer un nom pour enregistrer le paradigme</h2>
+                  <div style="display: flex; justify-content: center; align-items: center;">
+                      <input type="text" id="paradigme_name" placeholder="File Name">
+                      <button class="button-filename" onclick="SubmitParadigme()">Submit</button>
+                </div>
+              </div>
+            </div>
             <h2></h2>
             <div class="input-group">
                 <div class="suite-bouttons">
+                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Instructions')">Ajout d'instructions</button>
                     <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Image')">Ajout d'une image</button>
                     <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Video')">Ajout d'une vidéo</button>
                     <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Audio')">Ajout d'un audio</button>
@@ -188,7 +223,19 @@
                 </tbody>
               </table>
             </div>
+            <div class="input-group" id="visible-group">
+                <div class="box-wrapper">
+                    <span class="mini-title">Fichier d'instructions</span>
+                    <div class="small-box" id="instruction_txt">fichier</div>
+                </div>
+                <div class="box-wrapper">
+                    <span class="mini-title">Fichier slide de fin</span>
+                    <div class="small-box" id="end_txt">fichier</div>
+                </div>
+                <!-- Ajouter plus de boîtes comme nécessaire -->
+            </div>
             <button class="en_dessous_cadre" onclick="submitTable()">submit</button>
+
         </div>
     </main>
 </body>

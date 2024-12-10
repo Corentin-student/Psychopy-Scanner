@@ -1,7 +1,0 @@
-body_scr_static.jpeg
-body_static.jpeg
-bodyB_scr_static.jpeg
-bodyB_static.jpeg
-face_scr_static.jpeg
-face_static.jpeg
-face_scr_static.jpeg

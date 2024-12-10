@@ -1,0 +1,24 @@
+[
+    {
+        "Apparition": "0.000",
+        "Duree": "2.000",
+        "Type": "Croix de Fixation",
+        "Stimulus": "/",
+        "Angle": "/"
+    },
+    {
+        "Apparition": "2.000",
+        "Duree": "2.000",
+        "Type": "Image",
+        "Stimulus": "photo.jpg",
+        "Angle": "0"
+    },
+    {
+          "Apparition": "4.000",
+          "Duree": "1.000",
+          "Type": "Audition",
+          "Stimulus": "record1.wav",
+          "Angle": "0"
+    },
+
+]

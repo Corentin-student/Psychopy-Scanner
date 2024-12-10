@@ -8,6 +8,21 @@ function fermerOverlay(value) {
     document.getElementById(value).style.display = "none"; // Cache l'overlay
 }
 
+function ajoutFichiers(){
+    console.log("on regarde ce qui se passe")
+    let instru = document.getElementById("fileinput-Instructions").value;
+    let end = document.getElementById("fileinput-End").value;
+    instru = instru.split('\\').pop();
+    end = end.split("\\").pop();
+    document.getElementById("instruction_txt").textContent = instru;
+    document.getElementById("end_txt").textContent = end;
+    document.getElementById("visible-group").style.visibility = "visible";
+
+
+
+
+}
+
 function fermerTousOverlays() {
     var overlays = document.querySelectorAll('.overlay-index');
     overlays.forEach(function(overlay) {
@@ -22,7 +37,6 @@ document.addEventListener('keydown', function(event) {
         fermerTousOverlays();
     }
 });
-
 
 function submit(name) {
     let angleStimulus
@@ -243,46 +257,56 @@ function highlightDuplicateTimings() {
     });
 }
 
+
+function SubmitParadigme() {
+    var table = document.querySelector('.stimulus-table');
+    var data = [];
+    var keys = ['Apparition', 'Duree', 'Type', 'Stimulus', 'Angle'];
+    for (var i = 1, row; row = table.rows[i]; i++) {
+        var rowData = {};
+        for (var j = 0, col; col = row.cells[j]; j++) {
+            if (j < row.cells.length - 1) { // Ne pas inclure la dernière colonne 'Enlever'
+                var key = keys[j]; // Utiliser les clés prédéfinies
+                console.log("okkk")
+                console.log(key)
+                console.log("je capte pas")
+                var value = col.textContent.trim();
+                if (key === 'Apparition' || key === 'Duree') {
+                    value = value.endsWith('s') ? value.slice(0, -1) : value; // Enlève le 's' à la fin si présent
+                }
+                rowData[key] = value;
+            }
+        }
+        data.push(rowData);
+    }
+    const filename = document.getElementById("paradigme_name").value;
+    fetch('/keep-datas', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            data: data,
+            filename: filename
+        }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+
+
+}
+
 function submitTable() {
 
     Holes = checkingHoles();
     if (Object.keys(Holes).length === 0) {
-        var table = document.querySelector('.stimulus-table');
-        var data = [];
-        var keys = ['Apparition', 'Duree', 'Type', 'Stimulus', 'Angle'];
-        for (var i = 1, row; row = table.rows[i]; i++) {
-            var rowData = {};
-            for (var j = 0, col; col = row.cells[j]; j++) {
-                if (j < row.cells.length - 1) { // Ne pas inclure la dernière colonne 'Enlever'
-                    var key = keys[j]; // Utiliser les clés prédéfinies
-                    console.log("okkk")
-                    console.log(key)
-                    console.log("je capte pas")
-                    var value = col.textContent.trim();
-                    if (key === 'Apparition' || key === 'Duree') {
-                        value = value.endsWith('s') ? value.slice(0, -1) : value; // Enlève le 's' à la fin si présent
-                    }
-                    rowData[key] = value;
-                }
-            }
-            data.push(rowData);
-        }
-        console.log(data);
-
-        fetch('/submit-table', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data) // Conversion directe du tableau en chaîne JSON
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        ouvrirOverlay("overlay-filename")
     }
     else {
         ouvrirOverlay("overlay-Holes")

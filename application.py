@@ -1,5 +1,5 @@
-import os
 "Version 1.0"
+import os
 from flask import Flask, render_template, request, jsonify
 import subprocess
 import sys
@@ -28,6 +28,15 @@ def upload_file():
 def index():
     return render_template('index2.html')
 
+@app.route('/created_paradigmes')
+def created_paradigmes():
+    return render_template('existing.html')
+
+@app.route('/api/json-files')
+def list_json_files():
+    path = 'static/jsons'  # Chemin vers le dossier des fichiers JSON
+    files = [file.replace('.json', '') for file in os.listdir(path) if file.endswith('.json')]
+    return jsonify(files)
 
 @app.route('/about')
 def about():
@@ -45,6 +54,45 @@ def about_nl():
 @app.route('/')
 def home():
     return render_template('about.html')
+
+@app.route('/submit_ia_audition', methods=['POST'])
+def submit_ia_audition():
+    try:
+        print("oui?")
+        data = request.get_json()
+        print(data)
+        subprocess.run([
+            sys.executable, 'Python_scripts/IA_audition.py',
+            "--file", data.get("filePath"),
+            "--output_file", data.get("output_file"),
+            "--duration", data.get("duration"),
+            "--betweenstimuli", data.get("betweenstimuli"),
+            "--afterfixation", data.get("afterfixation"),
+            "--bip", data.get("bip")
+        ], check=True)
+
+        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
+
+
+@app.route('/submit_ia_image', methods=['POST'])
+def submit_ia_image():
+    try:
+        data = request.get_json()
+        print(data)
+        subprocess.run([
+            sys.executable, 'Python_scripts/IA_image.py',
+            "--file", data.get("filePath"),
+            "--output_file", data.get("output_file"),
+            '--duration', data.get("duration"),
+            "--betweenstimuli", data.get("betweenstimuli"),
+            "--zoom", data.get("zoom")
+        ], check=True)
+
+        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
 
 
 @app.route('/submit-text', methods=['POST'])
@@ -133,6 +181,24 @@ def submit_emo_voice():
 @app.route('/submit-cyberball', methods=['POST'])
 def submit_cyberball():
     try:
+        """try:
+                subprocess.run([
+                    'powershell', '-Command', 'Start-Process',
+                    'Python_scripts\\Psychopy_Cyberball.py',
+                    '-ArgumentList',
+                    f'"--premiere_phase", "{premiere_phase}", "--exclusion",'
+                    f' "{exclusion}", "--transition", "{transition}", "--minimum", "{minimum}",'
+                    f' "--patient_name", "{patient_name}", "--launching", "{launching}",'
+                    f' "--maximum", "{maximum}", "--trigger", "{trigger}",'
+                    f' "--output_file", "{output_file}", "--filePath", "{filePath}"',
+                    '-Verb', 'RunAs'
+                ])
+            except subprocess.CalledProcessError as e:
+                print(f"Error: {e.stderr.decode('utf-8')}")
+    
+            return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        except Exception as e:
+            return jsonify({'status': 'error', 'message': str(e)})"""
         data = request.get_json()
         premiere_phase = data.get("premiere_phase")
         exclusion = data.get("exclusion")
@@ -146,20 +212,19 @@ def submit_cyberball():
         filePath = data.get("filePath")
         print("ça passe")
         print(data)
-        try:
-            subprocess.run([
-                'powershell', '-Command', 'Start-Process',
-                'Python_scripts\\Psychopy_Cyberball.exe',
-                '-ArgumentList',
-                f'"--premiere_phase", "{premiere_phase}", "--exclusion",'
-                f' "{exclusion}", "--transition", "{transition}", "--minimum", "{minimum}",'
-                f' "--patient_name", "{patient_name}", "--launching", "{launching}",'
-                f' "--maximum", "{maximum}", "--trigger", "{trigger}",'
-                f' "--output_file", "{output_file}", "--filePath", "{filePath}"',
-                '-Verb', 'RunAs'
-            ])
-        except subprocess.CalledProcessError as e:
-            print(f"Error: {e.stderr.decode('utf-8')}")
+        subprocess.run([
+            sys.executable, 'Python_scripts/Psychopy_Cyberball.py',
+            '--premiere_phase', premiere_phase,
+            '--exclusion', exclusion,
+            '--transition', transition,
+            '--minimum', minimum,
+            '--patient_name', patient_name,
+            '--launching', launching,
+            '--maximum', maximum,
+            '--trigger', trigger,
+            '--output_file', output_file,
+            '--filePath', filePath,
+        ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -548,7 +613,6 @@ def submit_audition():
 
 @app.route('/submit-table', methods=['POST'])
 def submit_table():
-    print("on arrive iciooooooooooooo")
     data = request.get_json()
     print(data)
     json_data = json.dumps(data)
@@ -559,6 +623,19 @@ def submit_table():
         '--data', json_data
     ])
     return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+
+@app.route('/keep-datas', methods=['POST'])
+def keep_datas():
+    data = request.get_json()
+    filename = "static/jsons/"+data.get("filename")+".json"
+    datas = data.get("data")
+    print(datas)
+    print(filename)
+    with open(filename, "w") as json_file:
+        json.dump(datas, json_file, indent=4)
+
+    return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+
 
 
 if __name__ == '__main__':

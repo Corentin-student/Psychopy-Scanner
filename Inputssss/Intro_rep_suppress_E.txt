@@ -1,9 +1,0 @@
-*Pairs of pictures will be presented quickly
-
-In case the 2 pictures belong to a different category (f.e. a face and a body), press as quickly as possible the response button.
-In all other cases, do not press the button
-
-Between the pairs, fixate on the cross in the middle of the screen*
-
-
-*The Scanner will now start.*

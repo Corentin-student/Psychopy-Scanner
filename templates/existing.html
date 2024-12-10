@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <script src="{{ url_for('static', filename='script_paradigms.js') }}" defer></script></head>
+    <body>
+        <header class="header">
+                <h1 class="header-center">Création de Paradigme</h1>
+        </header>
+        <div class="sidenav">
+            <h2 class="h2-sidenav">Paradigme</h2>
+        </div>
+        <main>
+            <div id="main-container" style="margin-left: 260px; margin-top: 30px;">
+                 <div class="grand-cadre">
+                  <table class="stimulus-table">
+                    <thead>
+                      <tr>
+                        <th>Apparition</th>
+                        <th>Durée</th>
+                        <th>Type</th>
+                        <th>Stimulus</th>
+                        <th>Angle</th>
+                        <th>Supprimer</th>
+                      </tr>
+                    </thead>
+                    <tbody id="table-body">
+                      <!-- Les lignes de données seront ajoutées ici -->
+                    </tbody>
+                  </table>
+                </div>
+                <button class="en_dessous_cadre" onclick="launching()">submit</button>
+            </div>
+        </main>
+    </body>
+</html>

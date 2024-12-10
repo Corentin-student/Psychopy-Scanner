@@ -76,6 +76,8 @@
         <a href="#" onclick="changeMainContent('cyberball')">Cyberball</a>
         <a href="#" onclick="changeMainContent('emo_faces_nav')">EMO faces</a>
         <a href="#" onclick="changeMainContent('emo_voice_nav')">EMO voices</a>
+        <a href="#" onclick="changeMainContent('ia-audition')">Intelligence Artificiel Audition</a>
+        <a href="#" onclick="changeMainContent('ia-image')">Intelligence Artificiel Image</a>
         <a href="#" onclick="changeMainContent('contact')">Images mouvantes défilantes</a>
         <a href="#" onclick="changeMainContent('about')">Images statiques défilantes</a>
         <a href="#" onclick="changeMainContent('localizer')">Localizer</a>
@@ -100,6 +102,9 @@
         <input type="file" id="launching_text" class="cache">
         <input type="file" id="fileinput-audition" class="cache">
         <input type="file" id="fileinput-audition1" class="cache">
+        <input type="file" id="fileinput-ia-audition" class="cache">
+        <input type="file" id="fileinput-ia-image" class="cache">
+
 
 
 
@@ -577,6 +582,69 @@
                             </div>
                         `;
                         break;
+                    case 'ia-audition':
+                        newContent = `
+                            <h2>Paradigme pour l'audition avec l'IA</h2>
+                            <div class="input-group">
+                                <div class="input-container">
+                                    <h3>Durée en secondes d'attente après le Beep</h3>
+                                    <input type="text" id="bip-ia-audition" placeholder="par exemple: 1">
+                                </div>
+                                <div class="input-container">
+                                    <h3>Durée en secondes container stimulus</h3>
+                                    <input type="text" id="duration-ia-audition" placeholder="par exemple: 9">
+                                </div>
+                                <div class="input-container">
+                                    <h3>Durée en secondes container croix</h3>
+                                    <input type="text" id="fixation-ia-audition" placeholder="par exemple: 4">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <div class="input-container">
+                                    <h3>Durée en secondes d'attente après la croix</h3>
+                                    <input type="text" id="after-fixation-ia-audition" placeholder="par exemple: 0.5">
+                                </div>
+                                <div class="input-container">
+                                    <h3>Sélectionner un paradigme déjà existant</h3>
+                                    <button class="button-choice" onclick="document.getElementById('fileinput-ia-audition').click()">Choisir un fichier</button>
+                                </div>
+                                <div class="input-container">
+                                    <h3></h3>
+                                    <button class="submit" onclick="submitIaAudition()">Submit</button>
+                                </div>
+                            </div>
+                        `;
+                        break;
+
+                    case 'ia-image':
+                        newContent = `
+                            <h2>Paradigme pour les images avec l'IA</h2>
+                            <div class="input-group">
+                                <div class="input-container">
+                                    <h3>Durée en secondes des stimuli</h3>
+                                    <input type="text" id="duration-ia-image" placeholder="par exemple: 4">
+                                </div>
+                                <div class="input-container">
+                                    <h3>Durée entre les stimuli</h3>
+                                    <input type="text" id="betweenstimuli-ia-image" placeholder="par exemple: 4">
+                                </div>
+                                <div class="input-container">
+                                    <h3>Pourcentage de zoom</h3>
+                                    <input id="zoom-ia-image" type="text" placeholder="par exemple: 50">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <div class="input-container">
+                                    <h3>Sélectionner un paradigme déjà existant</h3>
+                                    <button class="button-choice" onclick="document.getElementById('fileinput-ia-image').click()">Choisir un fichier</button>
+                                </div>
+                                <div class="input-container">
+                                    <h3></h3>
+                                    <button class="submit" onclick="submitIaImage()">Submit</button>
+                                </div>
+                            </div>
+                        `;
+                        break;
 
 
 
@@ -750,6 +818,71 @@
                     console.error('Error:', error);
                 });
             }
+
+
+        function submitIaAudition() {
+            const fileInput = document.getElementById('fileinput-ia-audition');
+            const output_file = document.getElementById('patientName').textContent;
+            let fileName = fileInput.value.split('\\').pop();  // Cela extraira uniq
+            const duration = document.getElementById('duration-ia-audition').value || 'Non spécifié';
+            const betweenstimuli = document.getElementById('fixation-ia-audition').value || 'Non spécifié';
+            const afterfixation = document.getElementById('after-fixation-ia-audition').value || 'Non spécifié';
+            const bip = document.getElementById('bip-ia-audition').value || 'Non spécifié';
+
+            fetch('/submit_ia_audition', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        duration : duration,
+                        betweenstimuli : betweenstimuli,
+                        afterfixation : afterfixation,
+                        bip : bip,
+                        filePath: fileName,
+                        output_file: output_file
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function submitIaImage() {
+            const fileInput = document.getElementById('fileinput-ia-image');
+            const output_file = document.getElementById('patientName').textContent;
+            let fileName = fileInput.value.split('\\').pop();  // Cela extraira uniq
+            const duration = document.getElementById('duration-ia-image').value || 'Non spécifié';
+            const betweenstimuli = document.getElementById('betweenstimuli-ia-image').value || 'Non spécifié';
+            const zoom = document.getElementById('zoom-ia-image').value || 'Non spécifié';
+
+            fetch('/submit_ia_image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        filePath: fileName,
+                        output_file: output_file,
+                        duration : duration,
+                        betweenstimuli : betweenstimuli,
+                        zoom : zoom
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+
+
         function submitFaces() {
                 const duration = document.getElementById('duration-emo-face').value || 'Non spécifié';
                 const betweenstimuli = document.getElementById('betweenstimuli-emo-face').value || 'Non spécifié';

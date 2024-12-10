@@ -1,2 +1,0 @@
-face2_static.jpeg,0
-body15_static.jpeg, 0

@@ -1,0 +1,16 @@
+[
+    {
+        "Apparition": "0.000",
+        "Duree": "1.000",
+        "Type": "Audio",
+        "Stimulus": "A.wav",
+        "Angle": "/"
+    },
+    {
+        "Apparition": "0.000",
+        "Duree": "1.000",
+        "Type": "Image",
+        "Stimulus": "Femme2.jpg",
+        "Angle": "50"
+    }
+]

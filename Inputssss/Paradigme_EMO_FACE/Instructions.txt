@@ -1,7 +1,0 @@
-*Une série de visage va vous être présentée.
-
-Votre but va être de cliquer avec la souris, lorsqu'une image d'une couleur moins saturée apparaîtra.
-
-(Appuyez sur une touche quand vous êtes prêts)*
-
-*Le Scanner va maintenant démarrer.*

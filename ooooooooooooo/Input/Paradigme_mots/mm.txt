@@ -1,4 +1,0 @@
-pomme
-poire
-abricot
-mon_test

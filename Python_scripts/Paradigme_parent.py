@@ -106,13 +106,14 @@ class Parente(ABC):
     def send_character(self, port, baud_rate):
         char = "t"
         try:
-            # Ouvrir le port série
+            print(port)
             with serial.Serial(port=port, baudrate=baud_rate, timeout=1) as ser:
                 print(f"Connexion ouverte sur {port}. Envoi de '{char}'...")
+                #ser.write(char.encode())
                 ser.write(b'H')
                 time.sleep(0.5)
                 ser.write(b'L')
-                print("Pin 2 activé puis désactivé")  # Message de confirmation
+                print("Pin 2 activé puis désactivé")
 
 
         except serial.SerialException as e:
