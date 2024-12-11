@@ -12,7 +12,7 @@ import random
 
 
 class IA_image(Parente):
-    def __init__(self, file, output, zoom, duration, betweenstimuli, sigma, launching):
+    def __init__(self, file, output, zoom, duration, betweenstimuli, sigma, launching, random):
         self.dossier = os.path.abspath(
             os.path.join(os.path.dirname(__file__), '..', '..', 'Input', 'Paradigme_IA_IMAGE'))
         self.dossier_image = os.path.join(self.dossier, 'images')
@@ -42,6 +42,10 @@ class IA_image(Parente):
         self.global_timer = core.Clock()
         self.onset = None
         self.sigma = sigma
+        if random == "True":
+            self.random = True
+        else:
+            self.random = False
 
     def boucle_dans_la_boucle(self,image):
         image.draw()
@@ -88,6 +92,8 @@ class IA_image(Parente):
         super().file_init(self.filename, self.filename_csv,
                           ['onset', 'trial_type', 'stim_file'])
         self.images = self.reading(os.path.join(self.dossier,self.file))
+        if self.random:
+            random.shuffle(self.images)
         images_stim = []
         for x in self.images:
             image_path = os.path.join(self.dossier_image, x)
@@ -119,10 +125,13 @@ if __name__ == "__main__":
     parser.add_argument("--betweenstimuli", type=float, required=True, help="Durée en secondes entre les stimuli")
     parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
     parser.add_argument("--launching", type=str, help="Chemin vers le fichier de mots", required=False)
+    parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
+
 
 
     args = parser.parse_args()
     print(args.file)
     print(args.output_file)
-    my_ia = IA_image(args.file, args.output_file, args.zoom, args.duration, args.betweenstimuli, args.sigma, args.launching)
+    my_ia = IA_image(args.file, args.output_file, args.zoom, args.duration, args.betweenstimuli, args.sigma,
+                     args.launching, args.random)
     my_ia.lancement()

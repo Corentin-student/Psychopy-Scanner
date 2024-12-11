@@ -8,7 +8,7 @@ import random
 
 
 class IA_audition(Parente):
-    def __init__(self, bip, file, output, duration, betweenstimuli, afterfixation, bip_duration,sigma, launching):
+    def __init__(self, bip, file, output, duration, betweenstimuli, afterfixation, bip_duration,sigma, launching, random):
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'Input', 'Paradigme_IA_AUDITION'))
         self.dossier_audios = os.path.join(self.dossier, 'audios')
         self.file = file
@@ -60,6 +60,10 @@ class IA_audition(Parente):
             lineColor="white",
             units='height'
         )
+        if random == "True":
+            self.random = True
+        else:
+            self.random = False
 
 
 
@@ -110,6 +114,8 @@ class IA_audition(Parente):
         super().file_init(self.filename, self.filename_csv,
                           ['onset', 'trial_type', 'stim_file'])
         self.sounds = self.reading(os.path.join(self.dossier, self.file))
+        if self.random:
+            random.shuffle(self.sounds)
         self.global_timer.reset()
         texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger)
@@ -137,10 +143,12 @@ if __name__ == "__main__":
     parser.add_argument("--bip", type=float, required=True, help="Durée en secondes des stimuli")
     parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
     parser.add_argument("--launching", type=str, help="Chemin vers le fichier de mots", required=False)
+    parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
+
 
     args = parser.parse_args()
     print(args.file)
     print(args.output_file)
     audition = IA_audition("bip.mp3", args.file, args.output_file, args.duration, args.betweenstimuli,
-                           args.afterfixation, args.bip, args.sigma, args.launching)
+                           args.afterfixation, args.bip, args.sigma, args.launching, args.random)
     audition.lancement()
