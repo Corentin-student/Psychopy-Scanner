@@ -66,9 +66,11 @@ def submit_ia_audition():
             "--file", data.get("filePath"),
             "--output_file", data.get("output_file"),
             "--duration", data.get("duration"),
+            "--sigma", data.get("sigma"),
             "--betweenstimuli", data.get("betweenstimuli"),
             "--afterfixation", data.get("afterfixation"),
-            "--bip", data.get("bip")
+            "--bip", data.get("bip"),
+            "--launching", data.get("launching_text")
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
@@ -86,8 +88,10 @@ def submit_ia_image():
             "--file", data.get("filePath"),
             "--output_file", data.get("output_file"),
             '--duration', data.get("duration"),
+            "--sigma", data.get("sigma"),
             "--betweenstimuli", data.get("betweenstimuli"),
-            "--zoom", data.get("zoom")
+            "--zoom", data.get("zoom"),
+            "--launching", data.get("launching_text")
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
@@ -639,6 +643,6 @@ def keep_datas():
 
 
 if __name__ == '__main__':
-    webbrowser.open('http://127.0.0.1:5000')
-    #app.run(debug=True)
-    serve(app, host='0.0.0.0', port=5000)
+    #webbrowser.open('http://127.0.0.1:5000')
+    app.run(debug=True)
+    #serve(app, host='0.0.0.0', port=5000)

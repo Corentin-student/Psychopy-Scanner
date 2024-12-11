@@ -3,13 +3,17 @@ import os
 from psychopy import visual, core, event, sound
 import pygame
 from Paradigme_parent import Parente
+import random
+
 
 
 class IA_audition(Parente):
-    def __init__(self, bip, file, output, duration, betweenstimuli, afterfixation, bip_duration):
+    def __init__(self, bip, file, output, duration, betweenstimuli, afterfixation, bip_duration,sigma, launching):
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'Input', 'Paradigme_IA_AUDITION'))
         self.dossier_audios = os.path.join(self.dossier, 'audios')
         self.file = file
+        self.launching = launching
+        self.trigger = "s"
         output = output
         self.filename, self.filename_csv = super().preprocessing_tsv_csv(output)
         self.fs = 48000
@@ -40,6 +44,14 @@ class IA_audition(Parente):
         self.betweenstimuli = betweenstimuli
         self.afterfixation = afterfixation
         self.bip_duration = bip_duration
+        self.sigma = sigma
+        image_path = os.path.join(self.dossier_audios, "ONEcouter.PNG")
+        self.image_stim = visual.ImageStim(
+            win=self.win,
+            image=image_path,
+            pos=(0, 0)
+        )
+
 
 
     def une_boucle(self, sound):
@@ -73,7 +85,8 @@ class IA_audition(Parente):
         sound = os.path.join(self.dossier_audios, self.croix)
         audio = pygame.mixer.Sound(sound)
         audio.play()
-        while self.global_timer.getTime()  < onset + self.betweenstimuli:
+        random_gauss = random.gauss(self.betweenstimuli, self.sigma)
+        while self.global_timer.getTime()  < onset + random_gauss:
             pass
         onset = self.global_timer.getTime()
         while self.global_timer.getTime() < onset + self.afterfixation:
@@ -89,6 +102,11 @@ class IA_audition(Parente):
                           ['onset', 'trial_type', 'stim_file'])
         self.sounds = self.reading(os.path.join(self.dossier, self.file))
         self.global_timer.reset()
+        texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
+        super().launching_texts(self.win, texts, self.trigger)
+        super().wait_for_trigger(self.trigger)
+        self.image_stim.draw()
+        self.win.flip()
         for x in range(len(self.sounds)):
             self.une_boucle(self.sounds[x])
         super().write_tsv_csv(self.filename, self.filename_csv,
@@ -100,6 +118,7 @@ class IA_audition(Parente):
 
 
 if __name__ == "__main__":
+    print("okkk?")
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")
     parser.add_argument("--file", type=str, help="Chemin du fichier contenant les stimuli")
     parser.add_argument("--output_file", type=str, help="Chemin du fichier contenant les stimuli")
@@ -107,9 +126,12 @@ if __name__ == "__main__":
     parser.add_argument("--betweenstimuli", type=float, required=True, help="Durée en secondes des stimuli")
     parser.add_argument("--afterfixation", type=float, required=True, help="Durée en secondes des stimuli")
     parser.add_argument("--bip", type=float, required=True, help="Durée en secondes des stimuli")
+    parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
+    parser.add_argument("--launching", type=str, help="Chemin vers le fichier de mots", required=False)
+
     args = parser.parse_args()
     print(args.file)
     print(args.output_file)
     audition = IA_audition("bip.mp3", args.file, args.output_file, args.duration, args.betweenstimuli,
-                           args.afterfixation, args.bip)
+                           args.afterfixation, args.bip, args.sigma, args.launching)
     audition.lancement()

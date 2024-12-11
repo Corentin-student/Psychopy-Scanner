@@ -7,14 +7,18 @@ from datetime import datetime
 from Paradigme_parent import Parente
 from psychopy import visual, core, event
 import serial
+import random
+
 
 
 class IA_image(Parente):
-    def __init__(self, file, output, zoom, duration, betweenstimuli):
+    def __init__(self, file, output, zoom, duration, betweenstimuli, sigma, launching):
         self.dossier = os.path.abspath(
             os.path.join(os.path.dirname(__file__), '..', '..', 'Input', 'Paradigme_IA_IMAGE'))
         self.dossier_image = os.path.join(self.dossier, 'images')
         self.file = file
+        self.launching = launching
+        self.trigger = "s"
         self.zoom = zoom
         self.duration = duration
         self.betweenstimuli = betweenstimuli
@@ -37,6 +41,8 @@ class IA_image(Parente):
         event.globalKeys.add(key='escape', func=self.win.close)
         self.global_timer = core.Clock()
         self.onset = None
+        self.sigma = sigma
+
     def boucle_dans_la_boucle(self,image):
         image.draw()
         self.win.flip()
@@ -62,12 +68,13 @@ class IA_image(Parente):
             self.win.flip()
             super().write_tsv_csv(self.filename, self.filename_csv,
                                   [super().float_to_csv(self.global_timer.getTime()), "Croix de fixation", "/"])
-            while self.global_timer.getTime() < self.onset + self.duration + self.betweenstimuli - 1:
+            random_gauss = random.gauss(self.betweenstimuli, self.sigma)
+            while self.global_timer.getTime() < self.onset + self.duration + random_gauss - 1:
                 pass
             self.cross_stim.lineColor = "red"
             self.cross_stim.draw()
             self.win.flip()
-            while self.global_timer.getTime() < self.onset + self.duration + self.betweenstimuli :
+            while self.global_timer.getTime() < self.onset + self.duration + random_gauss:
                 pass
             self.cross_stim.lineColor = "white"
             count+=1
@@ -96,6 +103,9 @@ class IA_image(Parente):
             base_width, base_height = image_stim.size  # Taille par défaut de l'image
             zoom_factor = 0.5 + (0.012 * self.zoom)  # Ajustement du facteur de zoom
             image_stim.size = (base_width * zoom_factor, base_height * zoom_factor)
+        texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
+        super().launching_texts(self.win, texts, self.trigger)
+        super().wait_for_trigger(self.trigger)
         self.une_boucle(images_stim)
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
@@ -107,8 +117,12 @@ if __name__ == "__main__":
     parser.add_argument("--zoom", type=float, required=True, help="Pourcentage Zoom")
     parser.add_argument("--duration", type=float, required=True, help="Durée en secondes des stimuli")
     parser.add_argument("--betweenstimuli", type=float, required=True, help="Durée en secondes entre les stimuli")
+    parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
+    parser.add_argument("--launching", type=str, help="Chemin vers le fichier de mots", required=False)
+
+
     args = parser.parse_args()
     print(args.file)
     print(args.output_file)
-    my_ia = IA_image(args.file, args.output_file, args.zoom, args.duration, args.betweenstimuli)
+    my_ia = IA_image(args.file, args.output_file, args.zoom, args.duration, args.betweenstimuli, args.sigma, args.launching)
     my_ia.lancement()

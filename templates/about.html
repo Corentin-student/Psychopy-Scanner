@@ -601,6 +601,10 @@
                             </div>
                             <div class="input-group">
                                 <div class="input-container">
+                                    <h3> Écart type </h3>
+                                    <input id="sigma-ia-audition" type="text" placeholder="par exemple: 0.5">
+                                </div>
+                                <div class="input-container">
                                     <h3>Durée en secondes d'attente après la croix</h3>
                                     <input type="text" id="after-fixation-ia-audition" placeholder="par exemple: 0.5">
                                 </div>
@@ -631,6 +635,10 @@
                                 <div class="input-container">
                                     <h3>Pourcentage de zoom</h3>
                                     <input id="zoom-ia-image" type="text" placeholder="par exemple: 50">
+                                </div>
+                                <div class="input-container">
+                                    <h3> Écart type </h3>
+                                    <input id="sigma-ia-image" type="text" placeholder="par exemple: 0.5">
                                 </div>
                             </div>
                             <div class="input-group">
@@ -823,12 +831,14 @@
         function submitIaAudition() {
             const fileInput = document.getElementById('fileinput-ia-audition');
             const output_file = document.getElementById('patientName').textContent;
-            let fileName = fileInput.value.split('\\').pop();  // Cela extraira uniq
+            let fileName = fileInput.value.split('\\').pop();
             const duration = document.getElementById('duration-ia-audition').value || 'Non spécifié';
             const betweenstimuli = document.getElementById('fixation-ia-audition').value || 'Non spécifié';
             const afterfixation = document.getElementById('after-fixation-ia-audition').value || 'Non spécifié';
             const bip = document.getElementById('bip-ia-audition').value || 'Non spécifié';
-
+            const sigma = document.getElementById("sigma-ia-audition").value || 'Non spécifié';
+            const fileLaunching = document.getElementById('launching_text');
+            let launching_text =  fileLaunching.value.split('\\').pop();
             fetch('/submit_ia_audition', {
                     method: 'POST',
                     headers: {
@@ -840,7 +850,9 @@
                         afterfixation : afterfixation,
                         bip : bip,
                         filePath: fileName,
-                        output_file: output_file
+                        output_file: output_file,
+                        sigma: sigma,
+                        launching_text: launching_text
                     }),
                 })
                 .then(response => response.json())
@@ -859,6 +871,9 @@
             const duration = document.getElementById('duration-ia-image').value || 'Non spécifié';
             const betweenstimuli = document.getElementById('betweenstimuli-ia-image').value || 'Non spécifié';
             const zoom = document.getElementById('zoom-ia-image').value || 'Non spécifié';
+            const sigma = document.getElementById("sigma-ia-image").value || 'Non spécifié';
+            const fileLaunching = document.getElementById('launching_text');
+            let launching_text =  fileLaunching.value.split('\\').pop();
 
             fetch('/submit_ia_image', {
                     method: 'POST',
@@ -869,8 +884,10 @@
                         filePath: fileName,
                         output_file: output_file,
                         duration : duration,
+                        sigma : sigma,
                         betweenstimuli : betweenstimuli,
-                        zoom : zoom
+                        zoom : zoom,
+                        launching_text: launching_text
                     }),
                 })
                 .then(response => response.json())
