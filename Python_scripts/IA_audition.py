@@ -33,6 +33,7 @@ class IA_audition(Parente):
             lineColor="white",
             units='height'
         )
+
         event.globalKeys.add(key='escape', func=self.win.close)
         self.bip = os.path.join(self.dossier_audios, bip)
         self.sounds= self.reading(os.path.join(self.dossier, self.file))
@@ -50,6 +51,14 @@ class IA_audition(Parente):
             win=self.win,
             image=image_path,
             pos=(0, 0)
+        )
+        self.cross_stim = visual.ShapeStim(
+            win=self.win,
+            vertices=((0, -0.02), (0, 0.02), (0, 0), (-0.02, 0), (0.02, 0)),
+            lineWidth=8,
+            closeShape=False,
+            lineColor="white",
+            units='height'
         )
 
 
@@ -105,7 +114,7 @@ class IA_audition(Parente):
         texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger)
         super().wait_for_trigger(self.trigger)
-        self.image_stim.draw()
+        self.cross_stim.draw()
         self.win.flip()
         for x in range(len(self.sounds)):
             self.une_boucle(self.sounds[x])
