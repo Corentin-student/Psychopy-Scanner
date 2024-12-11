@@ -598,6 +598,10 @@
                                     <h3>Durée en secondes container croix</h3>
                                     <input type="text" id="fixation-ia-audition" placeholder="par exemple: 4">
                                 </div>
+                                <div class="input-container">
+                                    <h3> Ordre aléatoire </h3>
+                                    <input  type="checkbox" id="random-ia-audition" value="option1" style=" height: 50px">
+                                </div>
                             </div>
                             <div class="input-group">
                                 <div class="input-container">
@@ -642,6 +646,10 @@
                                 </div>
                             </div>
                             <div class="input-group">
+                                <div class="input-container">
+                                    <h3> Ordre aléatoire </h3>
+                                    <input  type="checkbox" id="random-ia-image" value="option1" style=" height: 50px">
+                                </div>
                                 <div class="input-container">
                                     <h3>Sélectionner un paradigme déjà existant</h3>
                                     <button class="button-choice" onclick="document.getElementById('fileinput-ia-image').click()">Choisir un fichier</button>
@@ -839,6 +847,8 @@
             const sigma = document.getElementById("sigma-ia-audition").value || 'Non spécifié';
             const fileLaunching = document.getElementById('launching_text');
             let launching_text =  fileLaunching.value.split('\\').pop();
+            const random = document.getElementById("random-ia-audition").checked;
+
             fetch('/submit_ia_audition', {
                     method: 'POST',
                     headers: {
@@ -850,6 +860,7 @@
                         afterfixation : afterfixation,
                         bip : bip,
                         filePath: fileName,
+                        random: random,
                         output_file: output_file,
                         sigma: sigma,
                         launching_text: launching_text
@@ -874,6 +885,8 @@
             const sigma = document.getElementById("sigma-ia-image").value || 'Non spécifié';
             const fileLaunching = document.getElementById('launching_text');
             let launching_text =  fileLaunching.value.split('\\').pop();
+            const random = document.getElementById("random-ia-image").checked;
+
 
             fetch('/submit_ia_image', {
                     method: 'POST',
@@ -885,6 +898,7 @@
                         output_file: output_file,
                         duration : duration,
                         sigma : sigma,
+                        random: random,
                         betweenstimuli : betweenstimuli,
                         zoom : zoom,
                         launching_text: launching_text

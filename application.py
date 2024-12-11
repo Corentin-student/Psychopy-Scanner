@@ -70,7 +70,8 @@ def submit_ia_audition():
             "--betweenstimuli", data.get("betweenstimuli"),
             "--afterfixation", data.get("afterfixation"),
             "--bip", data.get("bip"),
-            "--launching", data.get("launching_text")
+            "--launching", data.get("launching_text"),
+            '--random', str(data.get("random")),
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
@@ -91,7 +92,8 @@ def submit_ia_image():
             "--sigma", data.get("sigma"),
             "--betweenstimuli", data.get("betweenstimuli"),
             "--zoom", data.get("zoom"),
-            "--launching", data.get("launching_text")
+            "--launching", data.get("launching_text"),
+            "--random", str(data.get("random"))
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
