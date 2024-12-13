@@ -66,11 +66,11 @@ class IA_audition(Parente):
     def une_boucle(self, sound):
         if event.getKeys(keyList=["escape"]):
             self.close_program()
+        audio = pygame.mixer.Sound(self.bip)
+        audio.play()
         onset = self.global_timer.getTime()
         super().write_tsv_csv(self.filename, self.filename_csv,
                               [super().float_to_csv(onset), "Beep", "/"])
-        audio = pygame.mixer.Sound(self.bip)
-        audio.play()
         while pygame.mixer.get_busy():
             pass
         onset = self.global_timer.getTime()
@@ -78,24 +78,24 @@ class IA_audition(Parente):
                               [super().float_to_csv(onset),"Blank", "/"])
         while self.global_timer.getTime() < onset + self.bip_duration:
             pass
-        onset = self.global_timer.getTime() #début audio
-        super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(onset), "Stimulus", sound])
         sound = os.path.join(self.dossier_audios, sound)
         audio = pygame.mixer.Sound(sound)
         audio.play()
+        onset = self.global_timer.getTime()  # début audio
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(onset), "Stimulus", sound])
         while pygame.mixer.get_busy():
             pass
         super().write_tsv_csv(self.filename, self.filename_csv,
                               [super().float_to_csv(self.global_timer.getTime()), "Fin_stimulus", "/"])
         while self.global_timer.getTime() < onset + self.duration:
             pass
-        onset = self.global_timer.getTime()
-        super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(onset), "Croix de Fixation", "/"])
         sound = os.path.join(self.dossier_audios, self.croix)
         audio = pygame.mixer.Sound(sound)
         audio.play()
+        onset = self.global_timer.getTime()
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(onset), "Croix de Fixation", "/"])
         random_gauss = random.gauss(self.betweenstimuli, self.sigma)
         while self.global_timer.getTime()  < onset + random_gauss:
             pass
