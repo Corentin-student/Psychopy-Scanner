@@ -46,12 +46,6 @@ class IA_audition(Parente):
         self.afterfixation = afterfixation
         self.bip_duration = bip_duration
         self.sigma = sigma
-        image_path = os.path.join(self.dossier_audios, "ONEcouter.PNG")
-        self.image_stim = visual.ImageStim(
-            win=self.win,
-            image=image_path,
-            pos=(0, 0)
-        )
         self.cross_stim = visual.ShapeStim(
             win=self.win,
             vertices=((0, -0.02), (0, 0.02), (0, 0), (-0.02, 0), (0.02, 0)),
@@ -65,9 +59,13 @@ class IA_audition(Parente):
         else:
             self.random = False
 
-
+    def close_program(self):
+        self.win.close()
+        core.quit()
 
     def une_boucle(self, sound):
+        if event.getKeys(keyList=["escape"]):
+            self.close_program()
         onset = self.global_timer.getTime()
         super().write_tsv_csv(self.filename, self.filename_csv,
                               [super().float_to_csv(onset), "Beep", "/"])
