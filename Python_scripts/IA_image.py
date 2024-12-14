@@ -112,7 +112,16 @@ class IA_image(Parente):
         texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger)
         super().wait_for_trigger(self.trigger)
+        self.cross_stim.draw()
+        self.win.flip()
+        onset = self.global_timer.getTime()
+        while self.global_timer.getTime() < onset + 12:
+            pass
+        self.global_timer.reset()
         self.une_boucle(images_stim)
+        onset = self.global_timer.getTime()
+        while self.global_timer.getTime() < onset + 20:
+            pass
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
 

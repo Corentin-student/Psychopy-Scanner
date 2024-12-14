@@ -120,8 +120,15 @@ class IA_audition(Parente):
         super().wait_for_trigger(self.trigger)
         self.cross_stim.draw()
         self.win.flip()
+        onset = self.global_timer.getTime()
+        while self.global_timer.getTime() < onset + 12:
+            pass
+        self.global_timer.reset()
         for x in range(len(self.sounds)):
             self.une_boucle(self.sounds[x])
+        onset = self.global_timer.getTime()
+        while self.global_timer.getTime() < onset + 20:
+            pass
         super().write_tsv_csv(self.filename, self.filename_csv,
                               [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
                                "None"])
