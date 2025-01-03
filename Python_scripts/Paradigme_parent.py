@@ -116,10 +116,9 @@ class Parente(ABC):
     def send_character(self, port, baud_rate):
         char = "t"
         try:
-            print(port)
             with serial.Serial(port=port, baudrate=baud_rate, timeout=1) as ser:
                 print(f"Connexion ouverte sur {port}. Envoi de '{char}'...")
-                #ser.write(char.encode())
+                #ser.write(char.encode()) #solution pour Ron à St-luc
                 ser.write(b'H')
                 time.sleep(0.5)
                 ser.write(b'L')

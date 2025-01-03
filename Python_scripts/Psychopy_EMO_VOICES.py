@@ -135,8 +135,7 @@ class voices(Parente):
             super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), trial_type, reaction, stim_file])
         super().the_end(self.win)
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
-                               "None"])
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None"])
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
@@ -163,7 +162,6 @@ if __name__ == "__main__":
     parser.add_argument("--largeur", type=float, required=True, help="Largeur du rectangle")
 
     args = parser.parse_args()
-    print(args)
     paradigm = voices(args.duration, args.betweenstimuli, args.file, args.output_file, args.port, args.baudrate,
                       args.trigger, args.activation, args.hauteur, args.largeur, args.random, args.launching)
     paradigm.lancement()

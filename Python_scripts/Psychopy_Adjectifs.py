@@ -131,6 +131,9 @@ class Adjectifs(Parente):
         self.global_timer.reset()
 
         self.blocks()
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
+                               "None"])
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "block_type")
 
@@ -145,7 +148,7 @@ class Adjectifs(Parente):
         while self.global_timer.getTime() < onset + 3:
             pass
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(onset), "Instruciton", "None", "None", "None"])
+                              [super().float_to_csv(onset), "Instruction", "None", "None", "None"])
 
     def debut_friend(self):
         texte_block = visual.TextStim(self.win, text=self.Friend_shortcue, color=[1, 1, 1], alignText="center", wrapWidth=1.5, font="Arial")
@@ -155,7 +158,7 @@ class Adjectifs(Parente):
         while self.global_timer.getTime() < onset + 3:
             pass
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(onset), "Instruciton", "None", "None", "None"])
+                              [super().float_to_csv(onset), "Instruction", "None", "None", "None"])
 
     def debut_syllabe(self):
         texte_block = visual.TextStim(self.win, text=self.Syllabe_shortcue, color=[1, 1, 1], alignText="center", wrapWidth=1.5, font="Arial")
@@ -165,7 +168,7 @@ class Adjectifs(Parente):
         while self.global_timer.getTime() < onset + 3:
             pass
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(onset), "Instruciton", "None", "None", "None"])
+                              [super().float_to_csv(onset), "Instruction", "None", "None", "None"])
 
 
 

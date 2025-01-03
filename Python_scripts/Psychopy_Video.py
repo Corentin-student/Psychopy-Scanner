@@ -91,10 +91,6 @@ class VideoPsycho(Parente):
 
         for x, video_path in enumerate(videos):
             try:
-                print("onveut voir ça ")
-                print(x)
-                print(video_path)
-                print("oooooooooooooooooooooooooooooooooooooooooooooooooo")
                 cross_stim.draw()
                 self.win.flip()
                 apparition = global_timer.getTime()
@@ -138,9 +134,7 @@ class VideoPsycho(Parente):
                     gc.collect()
 
             except Exception as e:
-                print("#############################################")
                 print(f"Erreur rencontrée : {e}")
-                print("#############################################")
                 pass
 
 
@@ -154,8 +148,7 @@ class VideoPsycho(Parente):
 
         super().the_end(self.win)
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(global_timer.getTime()), "END", "None", "None", "None",
-                               "None"])
+                              [super().float_to_csv(global_timer.getTime()), "END", "None", "None"])
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
@@ -189,7 +182,6 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
-    print(args)
     videos= VideoPsycho(args.duration, args.betweenstimuli, args.file, args.zoom,
                          args.output_file, args.port, args.baudrate, args.trigger, args.activation,
                         args.hauteur, args.largeur, args.random, args.launching, args.sigma)

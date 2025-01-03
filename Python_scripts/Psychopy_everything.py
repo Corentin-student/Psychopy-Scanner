@@ -96,7 +96,6 @@ class Psychopy_everything (Parente):
         recording = sd.rec(int(stimuli_duration * self.fs), samplerate=self.fs, channels=1, dtype='int16')
         sd.wait()
         start_time = None
-        print("i was here")
         for i, sample in enumerate(recording):
             if np.abs(sample) > self.threshold:
                 start_time = i / self.fs
@@ -112,7 +111,6 @@ class Psychopy_everything (Parente):
         self.record_index += 1
         sf.write(record, recording, self.fs)
     def show_enregistrement(self, need_image=True):
-        print("on entre icids")
         single_type_infos = self.enregistrements.pop(0)
         self.enregistrement_thread= threading.Thread(target=self.launch_enregistrement, args=(single_type_infos,))
         self.enregistrement_thread.start()

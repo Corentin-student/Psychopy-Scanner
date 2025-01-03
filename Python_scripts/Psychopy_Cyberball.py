@@ -281,7 +281,6 @@ class launch_cyberball(Parente) :
 
 
 if __name__ == "__main__":
-    print("quepassa?")
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")
     parser.add_argument("--premiere_phase", type=float, required=True, help="Durée en secondes de la première phase")
     parser.add_argument("--exclusion", type=float, required=True, help="Durée en secondes de la phase d'exclusion")
@@ -295,7 +294,6 @@ if __name__ == "__main__":
     parser.add_argument("--output_file", type=str, required=True, help="Nom du fichier d'output")
     parser.add_argument('--trigger', type=str, required=True, help="caractère pour lancer le programme")
     args = parser.parse_args()
-    print(args)
     C=launch_cyberball(args.premiere_phase,args.transition,args.exclusion,args.minimum,args.maximum,
                        args.patient_name, args.filePath, args.launching, args.trigger)
     C.lancement()

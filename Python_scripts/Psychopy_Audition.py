@@ -179,8 +179,6 @@ class Audition(Parente):
             audio.stop()
 
     def lancement(self):
-        print("ici le son")
-        print(self.sound)
         super().file_init(self.filename, self.filename_csv, ['onset', 'Cond', 'stimulus', 'time_before_starting_to_answer', 'Image1', 'Image2'])
         gauche, droite = self.reading(self.filepath)
         if self.random:
