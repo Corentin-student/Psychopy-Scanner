@@ -124,12 +124,5 @@ class writtingprt:
         if min_onset is not None and min_trial_type is not None:
             trial_type_data[min_trial_type]["onsets"][0] = 0
         return trial_type_data
-"""
-csv_file = 'easy.csv'
-result = analyze_trial_types(csv_file)
-basics ["result"] = result
-filename = "experiment_config.csv".split(".csv")[0]+".prt"
-create_experiment_file(filename,basics)"""
-
 
 

@@ -2,12 +2,9 @@ import argparse
 import copy
 import csv
 import os
-from collections import defaultdict
-from datetime import datetime
 import random
 
 from psychopy import visual, core, event
-import serial
 from Paradigme_parent import Parente
 
 
@@ -162,6 +159,8 @@ class Priming(Parente):
         count=0
         limite = len(liste_image_win)
         for image_stim in liste_image_win:
+            self.mouse.getPressed()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
+            event.getKeys()  # vide le buffer, afin de pas avoir une touche pressée avant l'apparition du stimulus
             image_stim.draw()
             self.rect.draw()
             self.win.flip()
@@ -171,12 +170,23 @@ class Priming(Parente):
             if self.activation:
                 super().send_character(self.port,self.baudrate)
             while self.global_timer.getTime() < onset + self.stimuli_duration:
-                button = self.mouse.getPressed()  # Mise à jour de l'état des boutons de la souris
-                if any(button):
-                    if not clicked:  # Vérifier si c'est le premier clic détecté
+                button = self.mouse.getPressed()
+                keys = event.getKeys()
+                if not clicked:
+                    if any(button):
                         clicked_time = self.global_timer.getTime() - onset
                         print("Clic détecté à :", clicked_time, "secondes")
                         clicked = True
+                    if keys:
+                        if self.trigger in keys:
+                            pass
+                        elif "escape" in keys:
+                            self.win.close()
+                            break
+                        else:
+                            clicked_time = self.global_timer.getTime() - onset
+                            print("Touche détecté à :", clicked_time, "secondes")
+                            clicked = True
             click_times = clicked_time
             trial_type = "Stimuli"
             stim_file = toshow[count]
