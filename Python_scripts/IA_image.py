@@ -1,13 +1,8 @@
 import argparse
-import csv
 import os
-import random
-from datetime import datetime
-
 from Paradigme_parent import Parente
 from psychopy import visual, core, event
 from collections import defaultdict
-import serial
 import random
 
 
@@ -52,16 +47,13 @@ class IA_image(Parente):
         image.draw()
         self.win.flip()
         onset = self.global_timer.getTime()
-        print("début image : " + str(onset))
         while self.global_timer.getTime() < onset + 0.4 :
             pass
-        print("fin image : " + str(self.global_timer.getTime()))
         self.win.flip()
         while self.global_timer.getTime() < onset + 0.5 :
             pass
 
     def une_boucle(self, images):
-        print(len(images))
         count = 0 #pour chopper le nom de l'image
         for image in images:
             self.onset = self.global_timer.getTime()
@@ -167,11 +159,17 @@ class IA_image(Parente):
             pass
         self.global_timer.reset()
         self.une_boucle(images_stim)
+        self.cross_stim.draw()
+        self.win.flip()
         onset = self.global_timer.getTime()
         while self.global_timer.getTime() < onset + 20:
             pass
+        super().the_end(self.win)
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None"])
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")
@@ -187,8 +185,6 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
-    print(args.file)
-    print(args.output_file)
     my_ia = IA_image(args.file, args.output_file, args.zoom, args.duration, args.betweenstimuli, args.sigma,
                      args.launching, args.random)
     my_ia.lancement()

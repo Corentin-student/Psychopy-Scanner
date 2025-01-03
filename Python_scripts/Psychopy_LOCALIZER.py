@@ -1,13 +1,10 @@
 import argparse
 import copy
-import csv
 import os
 from collections import defaultdict
-from datetime import datetime
 import random
 
 from psychopy import visual, core, event
-import serial
 from Paradigme_parent import Parente
 
 
@@ -94,8 +91,7 @@ class Localizer(Parente):
                 self.show_block(y,self.number_per_block)
         super().the_end(self.win)
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
-                               "None"])
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None"])
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
 

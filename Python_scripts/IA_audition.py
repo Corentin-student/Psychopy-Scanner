@@ -1,6 +1,6 @@
 import argparse
 import os
-from psychopy import visual, core, event, sound
+from psychopy import visual, core, event
 import pygame
 from Paradigme_parent import Parente
 import random
@@ -129,8 +129,8 @@ class IA_audition(Parente):
         while self.global_timer.getTime() < onset + 20:
             pass
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
-                               "None"])
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None"])
+        super().the_end(self.win)
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
 

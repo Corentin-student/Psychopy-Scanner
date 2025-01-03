@@ -1,8 +1,5 @@
-import csv
 import os
 import random
-from datetime import datetime
-
 import argparse
 from psychopy import visual, core, event
 from Paradigme_parent import Parente
@@ -131,6 +128,9 @@ class Adjectifs(Parente):
         self.global_timer.reset()
 
         self.blocks()
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
+                               "None"])
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "block_type")
 
@@ -145,7 +145,7 @@ class Adjectifs(Parente):
         while self.global_timer.getTime() < onset + 3:
             pass
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(onset), "Instruciton", "None", "None", "None"])
+                              [super().float_to_csv(onset), "Instruction", "None", "None", "None"])
 
     def debut_friend(self):
         texte_block = visual.TextStim(self.win, text=self.Friend_shortcue, color=[1, 1, 1], alignText="center", wrapWidth=1.5, font="Arial")
@@ -155,7 +155,7 @@ class Adjectifs(Parente):
         while self.global_timer.getTime() < onset + 3:
             pass
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(onset), "Instruciton", "None", "None", "None"])
+                              [super().float_to_csv(onset), "Instruction", "None", "None", "None"])
 
     def debut_syllabe(self):
         texte_block = visual.TextStim(self.win, text=self.Syllabe_shortcue, color=[1, 1, 1], alignText="center", wrapWidth=1.5, font="Arial")
@@ -165,7 +165,7 @@ class Adjectifs(Parente):
         while self.global_timer.getTime() < onset + 3:
             pass
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(onset), "Instruciton", "None", "None", "None"])
+                              [super().float_to_csv(onset), "Instruction", "None", "None", "None"])
 
 
 
@@ -173,6 +173,7 @@ class Adjectifs(Parente):
         texte_5_words = visual.TextStim(self.win, color=[1, 1, 1], wrapWidth=1.5, font="Arial", height=0.1 + (0.004*self.zoom))
         texte_5_words.text = mot
         texte_5_words.draw()
+        event.getKeys()  #vide le buffer, afin de pas avoir une touche pressée avant l'apparition du stimulus
         self.rect.draw()
         self.win.flip()
         onset = self.global_timer.getTime()
@@ -184,7 +185,6 @@ class Adjectifs(Parente):
         while self.global_timer.getTime() < actual_time + self.stimuli_duration:  # Limite de temps de 4 secondes
             if k=="None":
                 key = event.getKeys()
-                #d=1, q=2, c=3, b=4
                 if "d" in key or "q" in key or 'c' in key or "b" in key  or "1" in key or "2" in key or "3" in key or "4" in key or "&" in key or "é" in key or "#" in key or "'" in key:
                     k = self.hashmapvaleurs.get(key[0])
                     response_time=self.global_timer.getTime() - actual_time
@@ -256,7 +256,7 @@ class Adjectifs(Parente):
             lineWidth=3,
             closeShape=False,
             lineColor="white",
-            units='height'  # Utilisation d'unités basées sur la hauteur de l'écran
+            units='height'
         )
 
         number_of_blocks = self.entrainement_block
@@ -289,12 +289,6 @@ class Adjectifs(Parente):
             while self.global_timer.getTime() < actual_time + fixation_duration:
                 cross_stim.draw()
                 self.win.flip()
-            block_type = "Fixation"
-            mot = "None"
-            key = "None"
-            response_time = "None"
-            #super().write_tsv_csv(self.filename, self.filename_csv,
-                                 # [super().float_to_csv(onset), block_type, mot, key, response_time])
 
     def blocks(self):
         cross_stim = visual.ShapeStim(
@@ -303,7 +297,7 @@ class Adjectifs(Parente):
             lineWidth=3,
             closeShape=False,
             lineColor="white",
-            units='height'  # Utilisation d'unités basées sur la hauteur de l'écran
+            units='height'
         )
 
         number_of_blocks = self.number_of_blocks
@@ -319,7 +313,6 @@ class Adjectifs(Parente):
             hashmap[block] -= 1
             if hashmap[block] == 0:
                 choice_block.remove(block)
-
             if block == "me":
                 self.debut_me()
                 self.show_words(self.per_block,block)
@@ -329,8 +322,6 @@ class Adjectifs(Parente):
             elif block == "syllabe":
                 self.debut_syllabe()
                 self.show_words(self.per_block,block)
-
-            # Affichage de la croix de fixation pendant 100 secondes
             cross_stim.draw()
             self.win.flip()
             onset = self.global_timer.getTime()

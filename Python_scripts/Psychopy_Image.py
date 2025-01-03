@@ -1,19 +1,16 @@
 import argparse
-import csv
 import os
 import random
-from datetime import datetime
 
 from Paradigme_parent import Parente
 from psychopy import visual, core, event
-import serial
 
 
 
 class static_image(Parente):
     def __init__(self, duration, betweenstimuli, file, zoom, output, port, baudrate, trigger, activation, hauteur,
                  largeur, random, launching, sigma):
-        self.duration = duration #args.duration, args.betweenstimuli, args.file, args.zoom, args.port, args.baudrate, args.trigger  ,args.output_file)
+        self.duration = duration
         self.betweenstimuli = betweenstimuli
         self.file = file
         self.zoom = zoom
@@ -28,7 +25,7 @@ class static_image(Parente):
         self.output = output
         self.filename, self.filename_csv = super().preprocessing_tsv_csv(output)
         self.port = port
-        self.global_timer = core.Clock() #Horloge principale
+        self.global_timer = core.Clock()
         self.baudrate = baudrate
         self.trigger = trigger
         self.launching = launching
@@ -60,7 +57,7 @@ class static_image(Parente):
                     angles.append(int(parts[1].strip()))
         return filenames, angles
 
-    def static_images_psychopy(self, chemin, duration, betweenstimuli):
+    def static_images_psychopy(self, chemin, duration):
         chemin = os.path.join(self.dossier, chemin)
         images, orientation = self.reading(chemin)
         super().file_init(self.filename, self.filename_csv,
@@ -79,8 +76,6 @@ class static_image(Parente):
             lineColor="white",
             units='height'  # Utilisation d'unités basées sur la hauteur de l'écran
         )
-        thezoom = 0.7 + (0.012*self.zoom)
-        #thezoom = 1 if zoom else 0.5
         stimulus_times = []  # Liste pour enregistrer la durée des stimuli
         stimulus_apparition=[] #Liste pour enregistrer le timing d'apparition des stimuli
         stimuli_liste = [] #Liste pour enregistrer les noms des stimuli, si c'est une croix ce sera Fixation sinon le nom du fichier
@@ -119,6 +114,8 @@ class static_image(Parente):
         super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), trial_type, none, none, none])
         image_count=0
         for image_stim in liste_image_win:
+            self.mouse.getPressed()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
+            event.getKeys()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
             image_stim.draw()
             self.rect.draw()
             self.win.flip()
@@ -128,13 +125,24 @@ class static_image(Parente):
             clicked_time = "None"
             onset = self.global_timer.getTime()
             while self.global_timer.getTime() < onset + duration:
-                button = self.mouse.getPressed()  # Mise à jour de l'état des boutons de la souris
-
-                if any(button):
-                    if not clicked:  # Vérifier si c'est le premier clic détecté
+                button = self.mouse.getPressed()
+                keys = event.getKeys()
+                if not clicked:
+                    if any(button):
                         clicked_time = self.global_timer.getTime() - onset
                         print("Clic détecté à :", clicked_time, "secondes")
-                        clicked = True  # Empêcher l'enregistrement de clics multiple
+                        clicked = True
+                    if keys:
+                        if self.trigger in keys:
+                            pass
+                        elif "escape" in keys:
+                            self.win.close()
+                            break
+                        else:
+                            clicked_time = self.global_timer.getTime() - onset
+                            print("Touche détecté à :", clicked_time, "secondes")
+                            clicked = True
+
             stimuli = images[image_count]
             trial_type = "Stimuli"
             if clicked_time != "None":
@@ -158,7 +166,7 @@ class static_image(Parente):
 
 
     def lancement(self):
-        stimulus_times, stimulus_apparition, stimuli, orientation = self.static_images_psychopy(self.file, self.duration, self.betweenstimuli)
+        stimulus_times, stimulus_apparition, stimuli, orientation = self.static_images_psychopy(self.file, self.duration)
         liste_trial=[]
         liste_lm=[]
         count=0
@@ -172,8 +180,7 @@ class static_image(Parente):
         for x in liste_lm:
             stimuli[x] = "None"
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
-                               "None"])
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None"])
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
 
@@ -198,7 +205,6 @@ if __name__ == "__main__":
     parser.add_argument("--largeur", type=float, required=True, help="Largeur du rectangle")
 
     args = parser.parse_args()
-    print(args)
     images = static_image(args.duration, args.betweenstimuli, args.file, args.zoom, args.output_file,
                           args.port, args.baudrate, args.trigger, args.activation, args.hauteur,
                           args.largeur, args.random, args.launching, args.sigma)
