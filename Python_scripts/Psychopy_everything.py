@@ -31,7 +31,7 @@ class Psychopy_everything (Parente):
             lineColor="white",
             units='height'
         )
-        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'uploads'))
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__),'..', 'uploads'))
         self.global_timer = core.Clock()
         pygame.mixer.init()
         self.fs = 44100
