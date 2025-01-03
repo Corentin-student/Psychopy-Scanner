@@ -1,6 +1,6 @@
-"Version 1.0"
+"Version 2.0"
 import os
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify
 import subprocess
 import sys
 import json
@@ -33,15 +33,6 @@ def created_paradigmes():
 
 @app.route('/api/json-files')
 def list_json_files():
-    current_directory = os.getcwd()  # Récupère le dossier actuel
-    print(f"Dossier actuel : {current_directory}")
-
-    # Afficher les fichiers et dossiers dans le répertoire courant
-    print("Contenu actuel du répertoire (équivalent à ls) :")
-    for item in os.listdir(current_directory):
-        print(f"- {item}")
-
-
     path = '_internal/static/jsons'  # Chemin vers le dossier des fichiers JSON
     files = [file.replace('.json', '') for file in os.listdir(path) if file.endswith('.json')]
     return jsonify(files)
@@ -80,12 +71,9 @@ def home():
 @app.route('/submit_ia_audition', methods=['POST'])
 def submit_ia_audition():
     try:
-        print("oui?")
         data = request.get_json()
-        print(data)
         subprocess.run([
-            sys.executable, 'Python_scripts/IA_audition.py',
-            #'Python_scripts\\IA_audition.exe',
+            'Python_scripts\\IA_audition.exe',
             "--file", data.get("filePath"),
             "--output_file", data.get("output_file"),
             "--duration", data.get("duration"),
@@ -106,10 +94,8 @@ def submit_ia_audition():
 def submit_ia_image():
     try:
         data = request.get_json()
-        print(data)
         subprocess.run([
-            sys.executable, 'Python_scripts/IA_image.py',
-            #'Python_scripts\\IA_image.exe',
+            'Python_scripts\\IA_image.exe',
             "--file", data.get("filePath"),
             "--output_file", data.get("output_file"),
             '--duration', data.get("duration"),
@@ -128,7 +114,6 @@ def submit_ia_image():
 @app.route('/submit-text', methods=['POST'])
 def submit_text():
     try:
-        print("working here?")
         data = request.get_json()
         duration = data.get('duration')
         words = data.get('words')
@@ -144,10 +129,8 @@ def submit_text():
         largeur = data.get('largeur')
         random = data.get('random')
         fixation = data.get('fixation')
-        print(data)
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_Text.py',
-            #'Python_scripts\\Psychopy_Text.exe',
+            'Python_scripts\\Psychopy_Text.exe',
             '--duration', duration,
             '--words', words,
             '--file', file,
@@ -172,7 +155,6 @@ def submit_text():
 @app.route('/submit-emo-voice', methods=['POST'])
 def submit_emo_voice():
     try:
-        print("working here?")
         data = request.get_json()
         duration = data.get('duration')
         betweenstimuli = data.get('betweenstimuli')
@@ -187,8 +169,7 @@ def submit_emo_voice():
         trigger = data.get('trigger')
         random = data.get('random')
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_EMO_VOICES.py',
-            #'Python_scripts\\Psychopy_EMO_VOICES.exe',
+            'Python_scripts\\Psychopy_EMO_VOICES.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -211,24 +192,6 @@ def submit_emo_voice():
 @app.route('/submit-cyberball', methods=['POST'])
 def submit_cyberball():
     try:
-        """try:
-                subprocess.run([
-                    'powershell', '-Command', 'Start-Process',
-                    'Python_scripts\\Psychopy_Cyberball.py',
-                    '-ArgumentList',
-                    f'"--premiere_phase", "{premiere_phase}", "--exclusion",'
-                    f' "{exclusion}", "--transition", "{transition}", "--minimum", "{minimum}",'
-                    f' "--patient_name", "{patient_name}", "--launching", "{launching}",'
-                    f' "--maximum", "{maximum}", "--trigger", "{trigger}",'
-                    f' "--output_file", "{output_file}", "--filePath", "{filePath}"',
-                    '-Verb', 'RunAs'
-                ])
-            except subprocess.CalledProcessError as e:
-                print(f"Error: {e.stderr.decode('utf-8')}")
-    
-            return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
-        except Exception as e:
-            return jsonify({'status': 'error', 'message': str(e)})"""
         data = request.get_json()
         premiere_phase = data.get("premiere_phase")
         exclusion = data.get("exclusion")
@@ -240,45 +203,20 @@ def submit_cyberball():
         patient_name = data.get("patient_name")
         output_file = "useless"
         filePath = data.get("filePath")
-        print("ça passe")
-        print(data)
-
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_Cyberball.py',
-            '--premiere_phase', premiere_phase,
-            '--exclusion', exclusion,
-            '--transition', transition,
-            '--minimum', minimum,
-            '--patient_name', patient_name,
-            '--launching', launching,
-            '--maximum', maximum,
-            '--trigger', trigger,
-            '--output_file', output_file,
-            '--filePath', filePath,
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
-        """
-        try:
-            subprocess.run([
-                'powershell', '-Command', 'Start-Process',
-                'Python_scripts\\Psychopy_Cyberball.exe',
-                '-ArgumentList',
-                f'"--premiere_phase", "{premiere_phase}", "--exclusion",'
-                f' "{exclusion}", "--transition", "{transition}", "--minimum", "{minimum}",'
-                f' "--patient_name", "{patient_name}", "--launching", "{launching}",'
-                f' "--maximum", "{maximum}", "--trigger", "{trigger}",'
-                f' "--output_file", "{output_file}", "--filePath", "{filePath}"',
-                '-Verb', 'RunAs'
-            ])
-        except subprocess.CalledProcessError as e:
-            print(f"Error: {e.stderr.decode('utf-8')}")
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
-        """
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
-
-
+            'powershell', '-Command', 'Start-Process',
+            'Python_scripts\\Psychopy_Cyberball.exe',
+            '-ArgumentList',
+            f'"--premiere_phase", "{premiere_phase}", "--exclusion",'
+            f' "{exclusion}", "--transition", "{transition}", "--minimum", "{minimum}",'
+            f' "--patient_name", "{patient_name}", "--launching", "{launching}",'
+            f' "--maximum", "{maximum}", "--trigger", "{trigger}",'
+            f' "--output_file", "{output_file}", "--filePath", "{filePath}"',
+            '-Verb', 'RunAs'
+        ])
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e.stderr.decode('utf-8')}")
+    return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
 
 
 
@@ -286,7 +224,6 @@ def submit_cyberball():
 @app.route('/submit-emo-faces', methods=['POST'])
 def submit_emo_faces():
     try:
-        print("working here?")
         data = request.get_json()
         duration = data.get('duration')
         betweenstimuli = data.get('betweenstimuli')
@@ -303,8 +240,7 @@ def submit_emo_faces():
         random = data.get('random')
         sigma = data.get('sigma')
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_EMO_FACE.py',
-            #'Python_scripts\\Psychopy_EMO_FACE.exe',
+            'Python_scripts\\Psychopy_EMO_FACE.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -329,7 +265,6 @@ def submit_emo_faces():
 @app.route('/submit-adjectifs', methods=['POST'])
 def submit_adjectifs():
     try:
-        print("working here?")
         data = request.get_json()
         duration = data.get('duration')
         betweenstimuli = data.get('betweenstimuli')
@@ -347,11 +282,8 @@ def submit_adjectifs():
         zoom = data.get('zoom')
         entrainement = data.get('entrainement')
         per_block = data.get('per_block')
-        print("working here?")
-        print(data)
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_Adjectifs.py',
-            #'Python_scripts\\Psychopy_Adjectifs.exe',
+            'Python_scripts\\Psychopy_Adjectifs.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -378,7 +310,6 @@ def submit_adjectifs():
 @app.route('/submit-stroop', methods=['POST'])
 def submit_stroop():
     try:
-        print("working here?")
         data = request.get_json()
         duration = data.get('duration')
         betweenstimuli = data.get('betweenstimuli')
@@ -395,10 +326,8 @@ def submit_stroop():
         launching = data.get('launching_text')
         random = data.get('random')
         sigma = data.get('sigma')
-        print(data)
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_Stroop.py',
-            #'Python_scripts\\Psychopy_Stroop.exe',
+            'Python_scripts\\Psychopy_Stroop.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -415,7 +344,6 @@ def submit_stroop():
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
         ], check = True)
-        print("working here?")
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -425,7 +353,6 @@ def submit_stroop():
 @app.route('/submit-localizer', methods=['POST'])
 def submit_localizer():
     try:
-        print("working here?")
         data = request.get_json()
         duration = data.get('duration')
         betweenstimuli = data.get('betweenstimuli')
@@ -444,10 +371,8 @@ def submit_localizer():
         random = data.get('random')
         file = data.get('fileName')
 
-        print(data)
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_LOCALIZER.py',
-            #'Python_scripts\\Psychopy_LOCALIZER.exe',
+            'Python_scripts\\Psychopy_LOCALIZER.exe',
             '--duration', duration,
             '--blocks', blocks,
             '--per_block', per_block,
@@ -465,7 +390,6 @@ def submit_localizer():
             '--betweenblocks', betweenblocks,
             '--output_file', output_file,
         ], check = True)
-        print("working here?")
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -475,7 +399,6 @@ def submit_localizer():
 @app.route('/submit-priming', methods=['POST'])
 def submit_priming():
     try:
-        print("working heere?")
         data = request.get_json()
         duration = data.get('duration')
         betweenstimuli = data.get('betweenstimuli')
@@ -492,8 +415,6 @@ def submit_priming():
         betweenblocks = data.get('betweenblocks')
         random = data.get('random')
         file = data.get('fileName')
-        print('in priming')
-        print(data)
         subprocess.run([
             sys.executable, 'Python_scripts/Psychopy_Priming.py',
             #'Python_scripts\\Psychopy_Priming.exe',
@@ -513,7 +434,6 @@ def submit_priming():
             '--betweenblocks', betweenblocks,
             '--output_file', output_file,
         ], check = True)
-        print("working here?")
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -523,14 +443,10 @@ def submit_priming():
 @app.route('/submit-images', methods=['POST'])
 def submit_images():
     try:
-        print("ooo?")
-        print("'oo")
         data = request.get_json()
-        print(data)
         duration = data.get('duration')
         file = data.get('filePath')
         zoom = data.get('zoom')
-        print("oop")
         betweenstimuli = data.get('betweenstimuli')
         output_file = data.get('output_file')
         activation = data.get('activation')
@@ -542,10 +458,8 @@ def submit_images():
         launching = data.get('launching_text')
         random = data.get('random')
         sigma = data.get('sigma')
-        print(data)
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_Image.py',
-            #'Python_scripts\\Psychopy_Image.exe',
+            'Python_scripts\\Psychopy_Image.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -570,9 +484,7 @@ def submit_images():
 @app.route('/submit-videos', methods=['POST'])
 def submit_videos():
     try:
-        print("wtf ????")
         data = request.get_json()
-        print(data)
         duration = data.get('duration')
         file = data.get('filePath')
         zoom = data.get('zoom')
@@ -587,10 +499,8 @@ def submit_videos():
         launching = data.get('launching_text')
         random = data.get('random')
         sigma = data.get('sigma')
-        print(data)
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_Video.py',
-            #'Python_scripts\\Psychopy_Video.exe',
+            'Python_scripts\\Psychopy_Video.exe',
             '--duration', duration,
             '--file', file,
             '--output_file', output_file,
@@ -615,14 +525,10 @@ def submit_videos():
 @app.route('/submit-audition', methods=['POST'])
 def submit_audition():
     try:
-        print("working hddere?")
         data = request.get_json()
-        print(data)
         instruction = data.get('instruction')
         duration = data.get('duration')
-        print("ok")
         betweenstimuli = data.get('betweenstimuli')
-        print("non")
         output_file = data.get('output_file')
         activation = data.get('activation')
         port = data.get('port')
@@ -635,11 +541,8 @@ def submit_audition():
         file = data.get('fileName')
         asound = data.get('ASound')
         sigma = data.get('sigma')
-
-        print(data)
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_Audition.py',
-            #'Python_scripts\\Psychopy_Audition.exe',
+            'Python_scripts\\Psychopy_Audition.exe',
             '--instruction', instruction,
             '--duration', duration,
             '--activation', str(activation),
@@ -663,23 +566,10 @@ def submit_audition():
 
 @app.route('/submit-table', methods=['POST'])
 def submit_table():
-    print("ici ?")
     data = request.get_json()
-    print(data)
-    json_data = json.dumps(data)
-    print(json_data)
     stimuli = json.dumps(data.get("data"))
-    current_directory = os.getcwd()  # Récupère le dossier actuel
-    print(f"Dossier actuel : {current_directory}")
-
-    # Afficher les fichiers et dossiers dans le répertoire courant
-    print("Contenu actuel du répertoire (équivalent à ls) :")
-    for item in os.listdir(current_directory):
-        print(f"- {item}")
-    print("fonctionne?")
     subprocess.run([
-        sys.executable, 'Python_scripts/Psychopy_everything.py',
-        #'Python_scripts\\Psychopy_everything.exe',
+        'Python_scripts\\Psychopy_everything.exe',
         '--data', stimuli,
         '--instructions', data.get("instructions"),
         '--mot_fin', data.get("mot_fin"),
@@ -692,16 +582,11 @@ def keep_datas():
     data = request.get_json()
     filename = "_internal/static/jsons/"+data.get("filename")+".json"
     datas = data.get("data")
-    print(data)
-    print("pas ici")
-    print(datas)
-    print(filename)
     output_data = {
         "data": datas,
         "instructions": data.get("instructions", ""),  # Valeur par défaut si non présente
         "mot_fin": data.get("mot_fin", "")  # Valeur par défaut si non présente
     }
-    print(output_data)
     with open(filename, "w") as json_file:
         json.dump(output_data, json_file, indent=4)
 
@@ -711,5 +596,5 @@ def keep_datas():
 
 if __name__ == '__main__':
     webbrowser.open('http://127.0.0.1:5000')
-    #app.run(debug=True)
+    #app.run(debug=True) #si jamais on veut voir le debugger alors il faut mettre les 2 autres lignes en commentaires
     serve(app, host='0.0.0.0', port=5000)
