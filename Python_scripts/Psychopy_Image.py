@@ -119,6 +119,8 @@ class static_image(Parente):
         super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), trial_type, none, none, none])
         image_count=0
         for image_stim in liste_image_win:
+            self.mouse.getPressed()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
+            event.getKeys()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
             image_stim.draw()
             self.rect.draw()
             self.win.flip()
@@ -128,13 +130,23 @@ class static_image(Parente):
             clicked_time = "None"
             onset = self.global_timer.getTime()
             while self.global_timer.getTime() < onset + duration:
-                button = self.mouse.getPressed()  # Mise à jour de l'état des boutons de la souris
-
-                if any(button):
-                    if not clicked:  # Vérifier si c'est le premier clic détecté
+                button = self.mouse.getPressed()
+                keys = event.getKeys()
+                if not clicked:
+                    if any(button):
                         clicked_time = self.global_timer.getTime() - onset
                         print("Clic détecté à :", clicked_time, "secondes")
-                        clicked = True  # Empêcher l'enregistrement de clics multiple
+                        clicked = True
+                    if keys:
+                        if self.trigger in keys:
+                            pass
+                        elif "escape" in keys:
+                            self.win.close()
+                            break
+                        else:
+                            clicked_time = self.global_timer.getTime() - onset
+                            print("Touche détecté à :", clicked_time, "secondes")
+                            clicked = True
             stimuli = images[image_count]
             trial_type = "Stimuli"
             if clicked_time != "None":

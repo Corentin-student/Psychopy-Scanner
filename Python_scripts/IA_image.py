@@ -167,11 +167,16 @@ class IA_image(Parente):
             pass
         self.global_timer.reset()
         self.une_boucle(images_stim)
+        self.cross_stim.draw()
+        self.win.flip()
         onset = self.global_timer.getTime()
         while self.global_timer.getTime() < onset + 20:
             pass
+        super().the_end(self.win)
+        print('iic??')
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")

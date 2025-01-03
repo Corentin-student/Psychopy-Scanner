@@ -256,7 +256,7 @@ class launch_cyberball(Parente) :
         next = "None"
         self.timer.reset()
         d=0
-        key = event.getKeys()
+        event.getKeys()  # vide le buffer, afin de pas avoir une touche pressée avant le tour du joueur
         key = ""
         while self.timer.getTime() < 4:
             key = event.getKeys()

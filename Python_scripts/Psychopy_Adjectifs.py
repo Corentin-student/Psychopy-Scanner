@@ -173,6 +173,7 @@ class Adjectifs(Parente):
         texte_5_words = visual.TextStim(self.win, color=[1, 1, 1], wrapWidth=1.5, font="Arial", height=0.1 + (0.004*self.zoom))
         texte_5_words.text = mot
         texte_5_words.draw()
+        event.getKeys()  #vide le buffer, afin de pas avoir une touche pressée avant l'apparition du stimulus
         self.rect.draw()
         self.win.flip()
         onset = self.global_timer.getTime()

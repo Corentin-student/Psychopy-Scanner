@@ -99,7 +99,8 @@ class voices(Parente):
             stim_file = "None"
             reaction = "None"
             super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), trial_type, reaction, stim_file])
-
+            self.mouse.getPressed()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
+            event.getKeys()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
             self.image_stim.draw()
             self.rect.draw()
             self.win.flip()
@@ -109,11 +110,23 @@ class voices(Parente):
             onset = self.global_timer.getTime()
             while self.global_timer.getTime() < onset + custom_sound.getDuration():
                 button = self.mouse.getPressed()
-                if any(button):
-                    if not clicked:
+                keys = event.getKeys()
+                if not clicked:
+                    if any(button):
                         clicked_time = self.global_timer.getTime() - onset
                         print("Clic détecté à :", clicked_time, "secondes")
                         clicked = True
+                    if keys:
+                        if self.trigger in keys:
+                            pass
+                        elif "escape" in keys:
+                            self.win.close()
+                            break
+                        else:
+                            clicked_time = self.global_timer.getTime() - onset
+                            print("Touche détecté à :", clicked_time, "secondes")
+                            clicked = True
+                        event.getKeys()
             trial_type = "Stimuli"
             stim_file = x
             reaction = clicked_time

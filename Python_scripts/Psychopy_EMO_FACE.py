@@ -117,21 +117,36 @@ class Emo_Face(Parente):
             trial_type = "Fixation"
             super().write_tsv_csv(self.filename, self.filename_csv,
                                   [super().float_to_csv(onset), trial_type, click_times, stimuli_file])
-            clicked = False  # Variable pour vérifier si un clic a été détecté
+            clicked = False  # Variable pour vérifier si un clic a été détecté ou une touche pressée
             clicked_time = "None"
             image_stim.draw()
             self.rect.draw()
+            self.mouse.getPressed() #vide le buffer, afin de pas avoir un click fait avant le stimulus
+            event.getKeys()  #vide le buffer, afin de pas avoir un click fait avant le stimulus
             self.win.flip()
             if self.activation:
                 super().send_character(self.port,self.baudrate)
             onset = global_timer.getTime()
             while global_timer.getTime() < onset + self.stimuli_duration:
-                button = self.mouse.getPressed()  # Mise à jour de l'état des boutons de la souris
-                if any(button):
-                    if not clicked:  # Vérifier si c'est le premier clic détecté
+                button = self.mouse.getPressed()
+                keys = event.getKeys()
+                if not clicked:
+                    if any(button):
                         clicked_time = global_timer.getTime() - onset
                         print("Clic détecté à :", clicked_time, "secondes")
-                        clicked = True  # Empêcher l'enregistrement de clics multiple
+                        clicked = True
+                    if keys:
+                        if self.trigger in keys:
+                            pass
+                        elif "escape" in keys:
+                            self.win.close()
+                            break
+                        else:
+                            clicked_time = global_timer.getTime() - onset
+                            print("Touche détecté à :", clicked_time, "secondes")
+                            clicked = True
+                        event.getKeys()
+
             click_times = clicked_time
             stimuli_file = images_files[image_stim_count]
             trial_type = "Stimuli"
