@@ -1,6 +1,6 @@
 "Version 1.0"
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import subprocess
 import sys
 import json
@@ -27,14 +27,22 @@ def upload_file():
 @app.route('/index')
 def index():
     return render_template('index2.html')
-
 @app.route('/created_paradigmes')
 def created_paradigmes():
     return render_template('existing.html')
 
 @app.route('/api/json-files')
 def list_json_files():
-    path = 'static/jsons'  # Chemin vers le dossier des fichiers JSON
+    current_directory = os.getcwd()  # Récupère le dossier actuel
+    print(f"Dossier actuel : {current_directory}")
+
+    # Afficher les fichiers et dossiers dans le répertoire courant
+    print("Contenu actuel du répertoire (équivalent à ls) :")
+    for item in os.listdir(current_directory):
+        print(f"- {item}")
+
+
+    path = '_internal/static/jsons'  # Chemin vers le dossier des fichiers JSON
     files = [file.replace('.json', '') for file in os.listdir(path) if file.endswith('.json')]
     return jsonify(files)
 
@@ -51,6 +59,20 @@ def about_fr():
 def about_nl():
     return render_template('about-nl.html')  # Template en néerlandais
 
+
+@app.route('/get-json-file', methods=['GET'])
+def serve_json_file():
+    file_name = request.args.get('param_to_file')
+    directory_path = '_internal/static/jsons'  # Assurez-vous que ce chemin est correct
+    file_path = f"{directory_path}/{file_name}.json"
+    try:
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+        return jsonify(data)
+    except FileNotFoundError:
+        return jsonify({"error": "File not found"}), 404
+    except json.JSONDecodeError:
+        return jsonify({"error": "Error decoding JSON"}), 500
 @app.route('/')
 def home():
     return render_template('about.html')
@@ -63,6 +85,7 @@ def submit_ia_audition():
         print(data)
         subprocess.run([
             sys.executable, 'Python_scripts/IA_audition.py',
+            #'Python_scripts\\IA_audition.exe',
             "--file", data.get("filePath"),
             "--output_file", data.get("output_file"),
             "--duration", data.get("duration"),
@@ -86,6 +109,7 @@ def submit_ia_image():
         print(data)
         subprocess.run([
             sys.executable, 'Python_scripts/IA_image.py',
+            #'Python_scripts\\IA_image.exe',
             "--file", data.get("filePath"),
             "--output_file", data.get("output_file"),
             '--duration', data.get("duration"),
@@ -218,6 +242,7 @@ def submit_cyberball():
         filePath = data.get("filePath")
         print("ça passe")
         print(data)
+
         subprocess.run([
             sys.executable, 'Python_scripts/Psychopy_Cyberball.py',
             '--premiere_phase', premiere_phase,
@@ -233,8 +258,27 @@ def submit_cyberball():
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        """
+        try:
+            subprocess.run([
+                'powershell', '-Command', 'Start-Process',
+                'Python_scripts\\Psychopy_Cyberball.exe',
+                '-ArgumentList',
+                f'"--premiere_phase", "{premiere_phase}", "--exclusion",'
+                f' "{exclusion}", "--transition", "{transition}", "--minimum", "{minimum}",'
+                f' "--patient_name", "{patient_name}", "--launching", "{launching}",'
+                f' "--maximum", "{maximum}", "--trigger", "{trigger}",'
+                f' "--output_file", "{output_file}", "--filePath", "{filePath}"',
+                '-Verb', 'RunAs'
+            ])
+        except subprocess.CalledProcessError as e:
+            print(f"Error: {e.stderr.decode('utf-8')}")
+        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        """
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
+
+
 
 
 
@@ -619,32 +663,53 @@ def submit_audition():
 
 @app.route('/submit-table', methods=['POST'])
 def submit_table():
+    print("ici ?")
     data = request.get_json()
     print(data)
     json_data = json.dumps(data)
     print(json_data)
+    stimuli = json.dumps(data.get("data"))
+    current_directory = os.getcwd()  # Récupère le dossier actuel
+    print(f"Dossier actuel : {current_directory}")
 
+    # Afficher les fichiers et dossiers dans le répertoire courant
+    print("Contenu actuel du répertoire (équivalent à ls) :")
+    for item in os.listdir(current_directory):
+        print(f"- {item}")
+    print("fonctionne?")
     subprocess.run([
         sys.executable, 'Python_scripts/Psychopy_everything.py',
-        '--data', json_data
-    ])
+        #'Python_scripts\\Psychopy_everything.exe',
+        '--data', stimuli,
+        '--instructions', data.get("instructions"),
+        '--mot_fin', data.get("mot_fin"),
+        '--output_file', data.get("output_file")
+    ], check= True)
     return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
 
 @app.route('/keep-datas', methods=['POST'])
 def keep_datas():
     data = request.get_json()
-    filename = "static/jsons/"+data.get("filename")+".json"
+    filename = "_internal/static/jsons/"+data.get("filename")+".json"
     datas = data.get("data")
+    print(data)
+    print("pas ici")
     print(datas)
     print(filename)
+    output_data = {
+        "data": datas,
+        "instructions": data.get("instructions", ""),  # Valeur par défaut si non présente
+        "mot_fin": data.get("mot_fin", "")  # Valeur par défaut si non présente
+    }
+    print(output_data)
     with open(filename, "w") as json_file:
-        json.dump(datas, json_file, indent=4)
+        json.dump(output_data, json_file, indent=4)
 
     return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
 
 
 
 if __name__ == '__main__':
-    #webbrowser.open('http://127.0.0.1:5000')
-    app.run(debug=True)
-    #serve(app, host='0.0.0.0', port=5000)
+    webbrowser.open('http://127.0.0.1:5000')
+    #app.run(debug=True)
+    serve(app, host='0.0.0.0', port=5000)

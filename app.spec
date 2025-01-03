@@ -5,6 +5,7 @@ block_cipher = None
 # Collecte des fichiers statiques et templates
 datas = [
     ('static', 'static'),      # Inclure tout le dossier 'static'
+    ('static/jsons', 'static/jsons'),
     ('templates', 'templates') # Inclure tout le dossier 'templates'
 ]
 

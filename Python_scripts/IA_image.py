@@ -6,6 +6,7 @@ from datetime import datetime
 
 from Paradigme_parent import Parente
 from psychopy import visual, core, event
+from collections import defaultdict
 import serial
 import random
 
@@ -88,12 +89,59 @@ class IA_image(Parente):
             ma_liste = [line.strip() for line in fichier]
         return ma_liste
 
+    def group_by_prefix(self,images):
+        groups = defaultdict(list)
+        for image in images:
+            prefix = image.split("_")[0]
+            groups[prefix].append(image)
+        return groups
+
+    def ajout_where_nothing(self,images,groups,groupe):
+        toinsert = []
+        for i in range(len(images)-1):
+            actual_prefix = images[i].split("_")[0]
+            next_prefix = images[i+1].split("_")[0]
+            if i == 0 and actual_prefix != groupe:
+                toinsert.append(i)
+            else:
+                if groupe == actual_prefix or groupe == next_prefix:
+                    pass
+                else:
+                    toinsert.append(i+1)
+        for j in reversed(toinsert):
+            if len(groups[groupe])== 1:
+                images.insert(j,groups[groupe].pop())
+                return images
+            else:
+                images.insert(j, groups[groupe].pop())
+        return images
+
+
+    def shuffle_groups(self,groups):
+        images = []
+        previous_groupe = ""
+        while len(groups)!=0:
+            groupe = random.choice(list(groups.keys()))
+            if groupe == previous_groupe:
+                if len(groups)==1:
+                    images = self.ajout_where_nothing(images,groups,groupe)
+                    return images
+            else:
+                x = random.choice(groups[groupe])
+                groups[groupe].remove(x)
+                if len(groups[groupe]) == 0:
+                    groups.pop(groupe)
+                images.append(x)
+                previous_groupe = groupe
+
+        return images
     def lancement(self):
         super().file_init(self.filename, self.filename_csv,
                           ['onset', 'trial_type', 'stim_file'])
         self.images = self.reading(os.path.join(self.dossier,self.file))
         if self.random:
-            random.shuffle(self.images)
+            gr = self.group_by_prefix(self.images)
+            self.images =  self.shuffle_groups(gr)
         images_stim = []
         for x in self.images:
             image_path = os.path.join(self.dossier_image, x)

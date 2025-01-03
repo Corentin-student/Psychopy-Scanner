@@ -8,6 +8,14 @@ function fermerOverlay(value) {
     document.getElementById(value).style.display = "none"; // Cache l'overlay
 }
 
+function ParadigmCreated() {
+    location.href = '/created_paradigmes';
+}
+
+function PrimeParadigm() {
+    location.href = '/';
+}
+
 function ajoutFichiers(){
     console.log("on regarde ce qui se passe")
     let instru = document.getElementById("fileinput-Instructions").value;
@@ -39,12 +47,20 @@ document.addEventListener('keydown', function(event) {
 });
 
 function submit(name) {
-    let angleStimulus
+    let angleStimulus;
+    let zoom;
     if (name === "Image"){
-        angleStimulus = document.getElementById("angle-Image").value || "/";
+        angleStimulus = document.getElementById("angle-Image").value || 0;
+        zoom = document.getElementById("zoom-image").value || 0;
+
+    }
+    else if (name ==="Video"){
+        zoom = document.getElementById("zoom-video").value || 0;
+        angleStimulus = "/";
     }
     else{
         angleStimulus = "/";
+        zoom = "/";
     }
     const timingApparitionInput = document.getElementById("apparition-"+name).value;
     const timingApparition = parseFloat(timingApparitionInput);
@@ -88,6 +104,7 @@ function submit(name) {
         <td>${name}</td>
         <td>${fileName}</td>
         <td>${angleStimulus}</td>
+        <td>${zoom}</td>
         <td><button class="supress" onclick="handleCloseClick(this)">Supprimer</button></td>
     `;
 
@@ -145,6 +162,7 @@ function fixation(){
         <td>${timingApparition.toFixed(3)}s</td>
         <td>${dureeStimulus.toFixed(3)}s</td>
         <td>Croix de Fixation</td>
+        <td>/</td>
         <td>/</td>
         <td>/</td>
         <td><button class="supress" onclick="handleCloseClick(this)">Supprimer</button></td>
@@ -261,7 +279,7 @@ function highlightDuplicateTimings() {
 function SubmitParadigme() {
     var table = document.querySelector('.stimulus-table');
     var data = [];
-    var keys = ['Apparition', 'Duree', 'Type', 'Stimulus', 'Angle'];
+    var keys = ['Apparition', 'Duree', 'Type', 'Stimulus', 'Angle', 'Zoom'];
     for (var i = 1, row; row = table.rows[i]; i++) {
         var rowData = {};
         for (var j = 0, col; col = row.cells[j]; j++) {
@@ -279,6 +297,8 @@ function SubmitParadigme() {
         }
         data.push(rowData);
     }
+    const instructions = document.getElementById("instruction_txt").textContent;
+    const mot_fin = document.getElementById("end_txt").textContent;
     const filename = document.getElementById("paradigme_name").value;
     fetch('/keep-datas', {
         method: 'POST',
@@ -287,7 +307,9 @@ function SubmitParadigme() {
         },
         body: JSON.stringify({
             data: data,
-            filename: filename
+            filename: filename,
+            instructions: instructions,
+            mot_fin: mot_fin
         }),
     })
         .then(response => response.json())

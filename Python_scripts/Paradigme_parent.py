@@ -77,7 +77,17 @@ class Parente(ABC):
         texte.draw()
         win.flip()
         core.wait(5)
-
+    def reading1 (self, filename):
+        with open(filename, "r") as fichier:
+            ma_liste = [line.strip() for line in fichier]
+        return ma_liste
+    def the_end_file(self,win, file):
+        dossier = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'uploads'))
+        texts = self.inputs_texts(os.path.join(dossier, file))
+        texte = visual.TextStim(win, text=texts[0], color=[1, 1, 1], alignText="center", wrapWidth=1.5, font='Arial')
+        texte.draw()
+        win.flip()
+        core.wait(5)
     def the_end2 (self, win):
         texte = visual.TextStim(win, text="Merci beaucoup d'avoir réalisé cette tâche. \n \n Ne bougez pas, on vous parle dans quelques secondes. ",
                                 color=[1, 1, 1], alignText="center", wrapWidth=1.5, font='Arial')
@@ -157,6 +167,11 @@ class Parente(ABC):
             onset_next = rows[i + 1]['onset']
             duration = onset_next - onset_current
             durations.append(duration)
+            for j in range(i, -1, -1):
+                if rows[j]['onset'] == onset_current:
+                    durations[j] = duration
+                else:
+                    break
         durations.append(None)
         for i, row in enumerate(rows):
             row['duration'] = durations[i]

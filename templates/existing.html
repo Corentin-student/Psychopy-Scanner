@@ -7,8 +7,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
     <script src="{{ url_for('static', filename='script_paradigms.js') }}" defer></script></head>
     <body>
+        <div class="overlay" id="popupOverlay" style="display: none;">
+            <div class="popup">
+                <span class="close-btn" onclick="closePopup('popupOverlay')">&times;</span>
+                <h4 style="color: #0c0b0b">Identifiant du patient</h4>
+                <input type="text" placeholder="Entrez votre texte" id="patientInput">
+                <button onclick="submitPopup()" class="submit">Submit</button>
+            </div>
+        </div>
         <header class="header">
-                <h1 class="header-center">Création de Paradigme</h1>
+            <button class="navbutton-left" style="margin-left: 10px" onclick="PrimeParadigm()">Prime Paradigms</button>
+            <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreation()">Creation of Paradigms</button>
+            <h1 class="header-center">Création de Paradigme</h1>
+            <div class="header-right">
+                <button id="openPopup" class="navbutton">Change of Patient</button>
+                <span id="patientName">Patient ID</span>
+            </div>
         </header>
         <div class="sidenav">
             <h2 class="h2-sidenav">Paradigme</h2>
@@ -24,6 +38,7 @@
                         <th>Type</th>
                         <th>Stimulus</th>
                         <th>Angle</th>
+                        <th>Zoom</th>
                         <th>Supprimer</th>
                       </tr>
                     </thead>
@@ -31,6 +46,17 @@
                       <!-- Les lignes de données seront ajoutées ici -->
                     </tbody>
                   </table>
+                </div>
+                <div class="input-group" id="visible-group">
+                    <div class="box-wrapper">
+                        <span class="mini-title">Fichier d'instructions</span>
+                        <div class="small-box" id="instruction_txt">fichier</div>
+                    </div>
+                    <div class="box-wrapper">
+                        <span class="mini-title">Fichier slide de fin</span>
+                        <div class="small-box" id="end_txt">fichier</div>
+                    </div>
+                    <!-- Ajouter plus de boîtes comme nécessaire -->
                 </div>
                 <button class="en_dessous_cadre" onclick="launching()">submit</button>
             </div>

@@ -1,0 +1,30 @@
+{
+    "data": [
+        {
+            "Apparition": "0.000",
+            "Duree": "2.000",
+            "Type": "Audio",
+            "Stimulus": "A.wav",
+            "Angle": "/",
+            "Zoom": "/"
+        },
+        {
+            "Apparition": "0.000",
+            "Duree": "2.000",
+            "Type": "Enregistrement",
+            "Stimulus": "/",
+            "Angle": "/",
+            "Zoom": "/"
+        },
+        {
+            "Apparition": "2.000",
+            "Duree": "2.000",
+            "Type": "Enregistrement",
+            "Stimulus": "/",
+            "Angle": "/",
+            "Zoom": "/"
+        }
+    ],
+    "instructions": "Instructions.txt",
+    "mot_fin": "Instructions.txt"
+}

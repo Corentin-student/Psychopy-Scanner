@@ -216,6 +216,14 @@ input {
     cursor: pointer;
 }
 
+.navbutton-left {
+    background-color: rgba(79, 138, 36, 0.58);
+    color: white;
+    height: 45px;
+    border: none;
+    cursor: pointer;
+}
+
 .color-green{
     background-color: rgba(40, 93, 1, 0.58);
 }

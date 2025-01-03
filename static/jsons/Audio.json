@@ -1,9 +1,14 @@
-[
-    {
-        "Apparition": "0.000",
-        "Duree": "1.000",
-        "Type": "Audio",
-        "Stimulus": "A.wav",
-        "Angle": "/"
-    }
-]
+{
+    "data": [
+        {
+            "Apparition": "0.000",
+            "Duree": "2.000",
+            "Type": "Audio",
+            "Stimulus": "A.wav",
+            "Angle": "/",
+            "Zoom": "/"
+        }
+    ],
+    "instructions": "Instructions.txt",
+    "mot_fin": "Instructions.txt"
+}

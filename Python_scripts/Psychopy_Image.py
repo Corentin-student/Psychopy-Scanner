@@ -191,10 +191,6 @@ if __name__ == "__main__":
     parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
     parser.add_argument("--launching", type=str, help="Chemin vers le fichier de mots", required=False)
     parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
-
-
-
-
     parser.add_argument('--port', type=str, required=False, help="Port")
     parser.add_argument('--baudrate', type=int, required=False, help="Speed port")
     parser.add_argument('--trigger', type=str, required=False, help="caractère pour lancer le programme")

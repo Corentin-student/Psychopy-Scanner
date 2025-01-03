@@ -9,6 +9,9 @@
 <body>
 
     <header class="header">
+        <button class="navbutton-left" style="margin-left: 10px" onclick="PrimeParadigm()">Prime Paradigms</button>
+        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreated()">Created Paradigms</button>
+        <input type="file" id="launching_text" class="cache">
         <h1 class="header-center">Création de Paradigme</h1>
     </header>
     <main>
@@ -31,14 +34,14 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="ajoutFichiers()">Suddbmit</button>
+                            <button class="submit" onclick="ajoutFichiers(); fermerOverlay('overlay-Instructions')">Submit</button>
                         </div>
                     </div>
                 </div>
               </div>
             </div>
             <div id="overlay-Image" class="overlay-index">
-              <div class="overlay-content-index">
+              <div class="overlay-content-index overlay-image">
                 <span class="fermer" onclick="fermerOverlay('overlay-Image')">&times;</span>
                 <h2>Ajout d'une Image</h2>
                 <div style="display: flex; justify-content: center; align-items: center;">
@@ -55,6 +58,14 @@
                             <h3>Angle du stimulus (si aucun mettre 0)</h3>
                             <input type="text" id="angle-Image" placeholder="par exemple: 90">
                         </div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <div class="input-group">
+                        <div class="input-container">
+                            <h3>Pourcentage de zoom</h3>
+                            <input id="zoom-image" type="text" placeholder="par exemple: 50">
+                        </div>
                         <div class="input-container">
                             <h3>Choix du stimulus</h3>
                             <button class="button-choice" onclick="document.getElementById('fileinput-Image').click()">Choisir un fichier</button>
@@ -62,14 +73,14 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="submit('Image')">Submit</button>
+                            <button class="submit" onclick="submit('Image'); fermerOverlay('overlay-Image')">Submit</button>
                         </div>
                     </div>
                 </div>
               </div>
             </div>
             <div id="overlay-Video" class="overlay-index">
-              <div class="overlay-content-index" style="width: 65%; margin-left: auto; margin-right: auto;">
+              <div class="overlay-content-index overlay-video" style="width: 65%; margin-left: auto; margin-right: auto;">
                 <span class="fermer" onclick="fermerOverlay('overlay-Video')">&times;</span>
                 <h2>Ajout d'une Vidéo</h2>
                   <div style="display: flex; justify-content: center; align-items: center;">
@@ -83,13 +94,17 @@
                             <input type="text" id="duration-Video" placeholder="par exemple: 3">
                         </div>
                         <div class="input-container">
+                            <h3>Pourcentage de zoom</h3>
+                            <input id="zoom-video" type="text" placeholder="par exemple: 50">
+                        </div>
+                        <div class="input-container">
                             <h3>Choix du stimulus</h3>
                             <button class="button-choice" onclick="document.getElementById('fileinput-Video').click()">Choisir un fichier</button>
                             <input type="file" id="fileinput-Video" style="display: none;" onchange="handleFileUpload(event)">
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="submit('Video')">Submit</button>
+                            <button class="submit" onclick="submit('Video'); fermerOverlay('overlay-Video')">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -116,7 +131,7 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="submit('Audio')">Submit</button>
+                            <button class="submit" onclick="submit('Audio'); fermerOverlay('overlay-Audio')">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -138,7 +153,7 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="submit('Enregistrement')">Submit</button>
+                            <button class="submit" onclick="submit('Enregistrement'); fermerOverlay('overlay-Enregistrement')">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -160,7 +175,7 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="fixation()">Submit</button>
+                            <button class="submit" onclick="fixation() ;fermerOverlay('overlay-Fixation')">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -186,11 +201,11 @@
             </div>
             <div id="overlay-filename" class="overlay-index">
               <div class="overlay-content-index" style="width: 55%; margin-left: auto; margin-right: auto;">
-                <span class="fermer" onclick="fermerOverlay('overlay-Fixation')">&times;</span>
+                <span class="fermer" onclick="fermerOverlay('overlay-filename')">&times;</span>
                 <h2>Veuillez entrer un nom pour enregistrer le paradigme</h2>
                   <div style="display: flex; justify-content: center; align-items: center;">
                       <input type="text" id="paradigme_name" placeholder="File Name">
-                      <button class="button-filename" onclick="SubmitParadigme()">Submit</button>
+                      <button class="button-filename" onclick="SubmitParadigme(); fermerOverlay('overlay-filename')">Submit</button>
                 </div>
               </div>
             </div>
@@ -215,6 +230,7 @@
                     <th>Type</th>
                     <th>Stimulus</th>
                     <th>Angle</th>
+                    <th>Zoom</th>
                     <th>Enlever</th>
                   </tr>
                 </thead>

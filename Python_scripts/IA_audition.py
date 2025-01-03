@@ -6,7 +6,6 @@ from Paradigme_parent import Parente
 import random
 
 
-
 class IA_audition(Parente):
     def __init__(self, bip, file, output, duration, betweenstimuli, afterfixation, bip_duration,sigma, launching, random):
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'Input', 'Paradigme_IA_AUDITION'))
@@ -138,7 +137,6 @@ class IA_audition(Parente):
 
 
 if __name__ == "__main__":
-    print("okkk?")
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")
     parser.add_argument("--file", type=str, help="Chemin du fichier contenant les stimuli")
     parser.add_argument("--output_file", type=str, help="Chemin du fichier contenant les stimuli")
@@ -152,8 +150,6 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
-    print(args.file)
-    print(args.output_file)
     audition = IA_audition("bip.mp3", args.file, args.output_file, args.duration, args.betweenstimuli,
                            args.afterfixation, args.bip, args.sigma, args.launching, args.random)
     audition.lancement()

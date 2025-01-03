@@ -9,6 +9,8 @@
 </head>
 <body>
     <header class="header">
+        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreation()">Creation of Paradigms</button>
+        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreated()">Created Paradigms</button>
         <div class="lang">
             <a id="lang-nl" href="#">NL</a>
             <span id="lang-icon" class="material-symbols-outlined">toggle_on</span>
@@ -674,6 +676,13 @@
                 mainContent.innerHTML = newContent;
             }
 
+            function ParadigmCreation() {
+                location.href = '/index';
+            }
+
+            function ParadigmCreated() {
+                location.href = '/created_paradigmes';
+            }
 
             function openPopup(name) {
                 document.getElementById(name).style.display = 'flex';

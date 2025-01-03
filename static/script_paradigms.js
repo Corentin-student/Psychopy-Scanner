@@ -17,22 +17,31 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
+
+function ParadigmCreation() {
+    location.href = '/index';
+}
+
+function PrimeParadigm() {
+    location.href = '/';
+}
 function get_table(file_name){
-    fetch('static/jsons/' + file_name + '.json')
+    const url = `/get-json-file?param_to_file=${file_name}`;
+    fetch(url)
     .then(response => response.json())
     .then(jsonData => {
         const tableBody = document.getElementById('table-body');
-
         // Vider le contenu actuel du tableau
         tableBody.innerHTML = '';
 
-        jsonData.forEach(item => {
+        jsonData.data.forEach(item => {
             const row = `<tr>
                 <td>${item.Apparition}</td>
                 <td>${item.Duree}</td>
                 <td>${item.Type}</td>
                 <td>${item.Stimulus}</td>
                 <td>${item.Angle}</td>
+                <td>${item.Zoom}</td>
                 <td><button class="supress" onclick="removeRow(this)">Supprimer</button></td>
             </tr>`;
 
@@ -43,6 +52,9 @@ function get_table(file_name){
             button.closest('tr').remove();
         };
         highlightDuplicateTimings();
+        document.getElementById("instruction_txt").textContent = jsonData.instructions;
+        document.getElementById("end_txt").textContent = jsonData.mot_fin;
+        document.getElementById("visible-group").style.visibility = "visible";
     })
     .catch(error => {
         console.error('Error loading the JSON file:', error);
@@ -68,10 +80,26 @@ function highlightDuplicateTimings() {
     });
 }
 
+function openPopup(name) {
+    document.getElementById(name).style.display = 'flex';
+}
+function submitPopup() {
+    var input = document.getElementById('patientInput').value;
+    document.getElementById('patientName').textContent = input; // Met à jour le nom du patient
+    document.getElementById('popupOverlay').style.display = 'none'; // Ferme la pop-up
+}
+document.getElementById('openPopup').addEventListener('click', function() {
+    openPopup('popupOverlay');
+});
+
+function closePopup(popupId) {
+    document.getElementById(popupId).style.display = 'none';
+}
+
 function launching(){
     var table = document.querySelector('.stimulus-table');
     var data = [];
-    var keys = ['Apparition', 'Duree', 'Type', 'Stimulus', 'Angle'];
+    var keys = ['Apparition', 'Duree', 'Type', 'Stimulus', 'Angle', 'Zoom'];
     for (var i = 1, row; row = table.rows[i]; i++) {
         var rowData = {};
         for (var j = 0, col; col = row.cells[j]; j++) {
@@ -90,13 +118,21 @@ function launching(){
         data.push(rowData);
     }
     console.log(data);
-
+    const instructions = document.getElementById("instruction_txt").textContent;
+    const mot_fin = document.getElementById("end_txt").textContent;
+    const output_file = document.getElementById('patientName').textContent;
     fetch('/submit-table', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data) // Conversion directe du tableau en chaîne JSON
+        body: JSON.stringify({
+            data: data,
+            instructions: instructions,
+            mot_fin: mot_fin,
+            output_file: output_file
+
+        }) // Conversion directe du tableau en chaîne JSON
     })
         .then(response => response.json())
         .then(data => {
