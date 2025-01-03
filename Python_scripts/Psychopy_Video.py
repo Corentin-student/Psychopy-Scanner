@@ -1,16 +1,11 @@
 import argparse
 import copy
-import csv
 import os
 import random
-import time
-from datetime import datetime
 
-from psychopy import visual, core, event, logging
-import serial
+from psychopy import visual, core, event
 from Paradigme_parent import Parente
 import gc  # Garbage Collector
-import sys
 
 
 

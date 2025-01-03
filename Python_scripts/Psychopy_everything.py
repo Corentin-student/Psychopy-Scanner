@@ -1,18 +1,14 @@
-import csv
 import os
-import random
 import threading
-from datetime import datetime
 
 import argparse
 import json
 import numpy as np
-from psychopy import visual, core, event, sound
+from psychopy import visual, core
 import sounddevice as sd
 import pygame
 import soundfile as sf
-import writtingprt as wr
-import gc  # Garbage Collector
+import gc
 from Paradigme_parent import Parente
 from multiprocessing.pool import ThreadPool
 

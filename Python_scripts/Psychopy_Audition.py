@@ -1,17 +1,14 @@
-import csv
 import os
 import random
 import threading
-from datetime import datetime
 
 import argparse
 
 import numpy as np
-from psychopy import visual, core, event, sound
+from psychopy import visual, core, event
 import sounddevice as sd
 import pygame
 import soundfile as sf
-import writtingprt as wr
 from Paradigme_parent import Parente
 
 class Audition(Parente):
@@ -125,9 +122,7 @@ class Audition(Parente):
         while self.global_timer.getTime() < actual_time + self.stimuli_duration:
             # Calcule le temps restant
             time_remaining = actual_time + self.stimuli_duration - self.global_timer.getTime()
-            # Attends seulement le temps restant, mais s'assure que ce soit plus précis
             core.wait(min(time_remaining, 1))  # Attente maximale de 1 seconde ou moins
-
             # Mise à jour du compteur et affichage
             compteur -= 1
             duration.text = str(compteur)

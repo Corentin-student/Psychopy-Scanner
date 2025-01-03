@@ -2,8 +2,7 @@ import csv
 import os
 import re
 import time
-import random
-from abc import ABC, abstractmethod
+from abc import ABC
 from datetime import datetime
 from psychopy import event, visual, core
 import writtingprt as  wr

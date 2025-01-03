@@ -1,6 +1,6 @@
 import argparse
 import os
-from psychopy import visual, core, event, sound
+from psychopy import visual, core, event
 import pygame
 from Paradigme_parent import Parente
 import random

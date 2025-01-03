@@ -1,12 +1,10 @@
 import csv
 import os
 import random
-from datetime import datetime
 
 import argparse
 from psychopy import visual, event, core
 from Paradigme_parent import Parente
-from PIL import Image
 
 
 

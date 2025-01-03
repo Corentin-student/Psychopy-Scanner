@@ -1,13 +1,10 @@
 import argparse
 import copy
-import csv
 import os
 from collections import defaultdict
-from datetime import datetime
 import random
 
 from psychopy import visual, core, event
-import serial
 from Paradigme_parent import Parente
 
 
