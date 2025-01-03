@@ -72,17 +72,26 @@ def home():
 def submit_ia_audition():
     try:
         data = request.get_json()
+        print(data)
         subprocess.run([
             sys.executable, 'Python_scripts/IA_audition.py',
-            "--file", data.get("filePath"),
-            "--output_file", data.get("output_file"),
-            "--duration", data.get("duration"),
-            "--sigma", data.get("sigma"),
-            "--betweenstimuli", data.get("betweenstimuli"),
-            "--afterfixation", data.get("afterfixation"),
-            "--bip", data.get("bip"),
-            "--launching", data.get("launching_text"),
+            '--file', data.get("filePath"),
+            '--output_file', data.get("output_file"),
+            '--duration', data.get("duration"),
+            '--sigma', data.get("sigma"),
+            '--betweenstimuli', data.get("betweenstimuli"),
+            '--afterfixation', data.get("afterfixation"),
+            '--bip', data.get("bip"),
+            '--launching', data.get("launching_text"),
             '--random', str(data.get("random")),
+            '--activation', str(data.get("activation")),
+            '--trigger', data.get("trigger"),
+            '--hauteur', data.get("hauteur"),
+            '--largeur', data.get("largeur"),
+            '--port', data.get("port"),
+            '--baudrate', str(data.get("baudrate"))
+
+
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
@@ -96,14 +105,20 @@ def submit_ia_image():
         data = request.get_json()
         subprocess.run([
             sys.executable, 'Python_scripts/IA_image.py',
-            "--file", data.get("filePath"),
-            "--output_file", data.get("output_file"),
+            '--file', data.get("filePath"),
+            '--output_file', data.get("output_file"),
             '--duration', data.get("duration"),
-            "--sigma", data.get("sigma"),
-            "--betweenstimuli", data.get("betweenstimuli"),
-            "--zoom", data.get("zoom"),
-            "--launching", data.get("launching_text"),
-            "--random", str(data.get("random"))
+            '--sigma', data.get("sigma"),
+            '--betweenstimuli', data.get("betweenstimuli"),
+            '--zoom', data.get("zoom"),
+            '--launching', data.get("launching_text"),
+            '--random', str(data.get("random")),
+            '--activation', str(data.get("activation")),
+            '--trigger', data.get("trigger"),
+            '--hauteur', data.get("hauteur"),
+            '--largeur', data.get("largeur"),
+            '--port', data.get("port"),
+            '--baudrate', str(data.get("baudrate"))
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
@@ -553,6 +568,8 @@ def submit_audition():
             '--hauteur', hauteur,
             '--launching', launching,
             '--file', file,
+            '--port', port,
+            '--baudrate', baudrate,
             '--asound', asound,
             '--largeur', largeur,
             '--random', str(random),
@@ -570,6 +587,7 @@ def submit_audition():
 @app.route('/submit-table', methods=['POST'])
 def submit_table():
     data = request.get_json()
+    print(data)
     stimuli = json.dumps(data.get("data"))
 
     subprocess.run([
@@ -577,7 +595,13 @@ def submit_table():
         '--data', stimuli,
         '--instructions', data.get("instructions"),
         '--mot_fin', data.get("mot_fin"),
-        '--output_file', data.get("output_file")
+        '--output_file', data.get("output_file"),
+        '--activation', str(data.get("activation")),
+        '--trigger', data.get("trigger"),
+        '--hauteur', data.get("hauteur"),
+        '--largeur', data.get("largeur"),
+        '--port', data.get("port"),
+        '--baudrate', str(data.get("baudrate"))
     ], check= True)
     return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
 
@@ -599,6 +623,6 @@ def keep_datas():
 
 
 if __name__ == '__main__':
-    webbrowser.open('http://127.0.0.1:5000')
-    #app.run(debug=True) #si jamais on veut voir le debugger alors il faut mettre les 2 autres lignes en commentaires
-    serve(app, host='0.0.0.0', port=5000)
+    #webbrowser.open('http://127.0.0.1:5000')
+    app.run(debug=True) #si jamais on veut voir le debugger alors il faut mettre les 2 autres lignes en commentaires
+    #serve(app, host='0.0.0.0', port=5000)

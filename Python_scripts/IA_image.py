@@ -8,13 +8,15 @@ import random
 
 
 class IA_image(Parente):
-    def __init__(self, file, output, zoom, duration, betweenstimuli, sigma, launching, random):
+    def __init__(self, file, output, zoom, duration, betweenstimuli, sigma, launching, random,
+                 hauteur, largeur, port, baudrate, trigger, activation):
         self.dossier = os.path.abspath(
             os.path.join(os.path.dirname(__file__), '..', '..', 'Input', 'Paradigme_IA_IMAGE'))
         self.dossier_image = os.path.join(self.dossier, 'images')
         self.file = file
         self.launching = launching
-        self.trigger = "s"
+        self.first = 0
+        self.trigger = trigger
         self.zoom = zoom
         self.duration = duration
         self.betweenstimuli = betweenstimuli
@@ -42,9 +44,24 @@ class IA_image(Parente):
             self.random = True
         else:
             self.random = False
+        if activation == "True":
+            self.activation = True
+        else:
+            self.activation = False
+        self.port = port
+        self.baudrate = baudrate
+        rect_width = largeur
+        rect_height = hauteur
+        self.rect = visual.Rect(self.win, width=rect_width, height=rect_height, fillColor='white', lineColor='white',
+                                units='pix')
+        self.rect.pos = (self.win.size[0] / 2 - rect_width / 2, self.win.size[1] / 2 - rect_height / 2)
 
     def boucle_dans_la_boucle(self,image):
         image.draw()
+        self.rect.draw()
+        if self.first == 0 and self.activation:
+            super().send_character(self.port, self.baudrate)
+            self.first = 1
         self.win.flip()
         onset = self.global_timer.getTime()
         while self.global_timer.getTime() < onset + 0.4 :
@@ -61,6 +78,7 @@ class IA_image(Parente):
                                   [super().float_to_csv(self.onset), "Stimulus", self.images[count]])
             while self.global_timer.getTime() < self.onset + self.duration :
                 self.boucle_dans_la_boucle(image)
+            self.first = 0
             self.cross_stim.draw()
             self.win.flip()
             super().write_tsv_csv(self.filename, self.filename_csv,
@@ -91,7 +109,7 @@ class IA_image(Parente):
     def ajout_where_nothing(self,images,groups,groupe):
         toinsert = []
         for i in range(len(images)-1):
-            actual_prefix = images[i].split("_")[0]
+            actual_prefix = images[i].split("_")[0] #on randomise en fonction des prefixe pour pas avoir deux préfixe les mêmes d'affilés
             next_prefix = images[i+1].split("_")[0]
             if i == 0 and actual_prefix != groupe:
                 toinsert.append(i)
@@ -181,10 +199,18 @@ if __name__ == "__main__":
     parser.add_argument("--sigma", type=float, required=True, help="ecart type pour le random")
     parser.add_argument("--launching", type=str, help="Chemin vers le fichier de mots", required=False)
     parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
+    parser.add_argument("--activation", type=str, required=True, help="Pour le boitier avec les EEG")
+
+    parser.add_argument('--port', type=str, required=False, help="Port")
+    parser.add_argument('--baudrate', type=int, required=False, help="Speed port")
+    parser.add_argument('--trigger', type=str, required=False, help="caractère pour lancer le programme")
+    parser.add_argument("--hauteur", type=float, required=True, help="hauteur du rectangle")
+    parser.add_argument("--largeur", type=float, required=True, help="Largeur du rectangle")
 
 
 
     args = parser.parse_args()
     my_ia = IA_image(args.file, args.output_file, args.zoom, args.duration, args.betweenstimuli, args.sigma,
-                     args.launching, args.random)
+                     args.launching, args.random, args.hauteur, args.largeur, args.port, args.baudrate,
+                     args.trigger, args.activation)
     my_ia.lancement()

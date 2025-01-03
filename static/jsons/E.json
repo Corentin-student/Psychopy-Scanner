@@ -1,0 +1,14 @@
+{
+    "data": [
+        {
+            "Apparition": "0.000",
+            "Duree": "1.000",
+            "Type": "Image",
+            "Stimulus": "DHDA5550.JPEG",
+            "Angle": "5",
+            "Zoom": "50"
+        }
+    ],
+    "instructions": "instruction_static_images_DK.txt",
+    "mot_fin": "Instructions.txt"
+}

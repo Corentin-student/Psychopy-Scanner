@@ -87,9 +87,27 @@ function submitPopup() {
     var input = document.getElementById('patientInput').value;
     document.getElementById('patientName').textContent = input; // Met à jour le nom du patient
     document.getElementById('popupOverlay').style.display = 'none'; // Ferme la pop-up
+    alert("okk?")
 }
+
+
+function submitPort(){
+    var baudrate = document.getElementById("baudrate").value;
+    var port = document.getElementById("port").value;
+    var realtrigger = document.getElementById("trigger").value;
+    document.getElementById("resultPort").textContent = port;
+    document.getElementById("resultBaudrate").textContent = baudrate;
+    document.getElementById("resultTrigger").textContent = realtrigger;
+    document.getElementById("popupSerial").style.display = 'none';
+}
+
+
 document.getElementById('openPopup').addEventListener('click', function() {
     openPopup('popupOverlay');
+});
+
+document.getElementById('serialport').addEventListener('click', function() {
+    openPopup('popupSerial');
 });
 
 function closePopup(popupId) {
@@ -121,6 +139,14 @@ function launching(){
     const instructions = document.getElementById("instruction_txt").textContent;
     const mot_fin = document.getElementById("end_txt").textContent;
     const output_file = document.getElementById('patientName').textContent;
+    const activation = document.getElementById("option1").checked;
+
+
+    let port = document.getElementById('resultPort').textContent.trim();
+    let baudrate = document.getElementById('resultBaudrate').textContent;
+    let trigger = document.getElementById('resultTrigger').textContent.trim();
+    let hauteur = document.getElementById('hauteur').value || '0';
+    let largeur = document.getElementById('largeur').value || '0';
     fetch('/submit-table', {
         method: 'POST',
         headers: {
@@ -130,7 +156,14 @@ function launching(){
             data: data,
             instructions: instructions,
             mot_fin: mot_fin,
-            output_file: output_file
+            output_file: output_file,
+            activation: activation,
+            baudrate: baudrate,
+            trigger: trigger,
+            hauteur: hauteur,
+            largeur: largeur,
+            port: port
+
 
         }) // Conversion directe du tableau en chaîne JSON
     })

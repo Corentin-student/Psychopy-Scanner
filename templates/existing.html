@@ -7,6 +7,48 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
     <script src="{{ url_for('static', filename='script_paradigms.js') }}" defer></script></head>
     <body>
+
+        <div class="overlay" id="popupSerial" style="display: none;">
+            <span class="close-btn" onclick="closePopup('popupSerial')">&times;</span>
+            <div class="popup">
+                <h3 style="color: #0c0b0b">Configuration du port</h3>
+                <div class="input-overlay">
+                    <div class="input-group" >
+                        <input class ="checkbox_style" type="checkbox" id="option1" value="Option1">
+                        <span class="checkbox_input"> Activation </span>
+                    </div>
+                    <div class="input-overlay-container">
+                        <span>Nom du port</span>
+                        <input type="text" placeholder="ex: COM3" id="port">
+                    </div>
+
+                    <div class="input-overlay-container">
+                        <span>Speed(baud)</span>
+                        <input type="text" placeholder="ex: 9600" id="baudrate">
+                    </div>
+
+                    <div class="input-overlay-container">
+                        <span>Caractère pour lancer</span>
+                        <input type="text" placeholder="ex: s" id="trigger">
+                    </div>
+                    <div class = "input-overlay-container">
+                        <h3>Taille du rectange en haut à droite</h3>
+                        <div class = "input-group">
+                            <span style="margin-top: 16px">Largeur</span>
+                            <input type="text" placeholder="ex: 100" id="largeur">
+                            <span style="margin-top: 16px">Hauteur</span>
+                            <input type="text" placeholder="ex: 50" id="hauteur">
+                        </div>
+                    </div>
+                </div>
+                <button onclick="submitPort()" class="submit">Submit</button>
+            </div>
+        </div>
+
+        <span id="resultPort"class="cache">Patient</span>
+        <span id="resultBaudrate"class="cache">-1</span>
+        <span id="resultTrigger" class="cache">s</span>
+
         <div class="overlay" id="popupOverlay" style="display: none;">
             <div class="popup">
                 <span class="close-btn" onclick="closePopup('popupOverlay')">&times;</span>
@@ -18,8 +60,9 @@
         <header class="header">
             <button class="navbutton-left" style="margin-left: 10px" onclick="PrimeParadigm()">Prime Paradigms</button>
             <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreation()">Creation of Paradigms</button>
-            <h1 class="header-center">Création de Paradigme</h1>
+            <h1 class="header-center">Paradigmes créés</h1>
             <div class="header-right">
+                <button id="serialport" class="navbutton">Serial Port</button>
                 <button id="openPopup" class="navbutton">Change of Patient</button>
                 <span id="patientName">Patient ID</span>
             </div>

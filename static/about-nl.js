@@ -657,6 +657,13 @@ function submitText() {
     .catch((error) => {
         console.error('Error:', error);
     });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
 
 function submitVoices(){
@@ -686,7 +693,7 @@ function submitVoices(){
     }
 
     if (!fileName){
-        alert('Veuillez sélectionner un fichier ou entrer des mots avant de soumettre.');
+        alert('Veuillez sélectionner un fichier.');
         return;
     }
 
@@ -718,6 +725,13 @@ function submitVoices(){
     .catch((error) => {
         console.error('Error:', error);
     });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
 
 
@@ -733,6 +747,19 @@ function submitIaAudition() {
     const fileLaunching = document.getElementById('launching_text');
     let launching_text =  fileLaunching.value.split('\\').pop();
     const random = document.getElementById("random-ia-audition").checked;
+    const activation = document.getElementById("option1").checked;
+
+
+    let port = document.getElementById('resultPort').textContent.trim();
+    let baudrate = document.getElementById('resultBaudrate').textContent;
+    let trigger = document.getElementById('resultTrigger').textContent.trim();
+    let hauteur = document.getElementById('hauteur').value || '0';
+    let largeur = document.getElementById('largeur').value || '0';
+
+    if (!fileName){
+        alert('Veuillez sélectionner un fichier');
+        return;
+    }
 
     fetch('/submit_ia_audition', {
             method: 'POST',
@@ -748,7 +775,13 @@ function submitIaAudition() {
                 random: random,
                 output_file: output_file,
                 sigma: sigma,
-                launching_text: launching_text
+                launching_text: launching_text,
+                activation: activation,
+                baudrate: baudrate,
+                trigger: trigger,
+                hauteur: hauteur,
+                largeur: largeur,
+                port: port
             }),
         })
         .then(response => response.json())
@@ -758,6 +791,13 @@ function submitIaAudition() {
         .catch((error) => {
             console.error('Error:', error);
         });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
 
 function submitIaImage() {
@@ -771,6 +811,18 @@ function submitIaImage() {
     const fileLaunching = document.getElementById('launching_text');
     let launching_text =  fileLaunching.value.split('\\').pop();
     const random = document.getElementById("random-ia-image").checked;
+    const activation = document.getElementById("option1").checked;
+
+    let port = document.getElementById('resultPort').textContent.trim();
+    let baudrate = document.getElementById('resultBaudrate').textContent;
+    let trigger = document.getElementById('resultTrigger').textContent.trim();
+    let hauteur = document.getElementById('hauteur').value || '0';
+    let largeur = document.getElementById('largeur').value || '0';
+
+    if (!fileName){
+        alert('Veuillez sélectionner un fichier');
+        return;
+    }
 
 
     fetch('/submit_ia_image', {
@@ -786,7 +838,13 @@ function submitIaImage() {
                 random: random,
                 betweenstimuli : betweenstimuli,
                 zoom : zoom,
-                launching_text: launching_text
+                launching_text: launching_text,
+                activation: activation,
+                baudrate: baudrate,
+                trigger: trigger,
+                hauteur: hauteur,
+                largeur: largeur,
+                port: port
             }),
         })
         .then(response => response.json())
@@ -796,6 +854,13 @@ function submitIaImage() {
         .catch((error) => {
             console.error('Error:', error);
         });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
 
 
@@ -863,6 +928,13 @@ function submitFaces() {
     .catch((error) => {
         console.error('Error:', error);
     });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
 
 function submitStroop(){
@@ -896,7 +968,7 @@ function submitStroop(){
     }
 
     if (!fileName){
-        alert('Veuillez sélectionner un fichier ou entrer des mots avant de soumettre.');
+        alert('Veuillez sélectionner un fichier');
         return;
     }
 
@@ -931,6 +1003,13 @@ function submitStroop(){
     .catch((error) => {
         console.error('Error:', error);
     });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
 
 function submitLocalizer(){
@@ -961,6 +1040,11 @@ function submitLocalizer(){
 
     if (trigger === ""){
         trigger = "s"
+    }
+
+    if (!fileName){
+        alert('Veuillez sélectionner un fichier');
+        return;
     }
 
 
@@ -996,6 +1080,13 @@ function submitLocalizer(){
     .catch((error) => {
         console.error('Error:', error);
     });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
 
 function submitAudition(){
@@ -1026,6 +1117,11 @@ function submitAudition(){
 
     if (trigger === ""){
         trigger = "s"
+    }
+
+    if (!fileName){
+        alert('Veuillez sélectionner un fichier');
+        return;
     }
 
 
@@ -1060,6 +1156,13 @@ function submitAudition(){
     .catch((error) => {
         console.error('Error:', error);
     });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
 
 
@@ -1091,6 +1194,11 @@ function submitpriming(){
     if (trigger === ""){
         trigger = "s"
     }
+    if (!fileName){
+        alert('Veuillez sélectionner un fichier');
+        return;
+    }
+
 
 
     // Envoyer les données au serveur
@@ -1123,6 +1231,13 @@ function submitpriming(){
     })
     .catch((error) => {
         console.error('Error:', error);
+    });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
     });
 }
 
@@ -1158,7 +1273,7 @@ function submitAdjectifs() {
     }
 
     if (!fileName){
-        alert('Veuillez sélectionner un fichier ou entrer des mots avant de soumettre.');
+        alert('Veuillez sélectionner un fichier.');
         return;
     }
 
@@ -1194,6 +1309,13 @@ function submitAdjectifs() {
     })
     .catch((error) => {
         console.error('Error:', error);
+    });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
     });
 }
 
@@ -1244,6 +1366,13 @@ function submitCyberball(){
     })
     .catch((error) => {
         console.error('Error:', error);
+    });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
     });
 
 }
@@ -1313,6 +1442,13 @@ function submitImages(){
     .catch((error) => {
         console.error('Error:', error);
     });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
 
 function submitVideos(){
@@ -1381,7 +1517,15 @@ function submitVideos(){
     .catch((error) => {
         console.error('Error:', error);
     });
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
+
 
 document.addEventListener('DOMContentLoaded', function() {
     const toggleIcon = document.getElementById('lang-icon');

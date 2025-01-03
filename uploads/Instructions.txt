@@ -1,0 +1,7 @@
+*Une série d'image va vous être présentée.
+
+Votre but va être de cliquer avec la souris, lorsqu'une image avec un fond bleu apparaîtra.
+
+(Appuyez sur une touche quand vous êtes prêts)*
+
+*Le Scanner va maintenant démarrer.*

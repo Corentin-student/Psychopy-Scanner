@@ -16,7 +16,8 @@ from multiprocessing.pool import ThreadPool
 
 class Psychopy_everything (Parente):
 
-    def __init__(self, datas, launching_text, ending_text, output_file):
+    def __init__(self, datas, launching_text, ending_text, output_file, hauteur, largeur, port, baudrate,
+                 trigger, activation):
         self.win = visual.Window(
             size=(800, 600),
             fullscr=True,
@@ -39,6 +40,7 @@ class Psychopy_everything (Parente):
         self.datas = datas
         self.images = []
         self.images_stim = []
+        self.trigger = trigger
         self.videos = []
         self.pool = ThreadPool(processes=2)
         self.audios = []
@@ -57,6 +59,17 @@ class Psychopy_everything (Parente):
         self.dirname = self.filename[:self.filename.find(".tsv")]
         os.makedirs(self.dirname, exist_ok=True)
         self.record_index = 0
+        if activation == "True":
+            self.activation = True
+        else:
+            self.activation = False
+        self.port = port
+        self.baudrate = baudrate
+        rect_width = largeur
+        rect_height = hauteur
+        self.rect = visual.Rect(self.win, width=rect_width, height=rect_height, fillColor='white', lineColor='white',
+                                units='pix')
+        self.rect.pos = (self.win.size[0] / 2 - rect_width / 2, self.win.size[1] / 2 - rect_height / 2)
 
 
     def show_croix(self):
@@ -148,16 +161,24 @@ class Psychopy_everything (Parente):
             self.multiple_type_infos.append(self.show_croix())
         else:
             self.multiple_type_infos.append(self.show_enregistrement())
-        self.onset = self.global_timer.getTime()
-
+        first = 0
         if self.movie_stim is not None:
             self.movie_stim.play()
         else:
+            self.rect.draw()
             self.win.flip()
+            if first == 0 and self.activation:
+                super().send_character(self.port, self.baudrate)
+                first = 1
+        self.onset = self.global_timer.getTime()
         while self.global_timer.getTime() < self.onset + float(self.multiple_type_infos[0]["Duree"]) or pygame.mixer.get_busy():
             if self.movie_stim is not None:
                 self.movie_stim.draw()
+                self.rect.draw()
                 self.win.flip()
+                if first == 0 and self.activation :
+                    super().send_character(self.port, self.baudrate)
+                    first = 1
             pass
         for x in self.multiple_type_infos:
             super().write_tsv_csv(self.filename, self.filename_csv,
@@ -188,10 +209,16 @@ class Psychopy_everything (Parente):
             else:
                 self.multiple_type_infos.append(self.show_enregistrement(False))
         self.onset = self.global_timer.getTime()
+        self.rect.draw()
         self.win.flip()
+        first = 0
         while self.global_timer.getTime() < self.onset + float(self.multiple_type_infos[0]["Duree"]) or pygame.mixer.get_busy():
+            if first == 0 and self.activation == True:
+                super().send_character(self.port, self.baudrate)
+                first = 1
             if self.movie_stim is not None:
                 self.movie_stim.draw()
+                self.rect.draw()
                 self.win.flip()
             pass
         if self.movie_stim is not None:
@@ -221,8 +248,8 @@ class Psychopy_everything (Parente):
         super().file_init(self.filename, self.filename_csv,
                       ['onset', 'trial_type', 'angle','zoom', 'Reaction_time', 'stim_file'])
         texts = super().inputs_texts(os.path.join(self.dossier,self.launching))
-        super().launching_texts(self.win, texts,"s")
-        super().wait_for_trigger("s")
+        super().launching_texts(self.win, texts,self.trigger)
+        super().wait_for_trigger(self.trigger)
         for x in self.all:
             nbr = self.all[x].count(",")
             if nbr == 0:
@@ -308,10 +335,21 @@ if __name__ == "__main__":
     parser.add_argument("--instructions",  type=str, help="Chemin vers le fichier de mots", required=False)
     parser.add_argument("--mot_fin",  type=str, help="Chemin vers le fichier de mots", required=False)
     parser.add_argument("--output_file", type=str, required=True, help="Nom du fichier d'output")
+    parser.add_argument("--activation", type=str, required=True, help="Pour le boitier avec les EEG")
+
+    parser.add_argument('--port', type=str, required=False, help="Port")
+    parser.add_argument('--baudrate', type=int, required=False, help="Speed port")
+    parser.add_argument('--trigger', type=str, required=False, help="caractère pour lancer le programme")
+    parser.add_argument("--hauteur", type=float, required=True, help="hauteur du rectangle")
+    parser.add_argument("--largeur", type=float, required=True, help="Largeur du rectangle")
+
 
     args = parser.parse_args()
+    print(args)
     data = json.loads(args.data)
-    E = Psychopy_everything(data, args.instructions, args.mot_fin, args.output_file)
+    E = Psychopy_everything(data, args.instructions, args.mot_fin, args.output_file,
+                            args.hauteur, args.largeur, args.port, args.baudrate,
+                            args.trigger, args.activation)
     E.preprocess()
     E.lancement()
 
