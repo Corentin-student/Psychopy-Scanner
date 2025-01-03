@@ -1,12 +1,9 @@
-import csv
 import os
 import random
-from datetime import datetime
 
 import argparse
 import sounddevice as sd
 import soundfile as sf
-import threading
 import numpy as np
 import speech_recognition as sr
 from psychopy import visual, core, event
@@ -86,7 +83,7 @@ class Colors(Parente):
 
         audio_file = chemin
 
-        # Utiliser SpeechRecognition pour convertir l'audio en texte
+        # Utilisation de SpeechRecognition pour convertir l'audio en texte
         with sr.AudioFile(audio_file) as source:
             audio_data = recognizer.record(source)
             try:
@@ -200,5 +197,3 @@ if __name__ == "__main__":
                     args.port, args.baudrate, args.trigger, args.activation,
                         args.hauteur, args.largeur, args.random, args.launching, args.sigma).lancement()
 
-
-#Colors(duration=2,betweenstimuli=1,zoom=10,filepath="colors_list.txt", output="wififi").lancement()

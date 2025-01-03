@@ -1,18 +1,14 @@
-import csv
 import os
-import random
 import threading
-from datetime import datetime
 
 import argparse
 import json
 import numpy as np
-from psychopy import visual, core, event, sound
+from psychopy import visual, core
 import sounddevice as sd
 import pygame
 import soundfile as sf
-import writtingprt as wr
-import gc  # Garbage Collector
+import gc
 from Paradigme_parent import Parente
 from multiprocessing.pool import ThreadPool
 
@@ -96,7 +92,6 @@ class Psychopy_everything (Parente):
         recording = sd.rec(int(stimuli_duration * self.fs), samplerate=self.fs, channels=1, dtype='int16')
         sd.wait()
         start_time = None
-        print("i was here")
         for i, sample in enumerate(recording):
             if np.abs(sample) > self.threshold:
                 start_time = i / self.fs
@@ -104,14 +99,14 @@ class Psychopy_everything (Parente):
         if start_time is not None:
             print(f"L'utilisateur a commencé à parler à {start_time:.2f} secondes.")
             self.reaction = start_time
+            single_type_infos["Reaction"] = start_time
         else:
             print("Aucune parole détectée.")
-            self.reaction = "None"
+            self.reaction = "/"
         record = os.path.join(self.dirname, f"record{self.record_index}.wav")
         self.record_index += 1
         sf.write(record, recording, self.fs)
     def show_enregistrement(self, need_image=True):
-        print("on entre icids")
         single_type_infos = self.enregistrements.pop(0)
         self.enregistrement_thread= threading.Thread(target=self.launch_enregistrement, args=(single_type_infos,))
         self.enregistrement_thread.start()
@@ -159,14 +154,14 @@ class Psychopy_everything (Parente):
             self.movie_stim.play()
         else:
             self.win.flip()
-        for x in self.multiple_type_infos:
-            super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(self.onset), x["Type"], x["Angle"], x["Zoom"], x["Stimulus"]])
         while self.global_timer.getTime() < self.onset + float(self.multiple_type_infos[0]["Duree"]) or pygame.mixer.get_busy():
             if self.movie_stim is not None:
                 self.movie_stim.draw()
                 self.win.flip()
             pass
+        for x in self.multiple_type_infos:
+            super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(self.onset), x["Type"], x["Angle"], x["Zoom"], x["Reaction"], x["Stimulus"]])
 
 
         if self.movie_stim is not None:
@@ -194,16 +189,11 @@ class Psychopy_everything (Parente):
                 self.multiple_type_infos.append(self.show_enregistrement(False))
         self.onset = self.global_timer.getTime()
         self.win.flip()
-        for x in self.multiple_type_infos:
-            super().write_tsv_csv(self.filename, self.filename_csv,
-                                  [super().float_to_csv(self.onset), x["Type"],
-                                   x["Angle"], x["Zoom"], x["Stimulus"]])
         while self.global_timer.getTime() < self.onset + float(self.multiple_type_infos[0]["Duree"]) or pygame.mixer.get_busy():
             if self.movie_stim is not None:
                 self.movie_stim.draw()
                 self.win.flip()
             pass
-
         if self.movie_stim is not None:
             self.movie_stim.stop()
             self.movie_stim.setAutoDraw(False)
@@ -216,14 +206,20 @@ class Psychopy_everything (Parente):
 
         self.multiple_type_infos = []
         if self.enregistrement_thread == None:
-            pass
+            for x in self.multiple_type_infos:
+                super().write_tsv_csv(self.filename, self.filename_csv,
+                                      [super().float_to_csv(self.onset), x["Type"],
+                                       x["Angle"], x["Zoom"], x["Reaction"], x["Stimulus"]])
         else:
-            print("ook?")
             self.enregistrement_thread.join()
+            for x in self.multiple_type_infos:
+                super().write_tsv_csv(self.filename, self.filename_csv,
+                                      [super().float_to_csv(self.onset), x["Type"],
+                                       x["Angle"], x["Zoom"], x["Reaction"], x["Stimulus"]])
 
     def lancement(self):
         super().file_init(self.filename, self.filename_csv,
-                      ['onset', 'trial_type', 'angle','zoom', 'stim_file'])
+                      ['onset', 'trial_type', 'angle','zoom', 'Reaction_time', 'stim_file'])
         texts = super().inputs_texts(os.path.join(self.dossier,self.launching))
         super().launching_texts(self.win, texts,"s")
         super().wait_for_trigger("s")
@@ -237,7 +233,7 @@ class Psychopy_everything (Parente):
                     types[i] = types[i].strip()
                 self.show_multiple_types(types)
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None", "None",
                                "None"])
         super().adding_duration(self.filename, self.filename_csv)
         super().the_end_file(self.win, self.ending_text)
@@ -247,6 +243,7 @@ class Psychopy_everything (Parente):
         count = -1
         timer = -1.0
         for x in self.datas:
+            x["Reaction"] = "/"
             if x["Apparition"] == timer:
                 if x["Type"] == "Image":
                     image_path = os.path.join(self.dossier, x["Stimulus"])

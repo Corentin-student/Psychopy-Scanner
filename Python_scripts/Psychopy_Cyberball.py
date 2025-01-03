@@ -1,7 +1,6 @@
 import csv
 import os
 import random
-import serial
 import argparse
 
 from PIL import Image
@@ -180,7 +179,7 @@ class launch_cyberball(Parente) :
         self.phase.append("Phase Normale")
         while self.period_timer.getTime() < self.phase1:
             if choice == self.player1:
-                choice = self.joueur(choice["image"].pos)
+                choice = self.joueur()
             elif choice == "None":
                 choice = random.choice(filtered_list)
                 core.wait(0.4)
@@ -194,7 +193,7 @@ class launch_cyberball(Parente) :
         self.onset.append(self.global_timer.getTime())
         while self.period_timer.getTime() < (self.transition/2):
             if choice == self.player1:
-                choice = self.joueur(choice["image"].pos)
+                choice = self.joueur()
             elif choice == "None":
                 choice = random.choice(filtered_list)
                 core.wait(0.4)
@@ -208,7 +207,7 @@ class launch_cyberball(Parente) :
         self.onset.append(self.global_timer.getTime())
         while self.period_timer.getTime() < (self.transition/2):
             if choice == self.player1:
-                choice = self.joueur(choice["image"].pos)
+                choice = self.joueur()
             elif choice == "None":
                 choice = random.choice(filtered_list)
                 core.wait(0.4)
@@ -222,7 +221,7 @@ class launch_cyberball(Parente) :
         self.onset.append(self.global_timer.getTime())
         while self.period_timer.getTime() < self.exclusion:
             if choice == self.player1:
-                choice = self.joueur(choice["image"].pos)
+                choice = self.joueur()
             elif choice == "None":
                 choice = random.choice(filtered_list)
                 core.wait(0.4)
@@ -237,13 +236,11 @@ class launch_cyberball(Parente) :
         next = player
         while self.timer.getTime() < random.uniform(self.minimum, self.maximum):
             if next == player :
-                #filtered_list = [x for x in self.players if x != player]
                 other_list = self.players.copy()
                 probas = self.proba.copy()
                 i = other_list.index(player)
                 del probas[i]
                 del other_list[i]
-                #next= random.choice (filtered_list)
                 next = random.choices(other_list, weights=probas, k=1)[0]
         self.ball_receptie(player)
         self.move_ball(self.ball, player["image"].pos, next["image"].pos, duration=0.3)
@@ -251,26 +248,23 @@ class launch_cyberball(Parente) :
 
 
 
-    def joueur (self, position):
+    def joueur (self):
         self.reception(self.player1)
         next = "None"
         self.timer.reset()
         d=0
-        key = event.getKeys()
-        key = ""
+        event.getKeys()  # vide le buffer, afin de pas avoir une touche pressée avant le tour du joueur
         while self.timer.getTime() < 4:
             key = event.getKeys()
             if key == ["c"] or key == ['right']:
                 self.player1["sens"] = "droite"
                 next = self.player3
                 d=1
-                key = ""
                 break
             elif key == ["d"] or key == ['left']:
                 self.player1["sens"] = "gauche"
                 next = self.player2
                 d=1
-                key = ""
                 break
         self.ball_receptie(self.player1)
         if d==1:
@@ -281,7 +275,6 @@ class launch_cyberball(Parente) :
 
 
 if __name__ == "__main__":
-    print("quepassa?")
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")
     parser.add_argument("--premiere_phase", type=float, required=True, help="Durée en secondes de la première phase")
     parser.add_argument("--exclusion", type=float, required=True, help="Durée en secondes de la phase d'exclusion")
@@ -295,7 +288,6 @@ if __name__ == "__main__":
     parser.add_argument("--output_file", type=str, required=True, help="Nom du fichier d'output")
     parser.add_argument('--trigger', type=str, required=True, help="caractère pour lancer le programme")
     args = parser.parse_args()
-    print(args)
     C=launch_cyberball(args.premiere_phase,args.transition,args.exclusion,args.minimum,args.maximum,
                        args.patient_name, args.filePath, args.launching, args.trigger)
     C.lancement()

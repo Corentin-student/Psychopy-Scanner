@@ -1,11 +1,8 @@
 import argparse
 import os
 import random
-from datetime import datetime
 
-import serial
 from psychopy import visual, core, event
-import csv
 from Paradigme_parent import Parente
 
 
@@ -118,8 +115,7 @@ class PsychoPyParadigm(Parente):
         super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(onset), stimuli, trial_type])
         super().the_end(self.win)
         super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None", "None",
-                               "None"])
+                              [super().float_to_csv(self.global_timer.getTime()), "END", "None", "None"])
         super().adding_duration(self.filename, self.filename_csv)
         super().writting_prt(self.filename_csv, "trial_type")
         self.win.close()
