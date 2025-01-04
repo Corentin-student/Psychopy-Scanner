@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Accueil</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="{{ url_for('static', filename='sweetalert2.min.css') }}">
+
 </head>
 <body>
     <header class="header">
-        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreation()">Creatie van paradigma's</button>
-        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreated()">Gecreëerde paradigma's</button>
+        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreation()">Création de paradigmes</button>
+        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreated()">Paradigmes créés</button>
         <div class="lang">
-            <a id="lang-nl" href="#" class="selected">NL</a>
-            <span id="lang-icon" class="material-symbols-outlined">toggle_off</span>
-            <a id="lang-fr" href="#" >FR</a>
+            <a id="lang-nl" href="#">NL</a>
+            <span id="lang-icon" class="material-symbols-outlined">toggle_on</span>
+            <a id="lang-fr" href="#" class="selected">FR</a>
         </div>
         <h1 class="header-center">Ion's Psychopy</h1>
         <div class="header-right">
-            <button class ="navbutton"  onclick="document.getElementById('launching_text').click()">Starting text</button>
-            <button id="serialport" class="navbutton">Serial Port</button>
-            <button id="openPopup" class="navbutton">Change of Patient</button>
+            <button class ="navbutton"  onclick="document.getElementById('launching_text').click()">Textes d'introduction</button>
+            <button id="serialport" class="navbutton">Port en série</button>
+            <button id="openPopup" class="navbutton">Changement de patient</button>
             <span id="patientName">Patient ID</span>
         </div>
     </header>
@@ -29,14 +30,14 @@
     <div class="overlay" id="popupSerial" style="display: none;">
         <span class="close-btn" onclick="closePopup('popupSerial')">&times;</span>
         <div class="popup">
-            <h3 style="color: #0c0b0b">Poortconfiguratie</h3>
+            <h3 style="color: #0c0b0b">Configuration du port</h3>
             <div class="input-overlay">
                 <div class="input-group" >
                     <input class ="checkbox_style" type="checkbox" id="option1" value="Option1">
-                    <span class="checkbox_input"> Activering </span>
+                    <span class="checkbox_input"> Activation </span>
                 </div>
                 <div class="input-overlay-container">
-                    <span>Naam haven</span>
+                    <span>Nom du port</span>
                     <input type="text" placeholder="ex: COM3" id="port">
                 </div>
 
@@ -46,15 +47,15 @@
                 </div>
 
                 <div class="input-overlay-container">
-                    <span>Karakter om te lanceren</span>
+                    <span>Caractère pour lancer</span>
                     <input type="text" placeholder="ex: s" id="trigger">
                 </div>
                 <div class = "input-overlay-container">
-                    <h3>Grootte van rechthoek rechtsboven</h3>
+                    <h3>Taille du rectange en haut à droite</h3>
                     <div class = "input-group">
-                        <span style="margin-top: 16px">Breedte</span>
+                        <span style="margin-top: 16px">Largeur</span>
                         <input type="text" placeholder="ex: 100" id="largeur">
-                        <span style="margin-top: 16px">Hoogte</span>
+                        <span style="margin-top: 16px">Hauteur</span>
                         <input type="text" placeholder="ex: 50" id="hauteur">
                     </div>
                 </div>
@@ -66,26 +67,26 @@
     <div class="overlay" id="popupOverlay" style="display: none;">
         <div class="popup">
             <span class="close-btn" onclick="closePopup('popupOverlay')">&times;</span>
-            <h4 style="color: #0c0b0b">Identificatiecode patiënt</h4>
+            <h4 style="color: #0c0b0b">Identifiant du patient</h4>
             <input type="text" placeholder="Entrez votre texte" id="patientInput">
             <button onclick="submitPopup()" class="submit">Submit</button>
         </div>
     </div>
 
     <div class="sidenav">
-        <h2 class="h2-sidenav">Paradigma</h2>
-        <a href="#" onclick="changeMainContent('Audition')">Auditie</a>
-        <a href="#" onclick="changeMainContent('contact')">Bewegende beelden scrollen</a>
+        <h2 class="h2-sidenav">Paradigme</h2>
+        <a href="#" onclick="changeMainContent('long_text')">Adjectifs positifs/négatifs</a>
+        <a href="#" onclick="changeMainContent('Audition')">Audition</a>
         <a href="#" onclick="changeMainContent('cyberball')">Cyberball</a>
-        <a href="#" onclick="changeMainContent('emo_faces_nav')">EMO gezichten</a>
-        <a href="#" onclick="changeMainContent('emo_voice_nav')">EMO stemmen</a>
-        <a href="#" onclick="changeMainContent('repetition_priming')">Herhaling Priming</a>
+        <a href="#" onclick="changeMainContent('emo_faces_nav')">EMO faces</a>
+        <a href="#" onclick="changeMainContent('emo_voice_nav')">EMO voices</a>
+        <a href="#" onclick="changeMainContent('ia-audition')">Intelligence Artificiel Audition</a>
+        <a href="#" onclick="changeMainContent('ia-image')">Intelligence Artificiel Image</a>
+        <a href="#" onclick="changeMainContent('contact')">Images mouvantes défilantes</a>
+        <a href="#" onclick="changeMainContent('about')">Images statiques défilantes</a>
         <a href="#" onclick="changeMainContent('localizer')">Localizer</a>
-        <a href="#" onclick="changeMainContent('ia-image')">Kunstmatige intelligentie Afbeelding</a>
-        <a href="#" onclick="changeMainContent('ia-audition')">Kunstmatige intelligentie hoorzitting</a>
-        <a href="#" onclick="changeMainContent('long_text')">Positieve/negatieve adjectieven</a>
-        <a href="#" onclick="changeMainContent('about')">Scrollende statische afbeeldingen</a>
-        <a href="#" onclick="changeMainContent('home')">Scrollende woorden</a>
+        <a href="#" onclick="changeMainContent('home')">Mots défilants</a>
+        <a href="#" onclick="changeMainContent('repetition_priming')">Repetition Priming</a>
         <a href="#" onclick="changeMainContent('stroop')">Stroop</a>
 
 
@@ -116,11 +117,10 @@
     </div>
 
     <main id="main-content" class="main-content">
-        <!-- Contenu géré par about.js !-->
+        <!-- Contenu géré par prime.js !-->
     </main>
-    <script src="{{ url_for('static', filename='about-nl.js') }}"></script>
+    <script src="{{ url_for('static', filename='prime.js') }}"></script>
     <script src="{{ url_for('static', filename='sweetalert2.min.js') }}"></script>
-
 
 </body>
 </html>

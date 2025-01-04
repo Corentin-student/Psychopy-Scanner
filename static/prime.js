@@ -15,32 +15,32 @@ function changeMainContent(section) {
     switch(section) {
         case 'home':
             newContent = `
-                <h2>Paradigma voor scrollende woorden</h2>
+                <h2>Paradigme pour les mots défilants</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Duur Fixatiekruis</h3>
-                        <input type="text" id="text-fixation" placeholder="bijvoorbeeld: 4" >
+                        <h3>Durée croix de Fixation</h3>
+                        <input type="text" id="text-fixation" placeholder="par exemple: 4" >
                     </div>
                     <div class="input-container">
-                        <h3>Lijst van woorden voor het paradigma</h3>
-                        <input type="text" id="words" placeholder="bijvoorbeeld: Apple, auto, ochtend,...">
+                        <h3>Liste de mots pour le paradigme</h3>
+                        <input type="text" id="words" placeholder="par exemple: Pomme, voiture, matin,...">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
-                        <h3>Zoompercentage</h3>
-                        <input id="zoom" type="text" placeholder="bijvoorbeeld: 30">
+                        <h3>Pourcentage de zoom</h3>
+                        <input id="zoom" type="text" placeholder="par exemple: 30">
                     </div>
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-text" value="option1" style=" height: 50px">
                     </div>
                     <div class="input-container">
@@ -50,35 +50,35 @@ function changeMainContent(section) {
                 </div>
             `;
             break;
-        case 'about':
+        case 'prime':
             newContent = `
-                <h2>Paradigma voor scrollende statische afbeeldingen</h2>
+                <h2>Paradigme pour les images statiques défilantes</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration-image" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration-image" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Tijd tussen stimuli</h3>
-                        <input type="text" id="betweenstimuli" placeholder="bijvoorbeeld: 5">
+                        <h3>Durée entre les stimuli</h3>
+                        <input type="text" id="betweenstimuli" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-image').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-image').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
-                        <h3>Zoompercentage</h3>
-                        <input id="zoom-image" type="text" placeholder="bijvoorbeeld: 100">
+                        <h3>Pourcentage de zoom</h3>
+                        <input id="zoom-image" type="text" placeholder="par exemple: 100">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-image" value="option1" style=" height: 50px">
                     </div>
                     <div class="input-container">
-                        <h3> Standaardafwijking </h3>
-                        <input id="sigma-image" type="text" placeholder="bijvoorbeeld: 0.5">
+                        <h3> Écart type </h3>
+                        <input id="sigma-image" type="text" placeholder="par exemple: 0.5">
                     </div>
                     <div class="input-container">
                         <h3></h3>
@@ -89,33 +89,33 @@ function changeMainContent(section) {
             break;
         case 'contact':
             newContent = `
-                <h2>Paradigma voor videostimuli</h2>
+                <h2>Paradigme pour les stimuli vidéo</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration-video" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration-video" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Tijd tussen stimuli</h3>
-                        <input type="text" id="betweenstimuli-video" placeholder="bijvoorbeeld: 5">
+                        <h3>Durée entre les stimuli</h3>
+                        <input type="text" id="betweenstimuli-video" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-video').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-video').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
-                        <h3>Zoompercentage</h3>
-                        <input id="zoom-video" type="text" placeholder="bijvoorbeeld: 50">
+                        <h3>Pourcentage de zoom</h3>
+                        <input id="zoom-video" type="text" placeholder="par exemple: 50">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-video" value="option1" style=" height: 50px">
                     </div>
                     <div class="input-container">
-                        <h3> Standaardafwijking </h3>
-                        <input id="sigma-video" type="text" placeholder="bijvoorbeeld: 0.5">
+                        <h3> Écart type </h3>
+                        <input id="sigma-video" type="text" placeholder="par exemple: 0.5">
                     </div>
                     <div class="input-container">
                         <h3></h3>
@@ -127,40 +127,40 @@ function changeMainContent(section) {
 
         case 'long_text':
             newContent = `
-                <h2>Paradigma voor positief/negatief adjectieven</h2>
+                <h2>Paradigme pour les adjectifs positifs/négatifs</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration-adjectifs" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration-adjectifs" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Kruisduur vastzetten</h3>
-                        <input type="text" id="betweenstimuli-adjectifs" placeholder="bijvoorbeeld: 5">
+                        <h3>Durée croix de fixation</h3>
+                        <input type="text" id="betweenstimuli-adjectifs" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-adjectifs').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-adjectifs').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
-                        <h3>Zoompercentage</h3>
-                        <input id="zoom-adjectifs" type="text" placeholder="bijvoorbeeld: 50">
+                        <h3>Pourcentage de zoom</h3>
+                        <input id="zoom-adjectifs" type="text" placeholder="par exemple: 50">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Aantal trainingsblokken</h3>
-                        <input type="text" id="number_of_blocks-entrainement" placeholder="bijvoorbeeld: 5">
+                        <h3>Nombre de blocks d'entrainement</h3>
+                        <input type="text" id="number_of_blocks-entrainement" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Aantal blokken</h3>
-                        <input type="text" id="number_of_blocks" placeholder="bijvoorbeeld: 30">
+                        <h3>Nombre de blocks</h3>
+                        <input type="text" id="number_of_blocks" placeholder="par exemple: 30">
                     </div>
                     <div class="input-container">
-                        <h3>Aantal stimuli per blok</h3>
-                        <input type="text" id="number_per_blocks-adjectifs" placeholder="bijvoorbeeld: 5">
+                        <h3>Nombre de stimuli par block</h3>
+                        <input type="text" id="number_per_blocks-adjectifs" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-adj" value="option1" style=" height: 50px">
                     </div>
                 </div>
@@ -175,33 +175,33 @@ function changeMainContent(section) {
 
         case 'emo_faces_nav':
             newContent = `
-                <h2>Paradigma voor gezichten met emoties</h2>
+                <h2>Paradigme pour les visages avec des émotions</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration-emo-face" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration-emo-face" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Tijd tussen stimuli</h3>
-                        <input type="text" id="betweenstimuli-emo-face" placeholder="bijvoorbeeld: 5">
+                        <h3>Durée entre les stimuli</h3>
+                        <input type="text" id="betweenstimuli-emo-face" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
                         <h3>Zoom</h3>
-                        <input type="text" id="zoom-emo-face" placeholder="bijvoorbeeld: 5">
+                        <input type="text" id="zoom-emo-face" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-emo-face').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-emo-face').click()">Choisir un fichier</button>
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-emo-face" value="option1" style=" height: 50px">
                     </div>
                     <div class="input-container">
-                        <h3> Standaardafwijking </h3>
-                        <input id="sigma-emo-face" type="text" placeholder="bijvoorbeeld: 0.5">
+                        <h3> Écart type </h3>
+                        <input id="sigma-emo-face" type="text" placeholder="par exemple: 0.5">
                     </div>
                     <div class="input-container">
                         <h3></h3>
@@ -213,22 +213,22 @@ function changeMainContent(section) {
 
         case 'emo_voice_nav':
             newContent = `
-                <h2>Paradigma voor stemmen met intonatie</h2>
+                <h2>Paradigme pour les voix avec intonation</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration-emo-voice" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration-emo-voice" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Tijd tussen stimuli</h3>
-                        <input type="text" id="betweenstimuli-emo-voice" placeholder="bijvoorbeeld: 5">
+                        <h3>Durée entre les stimuli</h3>
+                        <input type="text" id="betweenstimuli-emo-voice" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-emo-voice').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-emo-voice').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-emo-voice" value="option1" style=" height: 50px">
                     </div>
                 </div>
@@ -242,41 +242,41 @@ function changeMainContent(section) {
 
         case 'stroop':
             newContent = `
-                <h2>Paradigma voor kleurwoorden</h2>
+                <h2>Paradigme pour les mots de couleurs</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration-stroop" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration-stroop" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Tijd tussen stimuli</h3>
-                        <input type="text" id="betweenstimuli-stroop" placeholder="bijvoorbeeld: 5">
+                        <h3>Durée entre les stimuli</h3>
+                        <input type="text" id="betweenstimuli-stroop" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-stroop').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-stroop').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
-                        <h3>Zoompercentage</h3>
-                        <input id="zoom-stroop" type="text" placeholder="bijvoorbeeld: 50">
+                        <h3>Pourcentage de zoom</h3>
+                        <input id="zoom-stroop" type="text" placeholder="par exemple: 50">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Kies taal</h3>
+                        <h3>Choisir la langue</h3>
                         <select id="choice" name="choix">
-                            <option value="Anglais">Engels</option>
+                            <option value="Anglais">Anglais</option>
                             <option value="Dannois">Dannois</option>
-                            <option value="Francais">Frans</option>
+                            <option value="Francais">Français</option>
                         </select>
                     </div>
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-stroop" value="option1" style=" height: 50px">
                     </div>
                     <div class="input-container">
-                        <h3> Standaardafwijking </h3>
-                        <input id="sigma-stroop" type="text" placeholder="bijvoorbeeld: 0.5">
+                        <h3> Écart type </h3>
+                        <input id="sigma-stroop" type="text" placeholder="par exemple: 0.5">
                     </div>
                     <div class="input-container">
                         <h3></h3>
@@ -288,41 +288,41 @@ function changeMainContent(section) {
 
         case 'localizer':
             newContent = `
-                <h2>Paradigma voor beeldblokken</h2>
+                <h2>Paradigme pour les blocks d'images</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration-localizer" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration-localizer" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Tijd tussen stimuli</h3>
-                        <input type="text" id="betweenstimuli-localizer" placeholder="bijvoorbeeld: 5">
+                        <h3>Durée entre les stimuli</h3>
+                        <input type="text" id="betweenstimuli-localizer" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Aantal blokken</h3>
-                        <input type="text" id="number_of_blocks-localizer" placeholder="bijvoorbeeld: 3">
+                        <h3>Nombre de blocks</h3>
+                        <input type="text" id="number_of_blocks-localizer" placeholder="par exemple: 3">
                     </div>
                     <div class="input-container">
-                        <h3>Aantal stimuli per blok</h3>
-                        <input type="text" id="number_per_block-localizer" placeholder="bijvoorbeeld: 5">
+                        <h3>Nombre de stimuli par block</h3>
+                        <input type="text" id="number_per_block-localizer" placeholder="par exemple: 5">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Tijd tussen blokken</h3>
-                        <input type="text" id="betweenblocks-localizer" placeholder="bijvoorbeeld: 5">
+                        <h3>Durée entre les blocks</h3>
+                        <input type="text" id="betweenblocks-localizer" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Zoompercentage</h3>
-                        <input id="zoom-loca" type="text" placeholder="bijvoorbeeld: 50">
+                        <h3>Pourcentage de zoom</h3>
+                        <input id="zoom-loca" type="text" placeholder="par exemple: 50">
                     </div>
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-local" value="Option1" style=" height: 50px">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-localizer').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-localizer').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
                         <h3></h3>
@@ -335,37 +335,37 @@ function changeMainContent(section) {
 
         case 'cyberball':
             newContent = `
-                <h2>Cyberball (computerinstelling)</h2>
+                <h2>Cyberball (paramètre pour l'ordinateur)</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Naam patiënt</h3>
-                        <input type="text" id="patient_name" placeholder="bijvoorbeeld: Paul">
+                        <h3>Nom du patient</h3>
+                        <input type="text" id="patient_name" placeholder="par exemple: Paul">
                     </div>
                     <div class="input-container">
-                        <h3>Duur van de eerste fase</h3>
-                        <input type="text" id="phase1-cyberball" placeholder="bijvoorbeeld: 120">
+                        <h3>Durée de la première phase</h3>
+                        <input type="text" id="phase1-cyberball" placeholder="par exemple: 120">
                     </div>
                     <div class="input-container">
-                        <h3>Duur van de uitsluitingsfase</h3>
-                        <input type="text" id="exclusion-cyberball" placeholder="bijvoorbeeld: 120">
+                        <h3>Durée phase d'exclusion</h3>
+                        <input type="text" id="exclusion-cyberball" placeholder="par exemple: 120">
                     </div>
                     <div class="input-container">
-                        <h3>Patiëntenfoto selecteren</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-cyberball').click()">Kies een bestand</button>
+                        <h3>Sélectionner la photo du patient</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-cyberball').click()">Choisir un fichier</button>
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Duur van de overgangsfase</h3>
-                        <input type="text" id="transition-cyberball" placeholder="bijvoorbeeld: 60">
+                        <h3>Durée phase de Transition</h3>
+                        <input type="text" id="transition-cyberball" placeholder="par exemple: 60">
                     </div>
                     <div class="input-container">
-                        <h3>Minimale reactietijd</h3>
-                        <input type="text" id="minimum-reaction" placeholder="bijvoorbeeld: 0.8">
+                        <h3>Temps de réaction minimum</h3>
+                        <input type="text" id="minimum-reaction" placeholder="par exemple: 0.8">
                     </div>
                     <div class="input-container">
-                        <h3>Maximale reactietijd</h3>
-                        <input type="text" id="maximum-reaction" placeholder="bijvoorbeeld: 2.5">
+                        <h3>Temps de réaction maximum</h3>
+                        <input type="text" id="maximum-reaction" placeholder="par exemple: 2.5">
                     </div>
     
                     <div class="input-container">
@@ -378,36 +378,36 @@ function changeMainContent(section) {
 
         case 'repetition_priming':
             newContent = `
-                <h2>Herhaling priming paradigma</h2>
+                <h2>Paradigme de repetition priming</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration-priming" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration-priming" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Tijd tussen stimuli</h3>
-                        <input type="text" id="betweenstimuli-priming" placeholder="bijvoorbeeld: 5">
+                        <h3>Durée entre les stimuli</h3>
+                        <input type="text" id="betweenstimuli-priming" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Aantal blokken</h3>
-                        <input type="text" id="number_of_blocks-priming" placeholder="bijvoorbeeld: 3">
+                        <h3>Nombre de blocks</h3>
+                        <input type="text" id="number_of_blocks-priming" placeholder="par exemple: 3">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-priming').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-priming').click()">Choisir un fichier</button>
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Tijd tussen blokken</h3>
-                        <input type="text" id="betweenblocks-priming" placeholder="bijvoorbeeld: 5">
+                        <h3>Durée entre les blocks</h3>
+                        <input type="text" id="betweenblocks-priming" placeholder="par exemple: 5">
                     </div>
                     <div class="input-container">
-                        <h3>Zoompercentage</h3>
-                        <input id="zoom-priming" type="text" placeholder="bijvoorbeeld: 50">
+                        <h3>Pourcentage de zoom</h3>
+                        <input id="zoom-priming" type="text" placeholder="par exemple: 50">
                     </div>
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-priming" value="Option1" style=" height: 50px">
                     </div>
                     <div class="input-container">
@@ -420,37 +420,37 @@ function changeMainContent(section) {
 
         case 'Audition':
             newContent = `
-                <h2>Paradigma met gebruik van de stembanden</h2>
+                <h2>Paradigme utilisant les cordes vocales</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Instructieduur in seconden</h3>
-                        <input type="text" id="instruction-audition" placeholder="bijvoorbeeld: 2">
+                        <h3>Durée en secondes des instructions</h3>
+                        <input type="text" id="instruction-audition" placeholder="par exemple: 2">
                     </div>
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration-audition" placeholder="bijvoorbeeld: 3">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration-audition" placeholder="par exemple: 3">
                     </div>
                     <div class="input-container">
-                        <h3>Tijd tussen stimuli</h3>
-                        <input type="text" id="betweenstimuli-audition" placeholder="bijvoorbeeld: 7">
+                        <h3>Durée entre les stimuli</h3>
+                        <input type="text" id="betweenstimuli-audition" placeholder="par exemple: 7">
                     </div>
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-audition" value="Option1" style=" height: 50px">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3> Standaardafwijking </h3>
-                        <input id="sigma-audition" type="text" placeholder="bijvoorbeeld: 0.5">
+                        <h3> Écart type </h3>
+                        <input id="sigma-audition" type="text" placeholder="par exemple: 0.5">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-audition').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-audition').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
-                        <h3>Vooraf opgenomen geluid selecteren</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-audition1').click()">Kies een bestand</button>
+                        <h3>Sélectionner le son pré-enregistré</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-audition1').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
                         <h3></h3>
@@ -461,37 +461,37 @@ function changeMainContent(section) {
             break;
         case 'ia-audition':
             newContent = `
-                <h2>Paradigma voor horen met AI</h2>
+                <h2>Paradigme pour l'audition avec l'IA</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Wachttijd in seconden na de pieptoon</h3>
-                        <input type="text" id="bip-ia-audition" placeholder="bijvoorbeeld: 1">
+                        <h3>Durée en secondes d'attente après le Beep</h3>
+                        <input type="text" id="bip-ia-audition" placeholder="par exemple: 1">
                     </div>
                     <div class="input-container">
-                        <h3>Duur in seconden container stimulus</h3>
-                        <input type="text" id="duration-ia-audition" placeholder="bijvoorbeeld: 9">
+                        <h3>Durée en secondes container stimulus</h3>
+                        <input type="text" id="duration-ia-audition" placeholder="par exemple: 9">
                     </div>
                     <div class="input-container">
-                        <h3>Tijd in seconden containerkruis</h3>
-                        <input type="text" id="fixation-ia-audition" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes container croix</h3>
+                        <input type="text" id="fixation-ia-audition" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-ia-audition" value="option1" style=" height: 50px">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3> Standaardafwijking </h3>
-                        <input id="sigma-ia-audition" type="text" placeholder="bijvoorbeeld: 0.5">
+                        <h3> Écart type </h3>
+                        <input id="sigma-ia-audition" type="text" placeholder="par exemple: 0.5">
                     </div>
                     <div class="input-container">
-                        <h3>Wachttijd in seconden na het kruis</h3>
-                        <input type="text" id="after-fixation-ia-audition" placeholder="bijvoorbeeld: 0.5">
+                        <h3>Durée en secondes d'attente après la croix</h3>
+                        <input type="text" id="after-fixation-ia-audition" placeholder="par exemple: 0.5">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-ia-audition').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-ia-audition').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
                         <h3></h3>
@@ -503,33 +503,33 @@ function changeMainContent(section) {
 
         case 'ia-image':
             newContent = `
-                <h2>Paradigma voor afbeeldingen met AI</h2>
+                <h2>Paradigme pour les images avec l'IA</h2>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3>Stimulatorduur in seconden</h3>
-                        <input type="text" id="duration-ia-image" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée en secondes des stimuli</h3>
+                        <input type="text" id="duration-ia-image" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Tijd tussen stimuli</h3>
-                        <input type="text" id="betweenstimuli-ia-image" placeholder="bijvoorbeeld: 4">
+                        <h3>Durée entre les stimuli</h3>
+                        <input type="text" id="betweenstimuli-ia-image" placeholder="par exemple: 4">
                     </div>
                     <div class="input-container">
-                        <h3>Zoompercentage</h3>
-                        <input id="zoom-ia-image" type="text" placeholder="bijvoorbeeld: 50">
+                        <h3>Pourcentage de zoom</h3>
+                        <input id="zoom-ia-image" type="text" placeholder="par exemple: 50">
                     </div>
                     <div class="input-container">
-                        <h3> Standaardafwijking </h3>
-                        <input id="sigma-ia-image" type="text" placeholder="bijvoorbeeld: 0.5">
+                        <h3> Écart type </h3>
+                        <input id="sigma-ia-image" type="text" placeholder="par exemple: 0.5">
                     </div>
                 </div>
                 <div class="input-group">
                     <div class="input-container">
-                        <h3> Willekeurige volgorde </h3>
+                        <h3> Ordre aléatoire </h3>
                         <input  type="checkbox" id="random-ia-image" value="option1" style=" height: 50px">
                     </div>
                     <div class="input-container">
-                        <h3>Selecteer een bestaand paradigma</h3>
-                        <button class="button-choice" onclick="document.getElementById('fileinput-ia-image').click()">Kies een bestand</button>
+                        <h3>Sélectionner un paradigme déjà existant</h3>
+                        <button class="button-choice" onclick="document.getElementById('fileinput-ia-image').click()">Choisir un fichier</button>
                     </div>
                     <div class="input-container">
                         <h3></h3>
@@ -658,8 +658,8 @@ function submitText() {
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -726,8 +726,8 @@ function submitVoices(){
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -792,8 +792,8 @@ function submitIaAudition() {
             console.error('Error:', error);
         });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -855,8 +855,8 @@ function submitIaImage() {
             console.error('Error:', error);
         });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -929,8 +929,8 @@ function submitFaces() {
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -1004,8 +1004,8 @@ function submitStroop(){
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -1081,8 +1081,8 @@ function submitLocalizer(){
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -1157,8 +1157,8 @@ function submitAudition(){
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -1233,8 +1233,8 @@ function submitpriming(){
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -1311,8 +1311,8 @@ function submitAdjectifs() {
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -1368,8 +1368,8 @@ function submitCyberball(){
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -1443,8 +1443,8 @@ function submitImages(){
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
@@ -1518,14 +1518,13 @@ function submitVideos(){
         console.error('Error:', error);
     });
     Swal.fire({
-        title: 'Je paradigma zal lanceren',
-        text: "als u geen instellingen bent vergeten",
+        title: 'Votre paradigme va se lancer',
+        text: "si vous n'avez oublié aucun paramètre",
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#4CAF50', // Couleur verte
     });
 }
-
 
 document.addEventListener('DOMContentLoaded', function() {
     const toggleIcon = document.getElementById('lang-icon');
@@ -1535,13 +1534,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (toggleIcon) {
         toggleIcon.addEventListener('click', function () {
-            window.location.href = '/about';
+            window.location.href = '/nl/prime';
         });
     }
 
-    if (langFR) {
-        langFR.addEventListener('click', function () {
-            window.location.href = '/about';
+    if (langNL) {
+        langNL.addEventListener('click', function () {
+            window.location.href = '/nl/prime';
         });
     }
 })

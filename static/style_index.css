@@ -31,6 +31,41 @@ html, body {
     margin-top: 15px;
 }
 
+.lang {
+    margin-top: 15px;
+    margin-left: 15px;
+}
+.lang a {
+    color: #777;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.lang a:hover {
+    text-decoration: underline;
+}
+
+.lang .selected {
+    font-weight: bold !important;
+    color: #fff !important;
+}
+
+.nl_width{
+    margin-left: 30px !important;
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 40; /* Adjust size as needed */
+    font-size: 40px !important; /* Ensures size compatibility */
+    vertical-align: middle; /* Aligns icon with text */
+    cursor: pointer;
+}
+
 body {
     font-family: Arial, sans-serif;
 }
@@ -79,13 +114,21 @@ input {
 .en_dessous_cadre {
     position: absolute; /* Pour le positionner par rapport au conteneur parent */
     right: 8%;           /* Alignement à droite */
-    bottom: 5px;      /* Placer en dessous du cadre */
+    bottom: -20px;      /* Placer en dessous du cadre */
     padding: 10px 20px;
     background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.random {
+    position: absolute; /* Position absolue pour le placement précis */
+    right: 16%; /* Décalage à droite pour se placer à côté du bouton */
+    bottom: -20px; /* Ajustement vertical pour se positionner sous le cadre */
+    border: none;
+    border-radius: 5px;
 }
 
 .header-right {

@@ -1,0 +1,22 @@
+{
+    "data": [
+        {
+            "Apparition": "0.000",
+            "Duree": "3.000",
+            "Type": "Image",
+            "Stimulus": "body1_static.jpeg",
+            "Angle": "50",
+            "Zoom": "50"
+        },
+        {
+            "Apparition": "0.000",
+            "Duree": "3.000",
+            "Type": "Enregistrement",
+            "Stimulus": "/",
+            "Angle": "/",
+            "Zoom": "/"
+        }
+    ],
+    "instructions": "Instructions.txt",
+    "mot_fin": "Instructions.txt"
+}

@@ -4,11 +4,12 @@ import threading
 import argparse
 import json
 import numpy as np
-from psychopy import visual, core
+from psychopy import visual, core, event
 import sounddevice as sd
 import pygame
 import soundfile as sf
 import gc
+import random
 from Paradigme_parent import Parente
 from multiprocessing.pool import ThreadPool
 
@@ -17,7 +18,7 @@ from multiprocessing.pool import ThreadPool
 class Psychopy_everything (Parente):
 
     def __init__(self, datas, launching_text, ending_text, output_file, hauteur, largeur, port, baudrate,
-                 trigger, activation):
+                 trigger, activation, random):
         self.win = visual.Window(
             size=(800, 600),
             fullscr=True,
@@ -41,6 +42,7 @@ class Psychopy_everything (Parente):
         self.images = []
         self.images_stim = []
         self.trigger = trigger
+        self.mouse = event.Mouse(win=self.win)
         self.videos = []
         self.pool = ThreadPool(processes=2)
         self.audios = []
@@ -63,6 +65,10 @@ class Psychopy_everything (Parente):
             self.activation = True
         else:
             self.activation = False
+        if random == "True":
+            self.random = True
+        else:
+            self.random = False
         self.port = port
         self.baudrate = baudrate
         rect_width = largeur
@@ -111,11 +117,9 @@ class Psychopy_everything (Parente):
                 break
         if start_time is not None:
             print(f"L'utilisateur a commencé à parler à {start_time:.2f} secondes.")
-            self.reaction = start_time
             single_type_infos["Reaction"] = start_time
         else:
             print("Aucune parole détectée.")
-            self.reaction = "/"
         record = os.path.join(self.dirname, f"record{self.record_index}.wav")
         self.record_index += 1
         sf.write(record, recording, self.fs)
@@ -162,6 +166,8 @@ class Psychopy_everything (Parente):
         else:
             self.multiple_type_infos.append(self.show_enregistrement())
         first = 0
+        self.mouse.getPressed()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
+        event.getKeys()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
         if self.movie_stim is not None:
             self.movie_stim.play()
         else:
@@ -171,6 +177,9 @@ class Psychopy_everything (Parente):
                 super().send_character(self.port, self.baudrate)
                 first = 1
         self.onset = self.global_timer.getTime()
+        clicked = False
+        clicked_time = "None"
+        key = "None"
         while self.global_timer.getTime() < self.onset + float(self.multiple_type_infos[0]["Duree"]) or pygame.mixer.get_busy():
             if self.movie_stim is not None:
                 self.movie_stim.draw()
@@ -179,11 +188,17 @@ class Psychopy_everything (Parente):
                 if first == 0 and self.activation :
                     super().send_character(self.port, self.baudrate)
                     first = 1
-            pass
+            if not clicked:
+                clicked, key, clicked_time = super().key_click_register(self.mouse, clicked, self.global_timer,
+                                                                        self.onset, self.win, self.trigger)
+        if clicked_time != "None":
+            clicked_time = super().float_to_csv(clicked_time)
         for x in self.multiple_type_infos:
             super().write_tsv_csv(self.filename, self.filename_csv,
-                              [super().float_to_csv(self.onset), x["Type"], x["Angle"], x["Zoom"], x["Reaction"], x["Stimulus"]])
+                              [super().float_to_csv(self.onset), x["Type"], x["Angle"], x["Zoom"],
+                               x["Reaction"], key, clicked_time,  x["Stimulus"]])
 
+        self.multiple_type_infos = []
 
         if self.movie_stim is not None:
             self.movie_stim.stop()
@@ -194,7 +209,11 @@ class Psychopy_everything (Parente):
             core.wait(0.1)
             gc.collect()
             self.movie_stim = None
-        self.multiple_type_infos=[]
+
+
+
+
+
 
 
     def show_multiple_types (self, types):
@@ -210,6 +229,11 @@ class Psychopy_everything (Parente):
                 self.multiple_type_infos.append(self.show_enregistrement(False))
         self.onset = self.global_timer.getTime()
         self.rect.draw()
+        self.mouse.getPressed()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
+        event.getKeys()  # vide le buffer, afin de pas avoir un click fait avant le stimulus
+        clicked_time = "None"
+        clicked = False
+        key = "None"
         self.win.flip()
         first = 0
         while self.global_timer.getTime() < self.onset + float(self.multiple_type_infos[0]["Duree"]) or pygame.mixer.get_busy():
@@ -220,7 +244,11 @@ class Psychopy_everything (Parente):
                 self.movie_stim.draw()
                 self.rect.draw()
                 self.win.flip()
-            pass
+            if not clicked:
+                clicked, key, clicked_time = super().key_click_register(self.mouse,clicked, self.global_timer,
+                                                                        self.onset, self.win, self.trigger)
+        if clicked_time != "None":
+            clicked_time = super().float_to_csv(clicked_time)
         if self.movie_stim is not None:
             self.movie_stim.stop()
             self.movie_stim.setAutoDraw(False)
@@ -231,22 +259,23 @@ class Psychopy_everything (Parente):
             gc.collect()
             self.movie_stim = None
 
-        self.multiple_type_infos = []
         if self.enregistrement_thread == None:
             for x in self.multiple_type_infos:
                 super().write_tsv_csv(self.filename, self.filename_csv,
                                       [super().float_to_csv(self.onset), x["Type"],
-                                       x["Angle"], x["Zoom"], x["Reaction"], x["Stimulus"]])
+                                       x["Angle"], x["Zoom"], x["Reaction"], key, clicked_time, x["Stimulus"]])
         else:
             self.enregistrement_thread.join()
             for x in self.multiple_type_infos:
                 super().write_tsv_csv(self.filename, self.filename_csv,
                                       [super().float_to_csv(self.onset), x["Type"],
-                                       x["Angle"], x["Zoom"], x["Reaction"], x["Stimulus"]])
+                                       x["Angle"], x["Zoom"], x["Reaction"], key, clicked_time, x["Stimulus"]])
+        self.multiple_type_infos = []
 
     def lancement(self):
         super().file_init(self.filename, self.filename_csv,
-                      ['onset', 'trial_type', 'angle','zoom', 'Reaction_time', 'stim_file'])
+                      ['onset', 'trial_type', 'angle','zoom', 'Time_before_speaking', 'key',
+                       'Reaction_time_to_press', 'stim_file'])
         texts = super().inputs_texts(os.path.join(self.dossier,self.launching))
         super().launching_texts(self.win, texts,self.trigger)
         super().wait_for_trigger(self.trigger)
@@ -269,6 +298,7 @@ class Psychopy_everything (Parente):
     def preprocess(self):
         count = -1
         timer = -1.0
+        multiple = 0
         for x in self.datas:
             x["Reaction"] = "/"
             if x["Apparition"] == timer:
@@ -295,6 +325,7 @@ class Psychopy_everything (Parente):
                 elif x["Type"] == "Enregistrement":
                     self.all[count] = self.all[count]+", Enregistrement"
                     self.enregistrements.append(x)
+                multiple +=1
             else :
                 count+=1
                 if x["Type"] == "Image":
@@ -326,6 +357,17 @@ class Psychopy_everything (Parente):
                     self.fixations.append(x)
             timer = x["Apparition"]
 
+        if self.random == True and multiple == 0:
+            random.shuffle(self.videos)
+            random.shuffle(self.audios)
+            random.shuffle(self.enregistrements)
+            liste_indice = list(range(len(self.images)))
+            random.shuffle(liste_indice)
+            self.images = [self.images[i] for i in liste_indice]
+            self.images_stim = [self.images_stim[i] for i in liste_indice]
+
+
+
 
 
 
@@ -336,6 +378,8 @@ if __name__ == "__main__":
     parser.add_argument("--mot_fin",  type=str, help="Chemin vers le fichier de mots", required=False)
     parser.add_argument("--output_file", type=str, required=True, help="Nom du fichier d'output")
     parser.add_argument("--activation", type=str, required=True, help="Pour le boitier avec les EEG")
+    parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
+
 
     parser.add_argument('--port', type=str, required=False, help="Port")
     parser.add_argument('--baudrate', type=int, required=False, help="Speed port")
@@ -349,7 +393,7 @@ if __name__ == "__main__":
     data = json.loads(args.data)
     E = Psychopy_everything(data, args.instructions, args.mot_fin, args.output_file,
                             args.hauteur, args.largeur, args.port, args.baudrate,
-                            args.trigger, args.activation)
+                            args.trigger, args.activation, args.random)
     E.preprocess()
     E.lancement()
 

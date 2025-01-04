@@ -105,25 +105,9 @@ class IA_audition(Parente):
         clicked_time = "None"
         key = "None"
         while pygame.mixer.get_busy():
-            button = self.mouse.getPressed()
-            keys = event.getKeys()
             if not clicked:
-                if any(button):
-                    clicked_time = self.global_timer.getTime() - onset
-                    print("Clic détecté à :", clicked_time, "secondes")
-                    clicked = True
-                    key = "click"
-                if keys:
-                    if self.trigger in keys:
-                        pass
-                    elif "escape" in keys:
-                        self.win.close()
-                        break
-                    else:
-                        clicked_time = self.global_timer.getTime() - onset
-                        print("Touche détecté à :", clicked_time, "secondes")
-                        clicked = True
-                        key = keys[0]
+                clicked, key, clicked_time = super().key_click_register(self.mouse, clicked, self.global_timer, onset,
+                                                                        self.win, self.trigger)
         if clicked_time != "None":
             clicked_time = super().float_to_csv(clicked_time)
         super().write_tsv_csv(self.filename, self.filename_csv,

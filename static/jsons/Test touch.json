@@ -1,0 +1,14 @@
+{
+    "data": [
+        {
+            "Apparition": "0.000",
+            "Duree": "2.000",
+            "Type": "Image",
+            "Stimulus": "body1_static.jpeg",
+            "Angle": "50",
+            "Zoom": "50"
+        }
+    ],
+    "instructions": "Instructions.txt",
+    "mot_fin": "Instructions.txt"
+}

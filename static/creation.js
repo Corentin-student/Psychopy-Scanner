@@ -334,3 +334,23 @@ function submitTable() {
         ouvrirOverlay("overlay-Holes")
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('lang-icon');
+    const langNL = document.getElementById('lang-nl');
+    const langFR = document.getElementById('lang-fr');
+
+
+    if (toggleIcon) {
+        toggleIcon.addEventListener('click', function () {
+            window.location.href = '/nl/index';
+        });
+    }
+
+    if (langNL) {
+        langNL.addEventListener('click', function () {
+            window.location.href = '/nl/index';
+        });
+    }
+})
+

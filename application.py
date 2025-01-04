@@ -26,10 +26,19 @@ def upload_file():
         return f'Fichier {file.filename} téléchargé avec succès à {file_path}.', 200
 @app.route('/index')
 def index():
-    return render_template('index2.html')
+    return render_template('creating.html')
+
+@app.route('/nl/index')
+def index_nl():
+    return render_template('creating-nl.html')
 @app.route('/created_paradigmes')
 def created_paradigmes():
     return render_template('existing.html')
+
+
+@app.route('/nl/created_paradigmes')
+def created_paradigmes_nl():
+    return render_template('existing-nl.html')
 
 @app.route('/api/json-files')
 def list_json_files():
@@ -37,18 +46,18 @@ def list_json_files():
     files = [file.replace('.json', '') for file in os.listdir(path) if file.endswith('.json')]
     return jsonify(files)
 
-@app.route('/about')
-def about():
+@app.route('/prime')
+def prime():
     print("")
-    return render_template('about.html')
+    return render_template('prime.html')
 
-@app.route('/fr/about')
-def about_fr():
-    return render_template('about.html')  # Template en français
+@app.route('/fr/prime')
+def prime_fr():
+    return render_template('prime.html')  # Template en français
 
-@app.route('/nl/about')
-def about_nl():
-    return render_template('about-nl.html')  # Template en néerlandais
+@app.route('/nl/prime')
+def prime_nl():
+    return render_template('prime-nl.html')  # Template en néerlandais
 
 
 @app.route('/get-json-file', methods=['GET'])
@@ -66,7 +75,7 @@ def serve_json_file():
         return jsonify({"error": "Error decoding JSON"}), 500
 @app.route('/')
 def home():
-    return render_template('about.html')
+    return render_template('prime.html')
 
 @app.route('/submit_ia_audition', methods=['POST'])
 def submit_ia_audition():
@@ -597,6 +606,7 @@ def submit_table():
         '--mot_fin', data.get("mot_fin"),
         '--output_file', data.get("output_file"),
         '--activation', str(data.get("activation")),
+        '--random', str(data.get("random")),
         '--trigger', data.get("trigger"),
         '--hauteur', data.get("hauteur"),
         '--largeur', data.get("largeur"),
