@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paradigmes créés</title>
+    <title>Paradigma's gecreëerd</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link rel="stylesheet" href="{{ url_for('static', filename='sweetalert2.min.css') }}">
@@ -12,14 +12,14 @@
         <div class="overlay" id="popupSerial" style="display: none;">
             <span class="close-btn" onclick="closePopup('popupSerial')">&times;</span>
             <div class="popup">
-                <h3 style="color: #0c0b0b">Configuration du port</h3>
+                <h3 style="color: #0c0b0b">Poortconfiguratie</h3>
                 <div class="input-overlay">
                     <div class="input-group" >
                         <input class ="checkbox_style" type="checkbox" id="option1" value="Option1">
-                        <span class="checkbox_input"> Activation </span>
+                        <span class="checkbox_input"> Activatie </span>
                     </div>
                     <div class="input-overlay-container">
-                        <span>Nom du port</span>
+                        <span>Naam van de poort</span>
                         <input type="text" placeholder="ex: COM3" id="port">
                     </div>
 
@@ -29,15 +29,15 @@
                     </div>
 
                     <div class="input-overlay-container">
-                        <span>Caractère pour lancer</span>
+                        <span>Karakter om te lanceren</span>
                         <input type="text" placeholder="ex: s" id="trigger">
                     </div>
                     <div class = "input-overlay-container">
-                        <h3>Taille du rectange en haut à droite</h3>
+                        <h3>Grootte van de rechthoek rechtsboven</h3>
                         <div class = "input-group">
-                            <span style="margin-top: 16px">Largeur</span>
+                            <span style="margin-top: 16px">Breedte</span>
                             <input type="text" placeholder="ex: 100" id="largeur">
-                            <span style="margin-top: 16px">Hauteur</span>
+                            <span style="margin-top: 16px">Hoogte</span>
                             <input type="text" placeholder="ex: 50" id="hauteur">
                         </div>
                     </div>
@@ -53,28 +53,28 @@
         <div class="overlay" id="popupOverlay" style="display: none;">
             <div class="popup">
                 <span class="close-btn" onclick="closePopup('popupOverlay')">&times;</span>
-                <h4 style="color: #0c0b0b">Identifiant du patient</h4>
+                <h4 style="color: #0c0b0b">Identificatiecode patiënt</h4>
                 <input type="text" placeholder="Entrez votre texte" id="patientInput">
                 <button onclick="submitPopup()" class="submit">Submit</button>
             </div>
         </div>
         <header class="header">
-            <button class="navbutton-left" style="margin-left: 10px" onclick="PrimeParadigm()">Paradigmes principaux</button>
-            <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreation()">Création de paradigmes</button>
+            <button class="navbutton-left" style="margin-left: 10px" onclick="PrimeParadigm()">Prime paradigma's</button>
+            <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreation()">Creatie van paradigma's</button>
             <div class="lang">
-                <a id="lang-nl" href="#">NL</a>
-                <span id="lang-icon" class="material-symbols-outlined">toggle_on</span>
-                <a id="lang-fr" href="#" class="selected">FR</a>
+                <a id="lang-nl" href="#" class="selected">NL</a>
+                <span id="lang-icon" class="material-symbols-outlined">toggle_off</span>
+                <a id="lang-fr" href="#">FR</a>
             </div>
-            <h1 class="header-center">Paradigmes créés</h1>
+            <h1 class="header-center">Paradigma's gecreëerd</h1>
             <div class="header-right">
-                <button id="serialport" class="navbutton">Port en série</button>
-                <button id="openPopup" class="navbutton">Changement de patient</button>
+                <button id="serialport" class="navbutton">Seriële poort</button>
+                <button id="openPopup" class="navbutton">Verandering van patiënt</button>
                 <span id="patientName">Patient ID</span>
             </div>
         </header>
         <div class="sidenav">
-            <h2 class="h2-sidenav">Paradigme</h2>
+            <h2 class="h2-sidenav">Paradigma</h2>
         </div>
         <main>
             <div id="main-container" style="margin-left: 260px; margin-top: 30px;">
@@ -82,13 +82,13 @@
                   <table class="stimulus-table">
                     <thead>
                       <tr>
-                        <th>Apparition</th>
-                        <th>Durée</th>
-                        <th>Type</th>
+                        <th>Verschijning</th>
+                        <th>Duur</th>
+                        <th>Stimulustype</th>
                         <th>Stimulus</th>
-                        <th>Angle</th>
+                        <th>Hoek</th>
                         <th>Zoom</th>
-                        <th>Supprimer</th>
+                        <th>Verwijderen</th>
                       </tr>
                     </thead>
                     <tbody id="table-body">
@@ -98,23 +98,23 @@
                 </div>
                 <div class="input-group" id="visible-group">
                     <div class="box-wrapper">
-                        <span class="mini-title">Fichier d'instructions</span>
-                        <div class="small-box" id="instruction_txt">fichier</div>
+                        <span class="mini-title">Instructie bestand</span>
+                        <div class="small-box" id="instruction_txt">bestand</div>
                     </div>
                     <div class="box-wrapper">
-                        <span class="mini-title">Fichier slide de fin</span>
-                        <div class="small-box" id="end_txt">fichier</div>
+                        <span class="mini-title">Einde dia bestand</span>
+                        <div class="small-box" id="end_txt">bestand</div>
                     </div>
                     <!-- Ajouter plus de boîtes comme nécessaire -->
                 </div>
                 <div class="random">
-                    <h3> Ordre aléatoire </h3>
+                    <h3> Willekeurige volgorde </h3>
                     <input  type="checkbox" id="random" value="option1" style=" width: 50px;">
                 </div>
                 <button class="en_dessous_cadre" onclick="launching()">submit</button>
             </div>
         </main>
-        <script src="{{ url_for('static', filename='created_paradigms.js') }}" defer></script></head>
+        <script src="{{ url_for('static', filename='created_paradigms_nl.js') }}" defer></script></head>
         <script src="{{ url_for('static', filename='sweetalert2.min.js') }}"></script>
     </body>
 </html>

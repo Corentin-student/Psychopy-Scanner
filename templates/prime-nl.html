@@ -6,6 +6,7 @@
     <title>Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='sweetalert2.min.css') }}">
 </head>
 <body>
     <header class="header">
@@ -18,9 +19,9 @@
         </div>
         <h1 class="header-center">Ion's Psychopy</h1>
         <div class="header-right">
-            <button class ="navbutton"  onclick="document.getElementById('launching_text').click()">Starting text</button>
-            <button id="serialport" class="navbutton">Serial Port</button>
-            <button id="openPopup" class="navbutton">Change of Patient</button>
+            <button class ="navbutton"  onclick="document.getElementById('launching_text').click()">Begintekst</button>
+            <button id="serialport" class="navbutton">Seriële poort</button>
+            <button id="openPopup" class="navbutton">Verandering van patiënt</button>
             <span id="patientName">Patient ID</span>
         </div>
     </header>
@@ -115,9 +116,11 @@
     </div>
 
     <main id="main-content" class="main-content">
-        <!-- Contenu géré par about.js !-->
+        <!-- Contenu géré par prime.js !-->
     </main>
-    <script src="{{ url_for('static', filename='about-nl.js') }}"></script>
+    <script src="{{ url_for('static', filename='prime-nl.js') }}"></script>
+    <script src="{{ url_for('static', filename='sweetalert2.min.js') }}"></script>
+
 
 </body>
 </html>

@@ -6,11 +6,13 @@
     <title>Accueil</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='sweetalert2.min.css') }}">
+
 </head>
 <body>
     <header class="header">
-        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreation()">Creation of Paradigms</button>
-        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreated()">Created Paradigms</button>
+        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreation()">Création de paradigmes</button>
+        <button class="navbutton-left" style="margin-left: 10px" onclick="ParadigmCreated()">Paradigmes créés</button>
         <div class="lang">
             <a id="lang-nl" href="#">NL</a>
             <span id="lang-icon" class="material-symbols-outlined">toggle_on</span>
@@ -18,9 +20,9 @@
         </div>
         <h1 class="header-center">Ion's Psychopy</h1>
         <div class="header-right">
-            <button class ="navbutton"  onclick="document.getElementById('launching_text').click()">Starting text</button>
-            <button id="serialport" class="navbutton">Serial Port</button>
-            <button id="openPopup" class="navbutton">Change of Patient</button>
+            <button class ="navbutton"  onclick="document.getElementById('launching_text').click()">Textes d'introduction</button>
+            <button id="serialport" class="navbutton">Port en série</button>
+            <button id="openPopup" class="navbutton">Changement de patient</button>
             <span id="patientName">Patient ID</span>
         </div>
     </header>
@@ -115,9 +117,10 @@
     </div>
 
     <main id="main-content" class="main-content">
-        <!-- Contenu géré par about.js !-->
+        <!-- Contenu géré par prime.js !-->
     </main>
-    <script src="{{ url_for('static', filename='about.js') }}"></script>
+    <script src="{{ url_for('static', filename='prime.js') }}"></script>
+    <script src="{{ url_for('static', filename='sweetalert2.min.js') }}"></script>
 
 </body>
 </html>
