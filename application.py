@@ -1,4 +1,4 @@
-"Version 2.0"
+"Version 1.0"
 import os
 from flask import Flask, render_template, request, jsonify
 import subprocess
@@ -26,10 +26,19 @@ def upload_file():
         return f'Fichier {file.filename} téléchargé avec succès à {file_path}.', 200
 @app.route('/index')
 def index():
-    return render_template('index2.html')
+    return render_template('creating.html')
+
+@app.route('/nl/index')
+def index_nl():
+    return render_template('creating-nl.html')
 @app.route('/created_paradigmes')
 def created_paradigmes():
     return render_template('existing.html')
+
+
+@app.route('/nl/created_paradigmes')
+def created_paradigmes_nl():
+    return render_template('existing-nl.html')
 
 @app.route('/api/json-files')
 def list_json_files():
@@ -37,24 +46,24 @@ def list_json_files():
     files = [file.replace('.json', '') for file in os.listdir(path) if file.endswith('.json')]
     return jsonify(files)
 
-@app.route('/about')
-def about():
+@app.route('/prime')
+def prime():
     print("")
-    return render_template('about.html')
+    return render_template('prime.html')
 
-@app.route('/fr/about')
-def about_fr():
-    return render_template('about.html')  # Template en français
+@app.route('/fr/prime')
+def prime_fr():
+    return render_template('prime.html')  # Template en français
 
-@app.route('/nl/about')
-def about_nl():
-    return render_template('about-nl.html')  # Template en néerlandais
+@app.route('/nl/prime')
+def prime_nl():
+    return render_template('prime-nl.html')  # Template en néerlandais
 
 
 @app.route('/get-json-file', methods=['GET'])
 def serve_json_file():
     file_name = request.args.get('param_to_file')
-    directory_path = '_internal/static/jsons'  # Assurez-vous que ce chemin est correct
+    directory_path = '_internal/static/jsons'
     file_path = f"{directory_path}/{file_name}.json"
     try:
         with open(file_path, 'r') as file:
@@ -66,23 +75,30 @@ def serve_json_file():
         return jsonify({"error": "Error decoding JSON"}), 500
 @app.route('/')
 def home():
-    return render_template('about.html')
+    return render_template('prime.html')
 
 @app.route('/submit_ia_audition', methods=['POST'])
 def submit_ia_audition():
     try:
         data = request.get_json()
+        print(data)
         subprocess.run([
             'Python_scripts\\IA_audition.exe',
-            "--file", data.get("filePath"),
-            "--output_file", data.get("output_file"),
-            "--duration", data.get("duration"),
-            "--sigma", data.get("sigma"),
-            "--betweenstimuli", data.get("betweenstimuli"),
-            "--afterfixation", data.get("afterfixation"),
-            "--bip", data.get("bip"),
-            "--launching", data.get("launching_text"),
+            '--file', data.get("filePath"),
+            '--output_file', data.get("output_file"),
+            '--duration', data.get("duration"),
+            '--sigma', data.get("sigma"),
+            '--betweenstimuli', data.get("betweenstimuli"),
+            '--afterfixation', data.get("afterfixation"),
+            '--bip', data.get("bip"),
+            '--launching', data.get("launching_text"),
             '--random', str(data.get("random")),
+            '--activation', str(data.get("activation")),
+            '--trigger', data.get("trigger"),
+            '--hauteur', data.get("hauteur"),
+            '--largeur', data.get("largeur"),
+            '--port', data.get("port"),
+            '--baudrate', str(data.get("baudrate"))
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
@@ -96,14 +112,20 @@ def submit_ia_image():
         data = request.get_json()
         subprocess.run([
             'Python_scripts\\IA_image.exe',
-            "--file", data.get("filePath"),
-            "--output_file", data.get("output_file"),
+            '--file', data.get("filePath"),
+            '--output_file', data.get("output_file"),
             '--duration', data.get("duration"),
-            "--sigma", data.get("sigma"),
-            "--betweenstimuli", data.get("betweenstimuli"),
-            "--zoom", data.get("zoom"),
-            "--launching", data.get("launching_text"),
-            "--random", str(data.get("random"))
+            '--sigma', data.get("sigma"),
+            '--betweenstimuli', data.get("betweenstimuli"),
+            '--zoom', data.get("zoom"),
+            '--launching', data.get("launching_text"),
+            '--random', str(data.get("random")),
+            '--activation', str(data.get("activation")),
+            '--trigger', data.get("trigger"),
+            '--hauteur', data.get("hauteur"),
+            '--largeur', data.get("largeur"),
+            '--port', data.get("port"),
+            '--baudrate', str(data.get("baudrate"))
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
@@ -217,6 +239,8 @@ def submit_cyberball():
     except subprocess.CalledProcessError as e:
         print(f"Error: {e.stderr.decode('utf-8')}")
     return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+
+
 
 
 
@@ -370,7 +394,6 @@ def submit_localizer():
         betweenblocks = data.get('betweenblocks')
         random = data.get('random')
         file = data.get('fileName')
-
         subprocess.run([
             'Python_scripts\\Psychopy_LOCALIZER.exe',
             '--duration', duration,
@@ -416,8 +439,7 @@ def submit_priming():
         random = data.get('random')
         file = data.get('fileName')
         subprocess.run([
-            sys.executable, 'Python_scripts/Psychopy_Priming.py',
-            #'Python_scripts\\Psychopy_Priming.exe',
+            'Python_scripts\\Psychopy_Priming.exe',
             '--duration', duration,
             '--blocks', blocks,
             '--port', port,
@@ -434,7 +456,6 @@ def submit_priming():
             '--betweenblocks', betweenblocks,
             '--output_file', output_file,
         ], check = True)
-
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
@@ -550,6 +571,8 @@ def submit_audition():
             '--hauteur', hauteur,
             '--launching', launching,
             '--file', file,
+            '--port', port,
+            '--baudrate', baudrate,
             '--asound', asound,
             '--largeur', largeur,
             '--random', str(random),
@@ -557,7 +580,6 @@ def submit_audition():
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
         ], check = True)
-        print("working here?")
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -567,13 +589,22 @@ def submit_audition():
 @app.route('/submit-table', methods=['POST'])
 def submit_table():
     data = request.get_json()
+    print(data)
     stimuli = json.dumps(data.get("data"))
+
     subprocess.run([
         'Python_scripts\\Psychopy_everything.exe',
         '--data', stimuli,
         '--instructions', data.get("instructions"),
         '--mot_fin', data.get("mot_fin"),
-        '--output_file', data.get("output_file")
+        '--output_file', data.get("output_file"),
+        '--activation', str(data.get("activation")),
+        '--random', str(data.get("random")),
+        '--trigger', data.get("trigger"),
+        '--hauteur', data.get("hauteur"),
+        '--largeur', data.get("largeur"),
+        '--port', data.get("port"),
+        '--baudrate', str(data.get("baudrate"))
     ], check= True)
     return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
 
