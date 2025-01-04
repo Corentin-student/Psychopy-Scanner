@@ -125,23 +125,9 @@ class static_image(Parente):
             clicked_time = "None"
             onset = self.global_timer.getTime()
             while self.global_timer.getTime() < onset + duration:
-                button = self.mouse.getPressed()
-                keys = event.getKeys()
                 if not clicked:
-                    if any(button):
-                        clicked_time = self.global_timer.getTime() - onset
-                        print("Clic détecté à :", clicked_time, "secondes")
-                        clicked = True
-                    if keys:
-                        if self.trigger in keys:
-                            pass
-                        elif "escape" in keys:
-                            self.win.close()
-                            break
-                        else:
-                            clicked_time = self.global_timer.getTime() - onset
-                            print("Touche détecté à :", clicked_time, "secondes")
-                            clicked = True
+                    clicked, key, clicked_time = super().key_click_register(self.mouse, clicked, self.global_timer,
+                                                                            onset, self.win, self.trigger)
 
             stimuli = images[image_count]
             trial_type = "Stimuli"

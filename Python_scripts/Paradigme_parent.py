@@ -115,6 +115,7 @@ class Parente(ABC):
     def send_character(self, port, baud_rate):
         char = "t"
         try:
+            print(port)
             with serial.Serial(port=port, baudrate=baud_rate, timeout=1) as ser:
                 print(f"Connexion ouverte sur {port}. Envoi de '{char}'...")
                 #ser.write(char.encode()) #solution pour Ron à St-luc
@@ -144,6 +145,29 @@ class Parente(ABC):
         with open(filename_csv, mode='a', newline='', encoding='utf-8') as file1:
             csv_writer = csv.writer(file1, delimiter=';')
             csv_writer.writerow(rows)
+
+
+    def key_click_register (self, mouse, clicked, clock, onset, win, trigger):
+        key = "None"
+        clicked_time = "None"
+        button = mouse.getPressed()
+        keys = event.getKeys()
+        if any(button):
+            clicked_time = clock.getTime() - onset
+            print("Clic détecté à :", clicked_time, "secondes")
+            clicked = True
+            key = "click"
+        if keys:
+            if trigger in keys:
+                pass
+            elif "escape" in keys:
+                win.close()
+            else:
+                clicked_time = clock.getTime() - onset
+                print("Touche détecté à :", clicked_time, "secondes")
+                clicked = True
+                key = keys[0]
+        return clicked, key, clicked_time
     def float_to_csv(self, value):
         return str(value).replace('.', ',')
 

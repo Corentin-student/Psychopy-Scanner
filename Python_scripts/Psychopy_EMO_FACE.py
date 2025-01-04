@@ -126,25 +126,9 @@ class Emo_Face(Parente):
                 super().send_character(self.port,self.baudrate)
             onset = global_timer.getTime()
             while global_timer.getTime() < onset + self.stimuli_duration:
-                button = self.mouse.getPressed()
-                keys = event.getKeys()
                 if not clicked:
-                    if any(button):
-                        clicked_time = global_timer.getTime() - onset
-                        print("Clic détecté à :", clicked_time, "secondes")
-                        clicked = True
-                    if keys:
-                        if self.trigger in keys:
-                            pass
-                        elif "escape" in keys:
-                            self.win.close()
-                            break
-                        else:
-                            clicked_time = global_timer.getTime() - onset
-                            print("Touche détecté à :", clicked_time, "secondes")
-                            clicked = True
-                        event.getKeys()
-
+                    clicked, key, clicked_time = super().key_click_register(self.mouse, clicked, global_timer, onset,
+                                                                            self.win, self.trigger)
             click_times = clicked_time
             stimuli_file = images_files[image_stim_count]
             trial_type = "Stimuli"

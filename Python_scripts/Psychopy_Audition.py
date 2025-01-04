@@ -13,10 +13,10 @@ from Paradigme_parent import Parente
 
 class Audition(Parente):
     def __init__(self, duration, output, filepath, betweenstimuli, random, trigger, launching, hauteur,
-                 largeur, son, sigma):
+                 largeur, son, sigma, port, baudrate, activation):
         self.stimuli_duration = duration
         self.betweenstimuli = betweenstimuli
-        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_Audition'))
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'Input', 'Paradigme_Audition'))
         self.dossier_image = os.path.join(self.dossier, 'images')
         self.filepath = os.path.join(self.dossier, filepath)
         self.output = output
@@ -28,6 +28,8 @@ class Audition(Parente):
         self.trigger = trigger
         self.global_timer = core.Clock()
         pygame.mixer.init()
+        self.port = port
+        self.baudrate = baudrate
         self.reaction = "None"
         self.fs = 48000
         self.threshold = 1000
@@ -52,12 +54,14 @@ class Audition(Parente):
         self.image_gauche = visual.ImageStim(self.win, pos=(-0.5, 0))
         self.image_droite = visual.ImageStim(self.win, pos=(0.5, 0))
         self.random = random == "True"
+        self.activation = activation == "True"
         rect_width = largeur
         rect_height = hauteur
         self.rect = visual.Rect(self.win, width=rect_width, height=rect_height, fillColor='white', lineColor='white',
                                 units='pix')
         self.rect.pos = (self.win.size[0] / 2 - rect_width / 2, self.win.size[1] / 2 - rect_height / 2)
         event.globalKeys.add(key='escape', func=self.win.close)
+
 
     def reading(self, filename):
         image1 = []
@@ -131,6 +135,8 @@ class Audition(Parente):
             self.rect.draw()
             duration.draw()
             self.win.flip()
+            if self.activation:
+                super().send_character(self.port, self.baudrate)
         if droite == "ONEcouter":
             sound_path = os.path.join(self.dossier, self.sound)
             audio = pygame.mixer.Sound(sound_path)
@@ -153,7 +159,10 @@ class Audition(Parente):
             )
 
             image_stim.draw()
+            self.rect.draw()
             self.win.flip()
+            if x==0 and self.activation:
+                super().send_character(self.port, self.baudrate)
             core.wait(self.stimuli_duration/7)
         image_path = os.path.join(self.dossier_image, 'barre'+str(8)+'.png')
         image_stim = visual.ImageStim(
@@ -208,9 +217,11 @@ if __name__ == "__main__":
     parser.add_argument("--hauteur", type=float, required=True, help="hauteur du rectangle")
     parser.add_argument("--largeur", type=float, required=True, help="Largeur du rectangle")
     parser.add_argument('--trigger', type=str, required=False, help="caractère pour lancer le programme")
+    parser.add_argument('--port', type=str, required=False, help="Port")
+    parser.add_argument('--baudrate', type=int, required=False, help="Speed port")
 
 
     args = parser.parse_args()
     audition = Audition(args.duration, args.output_file, args.file, args.betweenstimuli,
                         args.random, args.trigger, args.launching, args.hauteur,
-                        args.largeur, args.asound, args.sigma).lancement()
+                        args.largeur, args.asound, args.sigma, args.port, args.baudrate, args.activation).lancement()
