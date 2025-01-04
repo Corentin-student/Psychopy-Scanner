@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     .then(response => response.json())
     .then(files => {
         const sidenav = document.querySelector('.sidenav');
-        sidenav.innerHTML = '<h2 class="h2-sidenav">Paradigme</h2>';  // Reset and keep the header
+        sidenav.innerHTML = '<h2 class="h2-sidenav">Paradigma</h2>';  // Reset and keep the header
 
         files.forEach(file => {
             const link = document.createElement('a');
@@ -42,7 +42,7 @@ function get_table(file_name){
                 <td>${item.Stimulus}</td>
                 <td>${item.Angle}</td>
                 <td>${item.Zoom}</td>
-                <td><button class="supress" onclick="removeRow(this)">Supprimer</button></td>
+                <td><button class="supress" onclick="removeRow(this)">Verwijderen</button></td>
             </tr>`;
 
             tableBody.innerHTML += row;
@@ -87,9 +87,27 @@ function submitPopup() {
     var input = document.getElementById('patientInput').value;
     document.getElementById('patientName').textContent = input; // Met à jour le nom du patient
     document.getElementById('popupOverlay').style.display = 'none'; // Ferme la pop-up
+    alert("okk?")
 }
+
+
+function submitPort(){
+    var baudrate = document.getElementById("baudrate").value;
+    var port = document.getElementById("port").value;
+    var realtrigger = document.getElementById("trigger").value;
+    document.getElementById("resultPort").textContent = port;
+    document.getElementById("resultBaudrate").textContent = baudrate;
+    document.getElementById("resultTrigger").textContent = realtrigger;
+    document.getElementById("popupSerial").style.display = 'none';
+}
+
+
 document.getElementById('openPopup').addEventListener('click', function() {
     openPopup('popupOverlay');
+});
+
+document.getElementById('serialport').addEventListener('click', function() {
+    openPopup('popupSerial');
 });
 
 function closePopup(popupId) {
@@ -121,6 +139,25 @@ function launching(){
     const instructions = document.getElementById("instruction_txt").textContent;
     const mot_fin = document.getElementById("end_txt").textContent;
     const output_file = document.getElementById('patientName').textContent;
+    const activation = document.getElementById("option1").checked;
+    const random = document.getElementById("random").checked;
+
+
+    let port = document.getElementById('resultPort').textContent.trim();
+    let baudrate = document.getElementById('resultBaudrate').textContent;
+    let trigger = document.getElementById('resultTrigger').textContent.trim();
+    let hauteur = document.getElementById('hauteur').value || '0';
+    let largeur = document.getElementById('largeur').value || '0';
+    if (data.length === 0){
+        Swal.fire({
+            title: 'Selecteer een paradigma dat ten minste één stimulus bevat',
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#4CAF50', // Couleur verte
+        });
+        return;
+    }
+
     fetch('/submit-table', {
         method: 'POST',
         headers: {
@@ -130,7 +167,15 @@ function launching(){
             data: data,
             instructions: instructions,
             mot_fin: mot_fin,
-            output_file: output_file
+            output_file: output_file,
+            activation: activation,
+            random: random,
+            baudrate: baudrate,
+            trigger: trigger,
+            hauteur: hauteur,
+            largeur: largeur,
+            port: port
+
 
         }) // Conversion directe du tableau en chaîne JSON
     })
@@ -141,4 +186,32 @@ function launching(){
         .catch((error) => {
             console.error('Error:', error);
         });
+
+    Swal.fire({
+        title: 'Je paradigma zal lanceren',
+        text: "als u geen instellingen bent vergeten",
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#4CAF50', // Couleur verte
+    });
 }
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleIcon = document.getElementById('lang-icon');
+    const langNL = document.getElementById('lang-nl');
+    const langFR = document.getElementById('lang-fr');
+
+
+    if (toggleIcon) {
+        toggleIcon.addEventListener('click', function () {
+            window.location.href = '/created_paradigmes';
+        });
+    }
+
+    if (langFR) {
+        langFR.addEventListener('click', function () {
+            window.location.href = '/created_paradigmes';
+        });
+    }
+})

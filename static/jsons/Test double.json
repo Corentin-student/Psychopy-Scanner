@@ -1,0 +1,22 @@
+{
+    "data": [
+        {
+            "Apparition": "0.000",
+            "Duree": "3.000",
+            "Type": "Image",
+            "Stimulus": "body4_static.jpeg",
+            "Angle": "50",
+            "Zoom": "50"
+        },
+        {
+            "Apparition": "0.000",
+            "Duree": "3.000",
+            "Type": "Enregistrement",
+            "Stimulus": "/",
+            "Angle": "/",
+            "Zoom": "/"
+        }
+    ],
+    "instructions": "fichier",
+    "mot_fin": "fichier"
+}

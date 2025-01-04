@@ -1,0 +1,22 @@
+{
+    "data": [
+        {
+            "Apparition": "0.000",
+            "Duree": "2.000",
+            "Type": "Image",
+            "Stimulus": "86.png",
+            "Angle": "50",
+            "Zoom": "50"
+        },
+        {
+            "Apparition": "2.000",
+            "Duree": "10.000",
+            "Type": "Image",
+            "Stimulus": "object_1.jpg",
+            "Angle": "50",
+            "Zoom": "50"
+        }
+    ],
+    "instructions": "instructions.txt",
+    "mot_fin": "instructions.txt"
+}
