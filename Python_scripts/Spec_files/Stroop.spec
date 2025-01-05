@@ -2,13 +2,13 @@
 
 
 a = Analysis(
-    ['Psychopy_Stroop.py'],
+    ['../Psychopy_Stroop.py'],
     pathex=[],
     binaries=[],
     datas=[
         ('C:\\Program Files\\PsychoPy\\Lib\\site-packages\\psychopy', 'psychopy'),
-        ('Paradigme_parent.py', '.'),
-        ('writtingprt.py', '.')
+        ('../Paradigme_parent.py', '.'),
+        ('../writtingprt.py', '.')
     ],
     hiddenimports=['numpy', 'platform', 'pkg_resources', 'six', 'pyglet', 'yaml', 'serial', 'serial.tools.list_ports', 'scipy'],
     hookspath=[],

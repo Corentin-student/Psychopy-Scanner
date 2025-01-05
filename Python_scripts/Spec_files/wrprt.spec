@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['writtingprt.py'],
+    ['../writtingprt.py'],
     pathex=[],
     binaries=[],
     datas=[('C:\\Program Files\\PsychoPy\\Lib\\site-packages\\psychopy', 'psychopy')],
