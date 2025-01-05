@@ -16,7 +16,7 @@ function PrimeParadigm() {
     location.href = '/';
 }
 
-function ajoutFichiers(){
+function addingFiles(){
     console.log("on regarde ce qui se passe")
     let instru = document.getElementById("fileinput-Instructions").value;
     let end = document.getElementById("fileinput-End").value;

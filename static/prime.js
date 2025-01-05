@@ -13,7 +13,7 @@ function changeMainContent(section) {
     }
 
     switch(section) {
-        case 'home':
+        case 'scrolling_word':
             newContent = `
                 <h2>Paradigme pour les mots défilants</h2>
                 <div class="input-group">
@@ -50,7 +50,7 @@ function changeMainContent(section) {
                 </div>
             `;
             break;
-        case 'prime':
+        case 'static_image':
             newContent = `
                 <h2>Paradigme pour les images statiques défilantes</h2>
                 <div class="input-group">
@@ -87,7 +87,7 @@ function changeMainContent(section) {
                 </div>
             `;
             break;
-        case 'contact':
+        case 'scrolling_video':
             newContent = `
                 <h2>Paradigme pour les stimuli vidéo</h2>
                 <div class="input-group">
@@ -125,7 +125,7 @@ function changeMainContent(section) {
             `;
             break;
 
-        case 'long_text':
+        case 'adjectif_pos_neg':
             newContent = `
                 <h2>Paradigme pour les adjectifs positifs/négatifs</h2>
                 <div class="input-group">
