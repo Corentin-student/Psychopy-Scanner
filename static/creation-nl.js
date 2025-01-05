@@ -1,10 +1,10 @@
 var Holes = {};
 
-function ouvrirOverlay(value) {
+function openPopup(value) {
     document.getElementById(value).style.display = "block"; // Affiche l'overlay
 }
 
-function fermerOverlay(value) {
+function closePopup(value) {
     document.getElementById(value).style.display = "none"; // Cache l'overlay
 }
 
@@ -327,10 +327,10 @@ function submitTable() {
 
     Holes = checkingHoles();
     if (Object.keys(Holes).length === 0) {
-        ouvrirOverlay("overlay-filename")
+        openPopup("overlay-filename")
     }
     else {
-        ouvrirOverlay("overlay-Holes")
+        openPopup("overlay-Holes")
     }
 }
 

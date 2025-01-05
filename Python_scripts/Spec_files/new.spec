@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['Psychopy_Audition.py'],
+    ['../Psychopy_Audition.py'],
     pathex=[],
     binaries=[],
     datas=[],

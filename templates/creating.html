@@ -25,7 +25,7 @@
         <div id="main-container" style="margin-left: 6%;">
             <div id="overlay-Instructions" class="overlay-index">
               <div class="overlay-content-index">
-                <span class="fermer" onclick="fermerOverlay('overlay-Instructions')">&times;</span>
+                <span class="fermer" onclick="closePopup('overlay-Instructions')">&times;</span>
                 <h2>Ajout d'Instructions au début du paradigme</h2>
                 <div style="display: flex; justify-content: center; align-items: center;">
                     <div class="input-group">
@@ -41,7 +41,7 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="ajoutFichiers(); fermerOverlay('overlay-Instructions')">Submit</button>
+                            <button class="submit" onclick="ajoutFichiers(); closePopup('overlay-Instructions')">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
             </div>
             <div id="overlay-Image" class="overlay-index">
               <div class="overlay-content-index overlay-image">
-                <span class="fermer" onclick="fermerOverlay('overlay-Image')">&times;</span>
+                <span class="fermer" onclick="closePopup('overlay-Image')">&times;</span>
                 <h2>Ajout d'une Image</h2>
                 <div style="display: flex; justify-content: center; align-items: center;">
                     <div class="input-group">
@@ -80,7 +80,7 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="submit('Image'); fermerOverlay('overlay-Image')">Submit</button>
+                            <button class="submit" onclick="submit('Image'); closePopup('overlay-Image')">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
             </div>
             <div id="overlay-Video" class="overlay-index">
               <div class="overlay-content-index overlay-video" style="width: 65%; margin-left: auto; margin-right: auto;">
-                <span class="fermer" onclick="fermerOverlay('overlay-Video')">&times;</span>
+                <span class="fermer" onclick="closePopup('overlay-Video')">&times;</span>
                 <h2>Ajout d'une Vidéo</h2>
                   <div style="display: flex; justify-content: center; align-items: center;">
                     <div class="input-group">
@@ -111,7 +111,7 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="submit('Video'); fermerOverlay('overlay-Video')">Submit</button>
+                            <button class="submit" onclick="submit('Video'); closePopup('overlay-Video')">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
             </div>
             <div id="overlay-Audio" class="overlay-index">
               <div class="overlay-content-index" style="width: 65%; margin-left: auto; margin-right: auto;">
-                <span class="fermer" onclick="fermerOverlay('overlay-Audio')">&times;</span>
+                <span class="fermer" onclick="closePopup('overlay-Audio')">&times;</span>
                 <h2>Ajout d'une Audio</h2>
                   <div style="display: flex; justify-content: center; align-items: center;">
                     <div class="input-group">
@@ -138,7 +138,7 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="submit('Audio'); fermerOverlay('overlay-Audio')">Submit</button>
+                            <button class="submit" onclick="submit('Audio'); closePopup('overlay-Audio')">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -146,7 +146,7 @@
             </div>
             <div id="overlay-Enregistrement" class="overlay-index">
               <div class="overlay-content-index" style="width: 55%; margin-left: auto; margin-right: auto;">
-                <span class="fermer" onclick="fermerOverlay('overlay-Enregistrement')">&times;</span>
+                <span class="fermer" onclick="closePopup('overlay-Enregistrement')">&times;</span>
                 <h2>Ajout d'un Enregistrement</h2>
                   <div style="display: flex; justify-content: center; align-items: center;">
                     <div class="input-group">
@@ -160,7 +160,7 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="submit('Enregistrement'); fermerOverlay('overlay-Enregistrement')">Submit</button>
+                            <button class="submit" onclick="submit('Enregistrement'); closePopup('overlay-Enregistrement')">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -168,7 +168,7 @@
             </div>
             <div id="overlay-Fixation" class="overlay-index">
               <div class="overlay-content-index" style="width: 55%; margin-left: auto; margin-right: auto;">
-                <span class="fermer" onclick="fermerOverlay('overlay-Fixation')">&times;</span>
+                <span class="fermer" onclick="closePopup('overlay-Fixation')">&times;</span>
                 <h2>Ajout d'une croix de Fixation</h2>
                   <div style="display: flex; justify-content: center; align-items: center;">
                     <div class="input-group">
@@ -182,7 +182,7 @@
                         </div>
                         <div class="input-container">
                             <h3></h3>
-                            <button class="submit" onclick="fixation() ;fermerOverlay('overlay-Fixation')">Submit</button>
+                            <button class="submit" onclick="fixation() ;closePopup('overlay-Fixation')">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -190,7 +190,7 @@
             </div>
             <div id="overlay-Holes" class="overlay-index">
               <div class="overlay-content-index" style="width: 55%; margin-left: auto; margin-right: auto;">
-                <span class="fermer" onclick="fermerOverlay('overlay-Fixation')">&times;</span>
+                <span class="fermer" onclick="closePopup('overlay-Fixation')">&times;</span>
                 <h2>Présence de trous dans la séquence, voulez vous ajouter des croix de fixation à ces endroits?</h2>
                   <div style="display: flex; justify-content: center; align-items: center;">
                     <div class="input-group">
@@ -208,23 +208,23 @@
             </div>
             <div id="overlay-filename" class="overlay-index">
               <div class="overlay-content-index" style="width: 55%; margin-left: auto; margin-right: auto;">
-                <span class="fermer" onclick="fermerOverlay('overlay-filename')">&times;</span>
+                <span class="fermer" onclick="closePopup('overlay-filename')">&times;</span>
                 <h2>Veuillez entrer un nom pour enregistrer le paradigme</h2>
                   <div style="display: flex; justify-content: center; align-items: center;">
                       <input type="text" id="paradigme_name" placeholder="File Name">
-                      <button class="button-filename" onclick="SubmitParadigme(); fermerOverlay('overlay-filename')">Submit</button>
+                      <button class="button-filename" onclick="SubmitParadigme(); closePopup('overlay-filename')">Submit</button>
                 </div>
               </div>
             </div>
             <h2></h2>
             <div class="input-group">
                 <div class="suite-bouttons">
-                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Instructions')">Ajout d'instructions</button>
-                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Image')">Ajout d'une image</button>
-                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Video')">Ajout d'une vidéo</button>
-                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Audio')">Ajout d'un audio</button>
-                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Enregistrement')">Enregistrement de la voix</button>
-                    <button class="boutton-de-la-suite" onclick="ouvrirOverlay('overlay-Fixation')">Croix de Fixation</button>
+                    <button class="boutton-de-la-suite" onclick="openPopup('overlay-Instructions')">Ajout d'instructions</button>
+                    <button class="boutton-de-la-suite" onclick="openPopup('overlay-Image')">Ajout d'une image</button>
+                    <button class="boutton-de-la-suite" onclick="openPopup('overlay-Video')">Ajout d'une vidéo</button>
+                    <button class="boutton-de-la-suite" onclick="openPopup('overlay-Audio')">Ajout d'un audio</button>
+                    <button class="boutton-de-la-suite" onclick="openPopup('overlay-Enregistrement')">Enregistrement de la voix</button>
+                    <button class="boutton-de-la-suite" onclick="openPopup('overlay-Fixation')">Croix de Fixation</button>
                 </div>
             </div>
 
