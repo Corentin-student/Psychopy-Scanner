@@ -42,7 +42,7 @@ function get_table(file_name){
                 <td>${item.Stimulus}</td>
                 <td>${item.Angle}</td>
                 <td>${item.Zoom}</td>
-                <td><button class="supress" onclick="removeRow(this)">Verwijderen</button></td>
+                <td><button class="supress" onclick="handleCloseClick(this)">Verwijderen</button></td>
             </tr>`;
 
             tableBody.innerHTML += row;
@@ -61,6 +61,29 @@ function get_table(file_name){
     });
 }
 
+function handleCloseClick(button) { //La fonction sert à enlever une row et mettre à jour les valeurs d'onsets
+    const row = button.closest("tr");
+    if (row.classList.contains("highlight")) { // On supprime juste la row si c'est un stimulus en concurrence
+        row.remove();
+        highlightDuplicateTimings();
+        return;
+    }
+    const tableBody = document.querySelector("#table-body");
+    const rows = Array.from(tableBody.querySelectorAll("tr"));
+    const rowIndex = rows.indexOf(row);
+    if (rowIndex === -1) return;
+    const durationCell = row.cells[1];
+    const duration = parseFloat(durationCell.textContent.slice(0, -1));
+    row.remove();
+    for (let i = rowIndex; i < rows.length; i++) {
+        const currentRow = rows[i];
+        const onsetCell = currentRow.cells[0];
+        const currentOnset = parseFloat(onsetCell.textContent.slice(0, -1));
+        const newOnset = currentOnset - duration;
+        onsetCell.textContent = `${newOnset.toFixed(3)}s`;
+    }
+}
+
 function highlightDuplicateTimings() {
     const rows = document.querySelectorAll("#table-body tr");
     const timingCounts = {};
@@ -76,6 +99,9 @@ function highlightDuplicateTimings() {
     Object.values(timingCounts).forEach(group => {
         if (group.length > 1) {
             group.forEach(row => row.classList.add("highlight"));
+        }
+        else {
+            group.forEach(row => row.classList.remove("highlight"));
         }
     });
 }
