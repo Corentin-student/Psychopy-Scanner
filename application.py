@@ -8,7 +8,7 @@ import webbrowser
 from waitress import serve
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads/'
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'uploads')
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
@@ -633,6 +633,6 @@ def keep_datas():
 
 
 if __name__ == '__main__':
-    #webbrowser.open('http://127.0.0.1:5000')
-    app.run(debug=True) #si jamais on veut voir le debugger alors il faut mettre les 2 autres lignes en commentaires
-    #serve(app, host='0.0.0.0', port=5000)
+    webbrowser.open('http://127.0.0.1:5000')
+    #app.run(debug=True) #si jamais on veut voir le debugger alors il faut mettre les 2 autres lignes en commentaires
+    serve(app, host='0.0.0.0', port=5000)

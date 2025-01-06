@@ -12,6 +12,7 @@ pyserial==3.5
 pyo==1.0.5
 pyinstaller==6.10.0
 pyglet==1.4.11
+pygame==2.6.0
 pydub==0.25.1
 PyAudio==0.2.14
 pydub==0.25.1
