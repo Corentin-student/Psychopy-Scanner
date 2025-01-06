@@ -1,0 +1,14 @@
+{
+    "data": [
+        {
+            "Apparition": "0.000",
+            "Duree": "3.000",
+            "Type": "Image",
+            "Stimulus": "barre0.png",
+            "Angle": "50",
+            "Zoom": "50"
+        }
+    ],
+    "instructions": "instructions.txt",
+    "mot_fin": "Instructie.txt"
+}

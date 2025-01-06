@@ -1,0 +1,5 @@
+grøn, yellow
+rød, blue
+gul, red
+blå, white
+hvid, green
