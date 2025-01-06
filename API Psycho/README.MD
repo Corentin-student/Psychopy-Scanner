@@ -19,12 +19,11 @@ Launching the application
 
 You can now run the command to launch the program: **python application.py** 
 
-Explaination of the Input Folder
+Input Folder
 -
 
-you can use it as an example to write your own paradigm files.
-But be careful, there are some files in there that must not be deleted or moved for the application to work properly.
-Here's the list of files and folders for each paradigm that must not be touched:
+Be careful, there are some files in the folder that must not be deleted or moved for the application to work properly.
+Here's the list of files and folders for each paradigm that must not be deleted:
 
 - **Cyberball:**
   - Folder : Banque_personnage
