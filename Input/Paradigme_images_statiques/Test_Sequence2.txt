@@ -1,0 +1,15 @@
+body19_static.jpeg, 0
+body6_scr_static.jpeg, 0
+face18_static.jpeg, 0
+object13_static.jpeg, 0
+body1_scr_static.jpeg, 0
+object6_static.jpeg, 0
+body4_static.jpeg, 0
+body18_static.jpeg, 0
+object20_scr_static.jpeg, 0
+object15_scr_static.jpeg, 0
+body20_scr_static.jpeg, 0
+object9_static.jpeg, 0
+object14_static.jpeg, 0
+body14_static.jpeg, 0
+object5_static.jpeg, 0
