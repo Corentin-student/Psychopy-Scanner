@@ -19,7 +19,7 @@ class voices(Parente):
             lineWidth=3,
             closeShape=False,
             lineColor="white",
-            units='height'  # Utilisation d'unités basées sur la hauteur de l'écran
+            units='height'
         )
         event.globalKeys.add(key='escape', func=self.win.close)
         self.mouse = event.Mouse(win=self.win)
