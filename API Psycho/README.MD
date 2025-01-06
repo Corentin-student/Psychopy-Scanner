@@ -10,32 +10,51 @@ Creating a virtual environment and install packages
 - Once this is done, issue this command to enter the virtual environment: **.\/.venv./Scripts/activate**
 - You can now run: **pip install -r requirements.txt**
 
-Once you've done all this, you've either encountered no problems or you've probably encountered a problem with dupky. To solve the problem, simply install Visual Studio Build Tools. Once this has been done on the Visual Build Tools application, simply install Development in a desktop environment with C++.
+Once you've done all this, you've either encountered no problems or you've probably encountered a problem with dupky. 
+To solve the problem, simply install Visual Studio Build Tools. Once this has been done on the Visual Build Tools application,
+simply install Development in a desktop environment with C++.
 
 You can then rerun the last command to install the missing packages.
 
 Transforming the application
 -
 
-In the Python_scripts/Spec_files/ folder, there's a file called toexecute.bat, in which you'll find everything you need to turn all your python files into executables. To do this, however, you'll need version 6.10.0 of Pyinstaller, which you should have installed with requirements.txt.
+In the Python_scripts/Spec_files/ folder, there's a file called toexecute.bat, in which you'll find everything you need 
+to turn all your python files into executables. To do this, however, you'll need version 6.10.0 of Pyinstaller, which 
+you should have installed with requirements.txt.
 
 
-In the Python_scripts/Spec_files/ folder, there's a file called toexecute.bat, in which you'll find everything you need to turn all your python files into executables. To do this, however, you'll need version 6.10.0 of Pyinstaller, which you should have installed with requirements.txt.
+In the Python_scripts/Spec_files/ folder, there's a file called toexecute.bat, in which you'll find everything you need 
+to turn all your python files into executables. To do this, however, you'll need version 6.10.0 of Pyinstaller, which 
+you should have installed with requirements.txt.
 
 
-Open the file toexecute.bat and replace every place where it says C:\Users\coren\AppData\LocalPackages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts\pyinstaller.exe with the path to the .exe version of Pyinstaller you've just installed.
+Open the file toexecute.bat and replace every place where it says C:\Users\coren\AppData\LocalPackages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts\pyinstaller.exe
+with the path to the .exe version of Pyinstaller you've just installed. You will also have to change the path of the 
+spec (i.e "C:\Users\coren\Documents\Memoire\Application\Application\API Psycho\Python_scripts\Spec_files\video.spec") 
+files to match the paths in your PC
 
 Once you've done this, you can run the toexecute.bat file and a series of command prompts will open to create an executable for each paradigm.
 
 When all the windows have finished running, you should end up with a dist folder in the Python_scripts/Spec_files/ folder.
 
-Inside you'll find folders for each paradigm. What you're going to do is take all the executables and put them in the same folder. Once you've done that, you can take the _internal folder from any of the paradigm folders and put it in the folder where you put the executable files.  To make sure that each paradigm can run properly, take the files from each _internal in the paradigm folders and put them in the _internal you put with the exe files (you can ignore the common files).
+Inside you'll find folders for each paradigm. What you're going to do is take all the executables and put them in the 
+same folder. Once you've done that, you can take the _internal folder from any of the paradigm folders and put it in 
+the folder where you put the executable files.  To make sure that each paradigm can run properly, take the files from
+each _internal in the paradigm folders and put them in the _internal you put with the exe files (you can ignore the
+common files).
 
-once this is done, you can copy a line from the toexecute.bat file and go to the API Psycho folder via a terminal. Once this is done, you can run the following command: Path\to\your\pyinstaller.exe app.spec replacing Path\to\your\pyinstaller.exe with the path to your Pyinstaller exe.
+once this is done, you can copy a line from the toexecute.bat file and go to the API Psycho folder via a terminal. Once
+this is done, you can run the following command: Path\to\your\pyinstaller.exe app.spec replacing Path\to\your\pyinstaller.exe
+with the path to your Pyinstaller exe.
 
-You'll get a dist folder containing an application folder with an application.exe file and an _internal folder. All that's left to do is reorganize everything and you'll have the application in portable format.
+You'll get a dist folder containing an application folder with an application.exe file and an _internal folder. 
+All that's left to do is reorganize everything and you'll have the application in portable format.
 
-To do this, create a folder containing application.exe and the _internal folder that went with it. Then you'll place the application's Input folder there and also create an Output_files folder. Then you'll create a folder called Python_scripts in which you'll put all the executable files for the paradigms and the _internal folder, which is made up of the _internal folders for each paradigm. 
+To do this, create a folder containing application.exe and the _internal folder that went with it. Then you'll place 
+the application's Input folder there and also create an Output_files folder. Then you'll create a folder called 
+Python_scripts in which you'll put all the executable files for the paradigms and the _internal folder, which is made up
+of the _internal folders for each paradigm. 
 
 
 
