@@ -77,7 +77,7 @@ class Emo_Face(Parente):
             lineWidth=3,
             closeShape=False,
             lineColor="white",
-            units='height'  # Utilisation d'unités basées sur la hauteur de l'écran
+            units='height'
         )
 
         images = []

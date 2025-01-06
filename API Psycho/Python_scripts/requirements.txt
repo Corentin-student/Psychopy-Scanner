@@ -1,5 +1,0 @@
-flask>=3.0.3
-pyserial>=3.5
-psychopy>=2024.2.1
-argparse>=1.1
-pyserial>=3.5

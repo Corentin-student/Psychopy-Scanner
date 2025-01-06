@@ -74,7 +74,7 @@ class static_image(Parente):
             lineWidth=3,
             closeShape=False,
             lineColor="white",
-            units='height'  # Utilisation d'unités basées sur la hauteur de l'écran
+            units='height'
         )
         stimulus_times = []  # Liste pour enregistrer la durée des stimuli
         stimulus_apparition=[] #Liste pour enregistrer le timing d'apparition des stimuli
