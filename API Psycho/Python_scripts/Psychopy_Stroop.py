@@ -36,7 +36,6 @@ class Colors(Parente):
         self.baudrate = baudrate
         self.trigger = trigger
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_Couleur'))
-        self.dossier_colors = os.path.join(self.dossier, 'colors')
 
         if activation == "True":
             self.activation = True

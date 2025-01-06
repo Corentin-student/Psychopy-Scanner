@@ -48,7 +48,6 @@ def list_json_files():
 
 @app.route('/prime')
 def prime():
-    print("")
     return render_template('prime.html')
 
 @app.route('/fr/prime')
@@ -81,7 +80,6 @@ def home():
 def submit_ia_audition():
     try:
         data = request.get_json()
-        print(data)
         subprocess.run([
             sys.executable, 'Python_scripts/IA_audition.py',
             '--file', data.get("filePath"),
@@ -586,7 +584,6 @@ def submit_audition():
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
         ], check = True)
-        print("working here?")
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -596,7 +593,6 @@ def submit_audition():
 @app.route('/submit-table', methods=['POST'])
 def submit_table():
     data = request.get_json()
-    print(data)
     stimuli = json.dumps(data.get("data"))
 
     subprocess.run([

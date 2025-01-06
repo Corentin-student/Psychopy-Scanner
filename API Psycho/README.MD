@@ -19,5 +19,55 @@ Launching the application
 
 You can now run the command to launch the program: **python application.py** 
 
-Creating the necessary Folders
+Explaination of the Input Folder
 -
+
+you can use it as an example to write your own paradigm files.
+But be careful, there are some files in there that must not be deleted or moved for the application to work properly.
+Here's the list of files and folders for each paradigm that must not be touched:
+
+- **Cyberball:**
+  - Folder : Banque_personnage
+  - File : Femme2.jpg
+  - File : Homme1.jpg
+  - File : Homme2.jpg
+  
+- **Positive/Negative adjectives:**
+  - File : entrainement.txt (this file can be modified but not deleted)
+
+- **Audition:**
+  - Folder : images
+
+- **Strooper (Folder "Paradigme_Couleur"):**
+  - there is no file or folder but to use it u need to put the word you want to show then a virgule and the color
+    in which you want the word to appear (in english)
+  
+- **Emo Face:**
+  - Folder : EMO_faces_list (you can add images)
+
+- **EMO Voices:**
+  - Folder : emo_voices (you can add audios)
+  - File : oreille.png
+
+- **IA Audition:**
+  - Folder : audios (you can add audios)
+
+- **IA Image:**
+  - Folder : images (you can add images)
+
+- **Static Images:**
+  - Folder : stim_static (you can add images)
+
+- **Localizer:**
+  - Folder : images (you can add images)
+
+- **Repetition Priming:**
+  - Folder : stim_static (you can add images)
+
+- **Scrolling videos:**
+  - Folder : new_stimuli (you can add images)
+
+How to use the application 
+-
+The link of a youtube video will be put here to explain how to use the application.
+But if you follow the above instructions, you shouldn't have any problems using the application.
