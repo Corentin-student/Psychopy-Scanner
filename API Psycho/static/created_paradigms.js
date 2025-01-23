@@ -109,7 +109,6 @@ function submitPopup() {
     var input = document.getElementById('patientInput').value;
     document.getElementById('patientName').textContent = input; // Met à jour le nom du patient
     document.getElementById('popupOverlay').style.display = 'none'; // Ferme la pop-up
-    alert("okk?")
 }
 
 
