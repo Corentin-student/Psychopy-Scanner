@@ -125,8 +125,9 @@ function submit(name) {
 
 function fillHoles(){
     for (const [key, value] of Object.entries(Holes)) {
+        var truevalue = value-key;
         document.getElementById("apparition-Fixation").value = key;
-        document.getElementById("duration-Fixation").value = value;
+        document.getElementById("duration-Fixation").value = truevalue;
         console.log(key, value);
         fixation();
     }
