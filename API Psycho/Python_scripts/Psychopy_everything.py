@@ -18,11 +18,11 @@ from multiprocessing.pool import ThreadPool
 class Psychopy_everything (Parente):
 
     def __init__(self, datas, launching_text, ending_text, output_file, hauteur, largeur, port, baudrate,
-                 trigger, activation, random):
+                 trigger, activation, random, background):
         self.win = visual.Window(
             size=(800, 600),
             fullscr=True,
-            color=[-0.042607843137254943, 0.0005215686274509665, -0.025607843137254943],
+            color=background,
             units="norm",
         )
         self.cross_stim = visual.ShapeStim(
@@ -376,6 +376,7 @@ if __name__ == "__main__":
     parser.add_argument("--data", type=str, required=True, help="")
     parser.add_argument("--instructions",  type=str, help="Chemin vers le fichier de mots", required=False)
     parser.add_argument("--mot_fin",  type=str, help="Chemin vers le fichier de mots", required=False)
+    parser.add_argument("--background",  type=str, help="Couleur de fond", required=False)
     parser.add_argument("--output_file", type=str, required=True, help="Nom du fichier d'output")
     parser.add_argument("--activation", type=str, required=True, help="Pour le boitier avec les EEG")
     parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
@@ -393,7 +394,7 @@ if __name__ == "__main__":
     data = json.loads(args.data)
     E = Psychopy_everything(data, args.instructions, args.mot_fin, args.output_file,
                             args.hauteur, args.largeur, args.port, args.baudrate,
-                            args.trigger, args.activation, args.random)
+                            args.trigger, args.activation, args.random, args.background)
     E.preprocess()
     E.lancement()
 

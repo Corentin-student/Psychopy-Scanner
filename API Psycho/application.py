@@ -594,12 +594,15 @@ def submit_audition():
 def submit_table():
     data = request.get_json()
     stimuli = json.dumps(data.get("data"))
+    print("ici")
+    print(data)
 
     subprocess.run([
         sys.executable, 'Python_scripts/Psychopy_everything.py',
         '--data', stimuli,
         '--instructions', data.get("instructions"),
         '--mot_fin', data.get("mot_fin"),
+        '--background', data.get("background"),
         '--output_file', data.get("output_file"),
         '--activation', str(data.get("activation")),
         '--random', str(data.get("random")),
@@ -619,7 +622,8 @@ def keep_datas():
     output_data = {
         "data": datas,
         "instructions": data.get("instructions", ""),  # Valeur par défaut si non présente
-        "mot_fin": data.get("mot_fin", "")  # Valeur par défaut si non présente
+        "mot_fin": data.get("mot_fin", ""),  # Valeur par défaut si non présente
+        "background" : data.get("background", "")
     }
     with open(filename, "w") as json_file:
         json.dump(output_data, json_file, indent=4)
@@ -629,6 +633,6 @@ def keep_datas():
 
 
 if __name__ == '__main__':
-    webbrowser.open('http://127.0.0.1:5000')
-    #app.run(debug=True) #si jamais on veut voir le debugger alors il faut mettre les 2 autres lignes en commentaires
+    #webbrowser.open('http://127.0.0.1:5000')
+    app.run(debug=True) #si jamais on veut voir le debugger alors il faut mettre les 2 autres lignes en commentaires
     serve(app, host='0.0.0.0', port=5000)

@@ -48,8 +48,12 @@ function get_table(file_name){
             tableBody.innerHTML += row;
         });
         highlightDuplicateTimings();
+        if (jsonData.background === ""){
+            jsonData.background = "grey";
+        }
         document.getElementById("instruction_txt").textContent = jsonData.instructions;
         document.getElementById("end_txt").textContent = jsonData.mot_fin;
+        document.getElementById("background").textContent = jsonData.background;
         document.getElementById("visible-group").style.visibility = "visible";
     })
     .catch(error => {
@@ -159,10 +163,10 @@ function launching(){
     console.log(data);
     const instructions = document.getElementById("instruction_txt").textContent;
     const mot_fin = document.getElementById("end_txt").textContent;
+    let background = document.getElementById("background").textContent;
     const output_file = document.getElementById('patientName').textContent;
     const activation = document.getElementById("option1").checked;
     const random = document.getElementById("random").checked;
-
 
     let port = document.getElementById('resultPort').textContent.trim();
     let baudrate = document.getElementById('resultBaudrate').textContent;
@@ -188,6 +192,7 @@ function launching(){
             data: data,
             instructions: instructions,
             mot_fin: mot_fin,
+            background: background,
             output_file: output_file,
             activation: activation,
             random: random,

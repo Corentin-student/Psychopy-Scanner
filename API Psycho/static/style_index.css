@@ -93,7 +93,7 @@ input {
 
 .grand-cadre {
   width: 90%; /* Largeur du cadre */
-  height: 400px; /* Hauteur du cadre */
+  height: 360px; /* Hauteur du cadre */
   background-color: white; /* Couleur de fond blanche */
   border: 2px solid rgba(33, 114, 1, 0.41); /* Bordure noire de 2px */
   padding: 10px; /* Espace intérieur pour ne pas coller le texte à la bordure */
@@ -114,7 +114,7 @@ input {
 .en_dessous_cadre {
     position: absolute; /* Pour le positionner par rapport au conteneur parent */
     right: 8%;           /* Alignement à droite */
-    bottom: -20px;      /* Placer en dessous du cadre */
+    bottom: -8px;      /* Placer en dessous du cadre */
     padding: 10px 20px;
     background-color: #4CAF50;
     color: white;
@@ -123,12 +123,21 @@ input {
     cursor: pointer;
 }
 
+.cadre_creating{
+    bottom: -30px !important;
+}
+
+
 .random {
     position: absolute; /* Position absolue pour le placement précis */
     right: 16%; /* Décalage à droite pour se placer à côté du bouton */
     bottom: -20px; /* Ajustement vertical pour se positionner sous le cadre */
     border: none;
     border-radius: 5px;
+}
+
+.spacing{
+    bottom: -40px !important;
 }
 
 .header-right {

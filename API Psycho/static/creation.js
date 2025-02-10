@@ -319,6 +319,7 @@ function SubmitParadigme() {
     const instructions = document.getElementById("instruction_txt").textContent;
     const mot_fin = document.getElementById("end_txt").textContent;
     const filename = document.getElementById("paradigme_name").value;
+    const background = document.getElementById("background-color").value;
     fetch('/keep-datas', {
         method: 'POST',
         headers: {
@@ -328,7 +329,8 @@ function SubmitParadigme() {
             data: data,
             filename: filename,
             instructions: instructions,
-            mot_fin: mot_fin
+            mot_fin: mot_fin,
+            background: background
         }),
     })
         .then(response => response.json())
