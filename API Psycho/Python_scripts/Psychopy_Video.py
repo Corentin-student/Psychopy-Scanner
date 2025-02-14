@@ -15,7 +15,17 @@ class VideoPsycho(Parente):
                  hauteur, largeur, random, launching, sigma):
         self.duration = duration
         self.betweenstimuli = betweenstimuli
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output)
+        self.information = {}
+        self.information["Paradigme"] = "Video"
+        self.information["File"] = file
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.information["Sigma"] = sigma
+        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output, self.information)
 
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'Input', 'Paradigme_video'))
         self.dossier_files = os.path.join(self.dossier,'newstimuli')

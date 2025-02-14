@@ -10,7 +10,7 @@ import serial
 
 
 class Parente(ABC):
-    def preprocessing_tsv_csv(self, filename):
+    def preprocessing_tsv_csv(self, filename, informations=None):
         output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'Fichiers_output'))
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -24,6 +24,10 @@ class Parente(ABC):
                 run_number = max(runs) + 1
         filename = os.path.join(output_dir, f"{filename_prefix}_run{run_number}.tsv")
         filename_csv = os.path.join(output_dir, f"{filename_prefix}_csv_run{run_number}.csv")
+        filename_txt = os.path.join(output_dir, f"{filename_prefix}_run{run_number}.txt")
+        with open(filename_txt, mode='w', newline='') as file1:
+            for key, value in informations.items():
+                file1.write(f"{key} = {value}\n")
         return filename, filename_csv
 
     def preprocessing_tsv(self, filename):

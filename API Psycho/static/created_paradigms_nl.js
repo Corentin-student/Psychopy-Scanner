@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const link = document.createElement('a');
             link.href = "#";
             link.textContent = file;
-            link.onclick = function() { get_table(file); };
+            link.onclick = function() { get_table(file); setCurrentParadigm(file); };
             sidenav.appendChild(link);
         });
     })
@@ -24,6 +24,12 @@ function ParadigmCreation() {
 
 function PrimeParadigm() {
     location.href = '/';
+}
+
+var currentParadigm = "";
+
+function setCurrentParadigm(paradigmName) {
+    currentParadigm = paradigmName;
 }
 function get_table(file_name){
     const url = `/get-json-file?param_to_file=${file_name}`;
@@ -200,8 +206,8 @@ function launching(){
             trigger: trigger,
             hauteur: hauteur,
             largeur: largeur,
-            port: port
-
+            port: port,
+            paradigm: currentParadigm
 
         }) // Conversion directe du tableau en chaîne JSON
     })

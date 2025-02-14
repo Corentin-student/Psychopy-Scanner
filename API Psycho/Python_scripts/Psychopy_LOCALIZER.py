@@ -54,13 +54,24 @@ class Localizer(Parente):
             self.random = True
         else:
             self.random = False
-
         self.ordre=self.reading(os.path.join(self.dossier, self.file))
         self.real_groups = self.real_reading(os.path.join(self.dossier,self.file))
         self.copy_real_groups = copy.deepcopy(self.real_groups)
         rect_width = largeur
         rect_height = hauteur
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.information = {}
+        self.information["Paradigme"] = "LOCALIZER"
+        self.information["File"] = file
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.information["Number of Blocks"] = number_of_block
+        self.information["Between Blocks"] = betweenblocks
+        self.information["Number of Stimuli per Block"] = number_per_block
+        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output,self.information)
         self.rect = visual.Rect(self.win, width=rect_width, height=rect_height, fillColor='white', lineColor='white',
                                 units='pix')
         self.rect.pos = (self.win.size[0] / 2 - rect_width / 2, self.win.size[1] / 2 - rect_height / 2)

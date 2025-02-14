@@ -596,10 +596,10 @@ def submit_table():
     stimuli = json.dumps(data.get("data"))
     print("ici")
     print(data)
-
     subprocess.run([
         sys.executable, 'Python_scripts/Psychopy_everything.py',
         '--data', stimuli,
+        '--paradigm', data.get("paradigm"),
         '--instructions', data.get("instructions"),
         '--mot_fin', data.get("mot_fin"),
         '--background', data.get("background"),

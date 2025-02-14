@@ -20,7 +20,16 @@ class Audition(Parente):
         self.dossier_image = os.path.join(self.dossier, 'images')
         self.filepath = os.path.join(self.dossier, filepath)
         self.output = output
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.information = {}
+        self.information["Paradigme"] = "Audition"
+        self.information["File"] = filepath
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.information["Sigma"] = sigma
+        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output,self.information)
         self.dirname = self.filename[:self.filename.find(".tsv")]
         os.makedirs(self.dirname, exist_ok=True)
         self.record_index=0

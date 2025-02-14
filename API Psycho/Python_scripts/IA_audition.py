@@ -15,7 +15,6 @@ class IA_audition(Parente):
         self.launching = launching
         self.trigger = trigger
         output = output
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output)
         self.fs = 48000
         self.threshold = 1000
         self.win = visual.Window(
@@ -47,6 +46,18 @@ class IA_audition(Parente):
         self.afterfixation = afterfixation
         self.bip_duration = bip_duration
         self.sigma = sigma
+        self.information = {}
+        self.information["Pardigme"] = "IA_audition"
+        self.information["Stimuli File"] = self.file
+        self.information["Launching File"] = self.launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["After Fixation"] = afterfixation
+        self.information["Bip Duration"] = bip_duration
+        self.information["Sigma"] = sigma
+        self.information["Trigger"] = trigger
+        self.information["Random"] = random
+        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output, self.information)
         self.cross_stim = visual.ShapeStim(
             win=self.win,
             vertices=((0, -0.02), (0, 0.02), (0, 0), (-0.02, 0), (0.02, 0)),

@@ -23,7 +23,17 @@ class static_image(Parente):
         self.mouse = event.Mouse(win=self.win)
         event.globalKeys.add(key='escape', func=self.win.close)
         self.output = output
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output)
+        self.information = {}
+        self.information["Paradigme"] = "Images statiques"
+        self.information["File"] = file
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.information["Sigma"] = sigma
+        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output, self.information)
         self.port = port
         self.global_timer = core.Clock()
         self.baudrate = baudrate

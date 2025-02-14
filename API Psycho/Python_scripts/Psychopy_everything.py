@@ -18,7 +18,7 @@ from multiprocessing.pool import ThreadPool
 class Psychopy_everything (Parente):
 
     def __init__(self, datas, launching_text, ending_text, output_file, hauteur, largeur, port, baudrate,
-                 trigger, activation, random, background):
+                 trigger, activation, random, background, paradigm):
         self.win = visual.Window(
             size=(800, 600),
             fullscr=True,
@@ -57,7 +57,11 @@ class Psychopy_everything (Parente):
         self.launching = launching_text
         self.ending_text = ending_text
         self.output_file = output_file
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output_file)
+        self.information = {}
+        self.information["Paradigme"] = paradigm
+        self.information["Launching File"] = launching_text
+        self.information["Ending File"] = ending_text
+        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output_file, self.information)
         self.dirname = self.filename[:self.filename.find(".tsv")]
         os.makedirs(self.dirname, exist_ok=True)
         self.record_index = 0
@@ -374,6 +378,7 @@ class Psychopy_everything (Parente):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")
     parser.add_argument("--data", type=str, required=True, help="")
+    parser.add_argument("--paradigm", type=str, required=True, help="Nom du paradigme")
     parser.add_argument("--instructions",  type=str, help="Chemin vers le fichier de mots", required=False)
     parser.add_argument("--mot_fin",  type=str, help="Chemin vers le fichier de mots", required=False)
     parser.add_argument("--background",  type=str, help="Couleur de fond", required=False)
@@ -394,7 +399,7 @@ if __name__ == "__main__":
     data = json.loads(args.data)
     E = Psychopy_everything(data, args.instructions, args.mot_fin, args.output_file,
                             args.hauteur, args.largeur, args.port, args.baudrate,
-                            args.trigger, args.activation, args.random, args.background)
+                            args.trigger, args.activation, args.random, args.background, args.paradigm)
     E.preprocess()
     E.lancement()
 

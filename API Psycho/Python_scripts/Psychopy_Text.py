@@ -23,7 +23,15 @@ class PsychoPyParadigm(Parente):
         self.fixation = fixation
         self.baudrate = baudrate
         self.trigger = trigger
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.information = {}
+        self.information["Paradigme"] = "Text"
+        self.information["File"] = file
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output, self.information)
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_mots'))
         self.win = visual.Window(size=(800, 600), fullscr=True, color=[-1, -1, -1], units="norm")
         self.win.winHandle.activate()

@@ -30,7 +30,17 @@ class Emo_Face(Parente):
         self.trigger = trigger
         self.launching = launching
         self.sigma = sigma
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.information = {}
+        self.information["Paradigme"] = "EMO_FACE"
+        self.information["File"] = self.filepath
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.information["Sigma"] = sigma
+        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output, self.information)
         self.win = visual.Window(size=(800, 600), fullscr=True, units="norm")
         self.win.winHandle.activate()
         if activation == "True":

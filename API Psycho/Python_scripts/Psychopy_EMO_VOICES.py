@@ -35,6 +35,14 @@ class voices(Parente):
         self.trial_type=[]
         self.stim_file=[]
         self.reaction = []
+        self.information = {}
+        self.information["Paradigme"] = "EMO_VOICES"
+        self.information["File"] = file
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_EMO_VOICES'))
         self.dossier_files = os.path.join(self.dossier, 'emo_voices')
         self.port = port
@@ -45,7 +53,7 @@ class voices(Parente):
         )
         self.baudrate = baudrate
         self.trigger = trigger
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output, self.information)
         if activation == "True":
             self.activation = True
         else:

@@ -20,7 +20,16 @@ class IA_image(Parente):
         self.zoom = zoom
         self.duration = duration
         self.betweenstimuli = betweenstimuli
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output)
+        self.information = {}
+        self.information["Paradigme"] = "IA_image"
+        self.information["File"] = self.file
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output, self.information)
         self.win = visual.Window(
             size=(800, 600),
             fullscr=True,
