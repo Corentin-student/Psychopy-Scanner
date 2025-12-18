@@ -291,4 +291,3 @@ if __name__ == "__main__":
     C=launch_cyberball(args.premiere_phase,args.transition,args.exclusion,args.minimum,args.maximum,
                        args.patient_name, args.filePath, args.launching, args.trigger)
     C.lancement()
-

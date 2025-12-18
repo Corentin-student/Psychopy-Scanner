@@ -22,7 +22,7 @@ class Psychopy_everything (Parente):
         self.win = visual.Window(
             size=(800, 600),
             fullscr=True,
-            color=background,
+            #color=background,
             units="norm",
         )
         self.cross_stim = visual.ShapeStim(
@@ -61,7 +61,7 @@ class Psychopy_everything (Parente):
         self.information["Paradigme"] = paradigm
         self.information["Launching File"] = launching_text
         self.information["Ending File"] = ending_text
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output_file, self.information)
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output_file, self.information)
         self.dirname = self.filename[:self.filename.find(".tsv")]
         os.makedirs(self.dirname, exist_ok=True)
         self.record_index = 0
@@ -283,6 +283,8 @@ class Psychopy_everything (Parente):
         texts = super().inputs_texts(os.path.join(self.dossier,self.launching))
         super().launching_texts(self.win, texts,self.trigger)
         super().wait_for_trigger(self.trigger)
+        super().ajouter_date_dans_fichier(self.filename_txt)
+        self.global_timer.reset()
         for x in self.all:
             nbr = self.all[x].count(",")
             if nbr == 0:
@@ -402,4 +404,3 @@ if __name__ == "__main__":
                             args.trigger, args.activation, args.random, args.background, args.paradigm)
     E.preprocess()
     E.lancement()
-

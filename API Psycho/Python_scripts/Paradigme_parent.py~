@@ -12,6 +12,8 @@ import serial
 locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
 class Parente(ABC):
     def preprocessing_tsv_csv(self, filename, informations=None):
+        now = datetime.now()
+        informations["Day"] = now.strftime("%d/%m/%Y %H:%M")
         output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'Fichiers_output'))
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)

@@ -15,6 +15,16 @@ class IA_audition(Parente):
         self.launching = launching
         self.trigger = trigger
         output = output
+        self.information = {}
+        self.information["Paradigme"] = "IA_Audition"
+        self.information["File"] = file
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.information["Sigma"] = sigma
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(output, self.information)
         self.fs = 48000
         self.threshold = 1000
         self.win = visual.Window(
@@ -46,18 +56,6 @@ class IA_audition(Parente):
         self.afterfixation = afterfixation
         self.bip_duration = bip_duration
         self.sigma = sigma
-        self.information = {}
-        self.information["Pardigme"] = "IA_audition"
-        self.information["Stimuli File"] = self.file
-        self.information["Launching File"] = self.launching
-        self.information["Stimuli Duration"] = duration
-        self.information["Between Stimuli Duration"] = betweenstimuli
-        self.information["After Fixation"] = afterfixation
-        self.information["Bip Duration"] = bip_duration
-        self.information["Sigma"] = sigma
-        self.information["Trigger"] = trigger
-        self.information["Random"] = random
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output, self.information)
         self.cross_stim = visual.ShapeStim(
             win=self.win,
             vertices=((0, -0.02), (0, 0.02), (0, 0), (-0.02, 0), (0.02, 0)),
@@ -152,16 +150,18 @@ class IA_audition(Parente):
         self.sounds = self.reading(os.path.join(self.dossier, self.file))
         if self.random:
             random.shuffle(self.sounds)
-        self.global_timer.reset()
         texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger)
         super().wait_for_trigger(self.trigger)
+        super().ajouter_date_dans_fichier(self.filename_txt)
+        self.global_timer = core.Clock()
         self.cross_stim.draw()
         self.win.flip()
         onset = self.global_timer.getTime()
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(onset), "Croix de Fixation", "None", "None", "None"])
         while self.global_timer.getTime() < onset + 12:
             pass
-        self.global_timer.reset()
         for x in range(len(self.sounds)):
             self.une_boucle(self.sounds[x])
         onset = self.global_timer.getTime()

@@ -1,3 +1,6 @@
+import random
+
+from psychopy.colors import Color
 import pandas as pd
 import random
 

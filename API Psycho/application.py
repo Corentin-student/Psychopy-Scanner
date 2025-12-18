@@ -98,7 +98,6 @@ def submit_ia_audition():
             '--port', data.get("port"),
             '--baudrate', str(data.get("baudrate"))
 
-
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
@@ -167,7 +166,7 @@ def submit_text():
             '--largeur', largeur,
             '--output_file', output_file,
             '--zoom', zoom
-        ], check = True)
+        ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -283,7 +282,7 @@ def submit_emo_faces():
             '--largeur', largeur,
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
-        ], check = True)
+        ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -328,7 +327,7 @@ def submit_adjectifs():
             '--per_block', per_block,
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
-        ], check = True)
+        ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -371,7 +370,7 @@ def submit_stroop():
             '--choice', choice,
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
-        ], check = True)
+        ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -416,7 +415,7 @@ def submit_localizer():
             '--betweenstimuli', betweenstimuli,
             '--betweenblocks', betweenblocks,
             '--output_file', output_file,
-        ], check = True)
+        ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -459,7 +458,7 @@ def submit_priming():
             '--betweenstimuli', betweenstimuli,
             '--betweenblocks', betweenblocks,
             '--output_file', output_file,
-        ], check = True)
+        ], check=True)
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
@@ -499,7 +498,7 @@ def submit_images():
             '--output_file', output_file,
             '--betweenstimuli', betweenstimuli,
             '--zoom', zoom
-        ], check = True)
+        ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -540,7 +539,7 @@ def submit_videos():
             '--largeur', largeur,
             '--betweenstimuli', betweenstimuli,
             '--zoom', zoom
-        ], check = True)
+        ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -583,7 +582,7 @@ def submit_audition():
             '--sigma', sigma,
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
-        ], check = True)
+        ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
@@ -611,7 +610,7 @@ def submit_table():
         '--largeur', data.get("largeur"),
         '--port', data.get("port"),
         '--baudrate', str(data.get("baudrate"))
-    ], check= True)
+    ], check=True)
     return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
 
 @app.route('/keep-datas', methods=['POST'])

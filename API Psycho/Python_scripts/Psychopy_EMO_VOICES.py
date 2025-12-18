@@ -53,7 +53,7 @@ class voices(Parente):
         )
         self.baudrate = baudrate
         self.trigger = trigger
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output, self.information)
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output, self.information)
         if activation == "True":
             self.activation = True
         else:
@@ -91,6 +91,7 @@ class voices(Parente):
         if self.random:
             random.shuffle(self.voices)
         super().wait_for_trigger(self.trigger)
+        super().ajouter_date_dans_fichier(self.filename_txt)
         self.global_timer.reset()
         for x in self.voices:
             custom_sound = sound.Sound(os.path.join(self.dossier_files, x))
@@ -157,4 +158,3 @@ if __name__ == "__main__":
     paradigm = voices(args.duration, args.betweenstimuli, args.file, args.output_file, args.port, args.baudrate,
                       args.trigger, args.activation, args.hauteur, args.largeur, args.random, args.launching)
     paradigm.lancement()
-

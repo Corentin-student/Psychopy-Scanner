@@ -19,7 +19,7 @@ pydub==0.25.1
 psychtoolbox==3.0.19.0
 psychopy-sounddevice==0.0.1
 psychopy-pyo==0.0.1
-psychopy==2024.2.1
+#psychopy==2024.2.1
 pillow==10.4.0
 opencv-python==4.10.0.84
 pandas==2.2.2
@@ -32,3 +32,8 @@ imageio-ffmpeg==0.5.1
 imageio==2.34.2
 Flask==3.0.3
 ffpyplayer==4.5.1
+pyyalm
+pywin32
+json_tricks
+python-bidi
+arabic_reshaper

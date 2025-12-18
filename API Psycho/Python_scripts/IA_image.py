@@ -20,16 +20,18 @@ class IA_image(Parente):
         self.zoom = zoom
         self.duration = duration
         self.betweenstimuli = betweenstimuli
+        print(output)
         self.information = {}
         self.information["Paradigme"] = "IA_image"
-        self.information["File"] = self.file
+        self.information["File"] = file
         self.information["Launching File"] = launching
         self.information["Stimuli Duration"] = duration
         self.information["Between Stimuli Duration"] = betweenstimuli
         self.information["Zoom"] = zoom
         self.information["Random"] = random
         self.information["Trigger"] = trigger
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output, self.information)
+        self.information["Sigma"] = sigma
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(output, self.information)
         self.win = visual.Window(
             size=(800, 600),
             fullscr=True,
@@ -113,6 +115,7 @@ class IA_image(Parente):
         for image in images:
             prefix = image.split("_")[0]
             groups[prefix].append(image)
+
         return groups
 
     def ajout_where_nothing(self,images,groups,groupe):
@@ -143,8 +146,12 @@ class IA_image(Parente):
             groupe = random.choice(list(groups.keys()))
             if groupe == previous_groupe:
                 if len(groups)==1:
-                    images = self.ajout_where_nothing(images,groups,groupe)
-                    return images
+                    x = random.choice(groups[groupe])
+                    groups[groupe].remove(x)
+                    if len(groups[groupe]) == 0:
+                        groups.pop(groupe)
+                    images.append(x)
+                    previous_groupe = groupe
             else:
                 x = random.choice(groups[groupe])
                 groups[groupe].remove(x)
@@ -152,7 +159,6 @@ class IA_image(Parente):
                     groups.pop(groupe)
                 images.append(x)
                 previous_groupe = groupe
-
         return images
     def lancement(self):
         super().file_init(self.filename, self.filename_csv,
@@ -162,7 +168,9 @@ class IA_image(Parente):
             gr = self.group_by_prefix(self.images)
             self.images =  self.shuffle_groups(gr)
         images_stim = []
+        print(self.images)
         for x in self.images:
+
             image_path = os.path.join(self.dossier_image, x)
             image_stim = visual.ImageStim(
                 win=self.win,
@@ -176,15 +184,19 @@ class IA_image(Parente):
             base_width, base_height = image_stim.size  # Taille par défaut de l'image
             zoom_factor = 0.5 + (0.012 * self.zoom)  # Ajustement du facteur de zoom
             image_stim.size = (base_width * zoom_factor, base_height * zoom_factor)
+        print()
         texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger)
         super().wait_for_trigger(self.trigger)
+        super().ajouter_date_dans_fichier(self.filename_txt)
+        self.global_timer.reset()
         self.cross_stim.draw()
         self.win.flip()
         onset = self.global_timer.getTime()
+        super().write_tsv_csv(self.filename, self.filename_csv,
+                              [super().float_to_csv(onset), "Croix de fixation", "/"])
         while self.global_timer.getTime() < onset + 12:
             pass
-        self.global_timer.reset()
         self.une_boucle(images_stim)
         self.cross_stim.draw()
         self.win.flip()
