@@ -23,7 +23,17 @@ class Colors(Parente):
         self.sigma = sigma
         self.filepath = filepath
         self.output = output
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.information = {}
+        self.information["Paradigme"] = "Stroop"
+        self.information["File"] = filepath
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.information["Sigma"] = sigma
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output, self.information)
         self.dirname = self.filename[:self.filename.find(".tsv")]
         os.makedirs(self.dirname, exist_ok=True)
         self.threshold = 1000  # seuil pour détecter le début de la parole (à ajuster selon votre micro/environnement)
@@ -99,6 +109,9 @@ class Colors(Parente):
             except sr.RequestError as e:
                 print(f"Erreur lors de la demande à Google Speech Recognition; {e}")
                 return "None/pas reconnu"
+            except Exception as e:
+                print(f"Une erreur lié à recognize_google est survenu: {e}")
+                return "None/pas reconnu"
 
     def lancement(self):
         super().file_init(self.filename,self.filename_csv, ['onset', 'stimuli', 'trial_type', 'response','time_before_starting_to_answer'] )
@@ -115,6 +128,7 @@ class Colors(Parente):
         text_stim = visual.TextStim(self.win, wrapWidth=1.5, font="Arial", height=0.1 + (0.005*self.zoom))
         count=0
         super().wait_for_trigger(self.trigger)
+        super().ajouter_date_dans_fichier(self.filename_txt)
         self.global_timer.reset()
         for mot in words:
             self.cross_stim.draw()
@@ -195,4 +209,3 @@ if __name__ == "__main__":
     colors = Colors(args.duration, args.betweenstimuli, args.zoom, args.choice, args.file, args.output_file,
                     args.port, args.baudrate, args.trigger, args.activation,
                         args.hauteur, args.largeur, args.random, args.launching, args.sigma).lancement()
-

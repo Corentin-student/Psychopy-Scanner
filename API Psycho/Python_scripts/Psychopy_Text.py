@@ -23,7 +23,15 @@ class PsychoPyParadigm(Parente):
         self.fixation = fixation
         self.baudrate = baudrate
         self.trigger = trigger
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.information = {}
+        self.information["Paradigme"] = "Text"
+        self.information["File"] = file
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.filename, self.filename_csv, self.filename_txt = super().preprocessing_tsv_csv(self.output, self.information)
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_mots'))
         self.win = visual.Window(size=(800, 600), fullscr=True, color=[-1, -1, -1], units="norm")
         self.win.winHandle.activate()
@@ -45,6 +53,7 @@ class PsychoPyParadigm(Parente):
             self.random = False
 
         self.rect_width = largeur
+        print(self.rect_width)
         self.rect_height = hauteur
 
 
@@ -71,10 +80,12 @@ class PsychoPyParadigm(Parente):
 
 
     def words_psychopy(self):
-        self.rect = visual.Rect(self.win, width=self.rect_width, height=self.rect_height, fillColor='white',
-                                lineColor='white')
-        self.rect.pos = (self.win.size[0] / 2 - self.rect_width / 2, self.win.size[1] / 2 - self.rect_height / 2)
+        self.rect = visual.Rect(self.win, width=self.rect_width, height=self.rect_height,
+                           fillColor='white', lineColor='white', units='pix')
+        pos_x = self.win.size[0] / 2 - self.rect_width / 2  # Vers la droite
+        pos_y = self.win.size[1] / 2 - self.rect_height / 2  # Vers le haut
         event.globalKeys.add(key='escape', func=self.win.close)
+        self.rect.pos = (pos_x, pos_y)
         texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts,self.trigger)
         super().wait_for_trigger(self.trigger)

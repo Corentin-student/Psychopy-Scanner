@@ -1,0 +1,1 @@
+start "Compilation Image" cmd /c C:\Users\coren\AppData\Roaming\Python\Python310\Scripts\pyinstaller.exe "C:\Users\coren\Documents\Memoire\Application\Application\API Psycho\Python_scripts\Spec_files\EMO_FACE.spec"

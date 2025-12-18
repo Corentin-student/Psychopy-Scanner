@@ -46,7 +46,19 @@ class Adjectifs(Parente):
         self.baudrate = baudrate
         self.trigger = trigger
         self.global_timer = core.Clock()
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(output)
+        self.information = {}
+        self.information["Paradigme"] = "Adjectifs"
+        self.information["File"] = filepath
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Blocks"] = blocks
+        self.information["Entrainement"] = entrainement
+        self.information["Stimulus per blocks"] = per_block
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(output, self.information)
 
         if activation == "True":
             self.activation = True
@@ -125,6 +137,7 @@ class Adjectifs(Parente):
         self.win.flip()
         super().proper_waitkey(self.trigger)
         super().wait_for_trigger(self.trigger)
+        super().ajouter_date_dans_fichier(self.filename_txt)
         self.global_timer.reset()
 
         self.blocks()
@@ -369,5 +382,4 @@ if __name__ == "__main__":
                         args.hauteur, args.largeur, args.random, args.launching)
     paradigm.lancement()
     paradigm.fin()
-
 

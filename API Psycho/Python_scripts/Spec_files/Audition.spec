@@ -1,12 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
-
+import sys
+sys.setrecursionlimit(sys.getrecursionlimit() * 5)
 
 a = Analysis(
     ['../Psychopy_Audition.py'],
     pathex=[],
     binaries=[],
     datas=[
-        ('C:\\Program Files\\PsychoPy\\Lib\\site-packages\\psychopy', 'psychopy'),
+        ('C:\\Users\\coren\\AppData\\Roaming\\Python\\Python310\\site-packages\\psychopy', 'psychopy'),
         ('../Paradigme_parent.py', '.'),
         ('../writtingprt.py', '.')
     ],
@@ -14,7 +15,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=['torch', 'torchvision', 'torchaudio', 'torch.utils.tensorboard'],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=None,

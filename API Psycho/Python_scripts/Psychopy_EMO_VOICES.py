@@ -19,7 +19,7 @@ class voices(Parente):
             lineWidth=3,
             closeShape=False,
             lineColor="white",
-            units='height'
+            units='height'  # Utilisation d'unités basées sur la hauteur de l'écran
         )
         event.globalKeys.add(key='escape', func=self.win.close)
         self.mouse = event.Mouse(win=self.win)
@@ -35,6 +35,14 @@ class voices(Parente):
         self.trial_type=[]
         self.stim_file=[]
         self.reaction = []
+        self.information = {}
+        self.information["Paradigme"] = "EMO_VOICES"
+        self.information["File"] = file
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_EMO_VOICES'))
         self.dossier_files = os.path.join(self.dossier, 'emo_voices')
         self.port = port
@@ -45,7 +53,7 @@ class voices(Parente):
         )
         self.baudrate = baudrate
         self.trigger = trigger
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output, self.information)
         if activation == "True":
             self.activation = True
         else:
@@ -83,6 +91,7 @@ class voices(Parente):
         if self.random:
             random.shuffle(self.voices)
         super().wait_for_trigger(self.trigger)
+        super().ajouter_date_dans_fichier(self.filename_txt)
         self.global_timer.reset()
         for x in self.voices:
             custom_sound = sound.Sound(os.path.join(self.dossier_files, x))
@@ -149,4 +158,3 @@ if __name__ == "__main__":
     paradigm = voices(args.duration, args.betweenstimuli, args.file, args.output_file, args.port, args.baudrate,
                       args.trigger, args.activation, args.hauteur, args.largeur, args.random, args.launching)
     paradigm.lancement()
-

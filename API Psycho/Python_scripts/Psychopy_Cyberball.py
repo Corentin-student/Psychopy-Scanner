@@ -95,6 +95,7 @@ class launch_cyberball(Parente) :
         self.text2.draw()
         self.text3.draw()
 
+# Animation de la balle du centre à self.image1, puis à self.image2
     def move_ball(self, ball, start_pos, end_pos, duration=2.0):
         steps = 60
         for i in range(steps):
@@ -290,4 +291,3 @@ if __name__ == "__main__":
     C=launch_cyberball(args.premiere_phase,args.transition,args.exclusion,args.minimum,args.maximum,
                        args.patient_name, args.filePath, args.launching, args.trigger)
     C.lancement()
-

@@ -30,7 +30,17 @@ class Emo_Face(Parente):
         self.trigger = trigger
         self.launching = launching
         self.sigma = sigma
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.information = {}
+        self.information["Paradigme"] = "EMO_FACE"
+        self.information["File"] = self.filepath
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.information["Sigma"] = sigma
+        self.filename, self.filename_csv, self.filename_txt = super().preprocessing_tsv_csv(self.output, self.information)
         self.win = visual.Window(size=(800, 600), fullscr=True, units="norm")
         self.win.winHandle.activate()
         if activation == "True":
@@ -77,7 +87,7 @@ class Emo_Face(Parente):
             lineWidth=3,
             closeShape=False,
             lineColor="white",
-            units='height'  # Utilisation d'unités basées sur la hauteur de l'écran
+            units='height'
         )
 
         images = []
@@ -101,6 +111,7 @@ class Emo_Face(Parente):
         texts = super().inputs_texts(os.path.join(self.dossier, self.launching))
         super().launching_texts(self.win, texts, self.trigger)
         super().wait_for_trigger(self.trigger)
+        super().ajouter_date_dans_fichier(self.filename_txt)
         global_timer = core.Clock()
         image_stim_count = 0
         for image_stim in images:
@@ -176,4 +187,3 @@ if __name__ == "__main__":
                         args.output_file, args.port, args.baudrate, args.trigger, args.activation,
                         args.hauteur, args.largeur, args.zoom, args.random, args.launching, args.sigma)
     paradigm.lancement()
-

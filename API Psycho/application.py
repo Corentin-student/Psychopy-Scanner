@@ -8,8 +8,8 @@ import webbrowser
 from waitress import serve
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads/'
-
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(__file__), 'uploads')
+print(app.config['UPLOAD_FOLDER'])
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 
@@ -81,7 +81,7 @@ def submit_ia_audition():
     try:
         data = request.get_json()
         subprocess.run([
-            'Python_scripts\\IA_audition.exe',
+            'Python_scripts/IA_audition.exe',
             '--file', data.get("filePath"),
             '--output_file', data.get("output_file"),
             '--duration', data.get("duration"),
@@ -97,6 +97,8 @@ def submit_ia_audition():
             '--largeur', data.get("largeur"),
             '--port', data.get("port"),
             '--baudrate', str(data.get("baudrate"))
+
+
         ], check=True)
 
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
@@ -109,7 +111,7 @@ def submit_ia_image():
     try:
         data = request.get_json()
         subprocess.run([
-            'Python_scripts\\IA_image.exe',
+            'Python_scripts/IA_image.exe',
             '--file', data.get("filePath"),
             '--output_file', data.get("output_file"),
             '--duration', data.get("duration"),
@@ -150,7 +152,7 @@ def submit_text():
         random = data.get('random')
         fixation = data.get('fixation')
         subprocess.run([
-            'Python_scripts\\Psychopy_Text.exe',
+            'Python_scripts/Psychopy_Text.exe',
             '--duration', duration,
             '--words', words,
             '--file', file,
@@ -189,7 +191,7 @@ def submit_emo_voice():
         trigger = data.get('trigger')
         random = data.get('random')
         subprocess.run([
-            'Python_scripts\\Psychopy_EMO_VOICES.exe',
+            'Python_scripts/Psychopy_EMO_VOICES.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -223,20 +225,22 @@ def submit_cyberball():
         patient_name = data.get("patient_name")
         output_file = "useless"
         filePath = data.get("filePath")
+
         subprocess.run([
             'powershell', '-Command', 'Start-Process',
-            'Python_scripts\\Psychopy_Cyberball.exe',
+            'Python_scripts\Psychopy_Cyberball.exe',
             '-ArgumentList',
-            f'"--premiere_phase", "{premiere_phase}", "--exclusion",'
-            f' "{exclusion}", "--transition", "{transition}", "--minimum", "{minimum}",'
+            f'"--premiere_phase", "{premiere_phase}", "--exclusion", "{exclusion}",'
+            f' "--transition", "{transition}", "--minimum", "{minimum}",'
             f' "--patient_name", "{patient_name}", "--launching", "{launching}",'
             f' "--maximum", "{maximum}", "--trigger", "{trigger}",'
             f' "--output_file", "{output_file}", "--filePath", "{filePath}"',
             '-Verb', 'RunAs'
-        ])
-    except subprocess.CalledProcessError as e:
-        print(f"Error: {e.stderr.decode('utf-8')}")
-    return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ], check=True)
+
+        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
 
 
 
@@ -262,7 +266,7 @@ def submit_emo_faces():
         random = data.get('random')
         sigma = data.get('sigma')
         subprocess.run([
-            'Python_scripts\\Psychopy_EMO_FACE.exe',
+            'Python_scripts/Psychopy_EMO_FACE.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -305,7 +309,7 @@ def submit_adjectifs():
         entrainement = data.get('entrainement')
         per_block = data.get('per_block')
         subprocess.run([
-            'Python_scripts\\Psychopy_Adjectifs.exe',
+            'Python_scripts/Psychopy_Adjectifs.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -349,7 +353,7 @@ def submit_stroop():
         random = data.get('random')
         sigma = data.get('sigma')
         subprocess.run([
-            'Python_scripts\\Psychopy_Stroop.exe',
+            'Python_scripts/Psychopy_Stroop.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -393,7 +397,8 @@ def submit_localizer():
         random = data.get('random')
         file = data.get('fileName')
         subprocess.run([
-            'Python_scripts\\Psychopy_LOCALIZER.exe',
+            'Python_scripts/Psychopy_LOCALIZER.exe',
+            #sys.executable, 'Python_scripts/Psychopy_LOCALIZER.py',
             '--duration', duration,
             '--blocks', blocks,
             '--per_block', per_block,
@@ -437,7 +442,7 @@ def submit_priming():
         random = data.get('random')
         file = data.get('fileName')
         subprocess.run([
-            'Python_scripts\\Psychopy_Priming.exe',
+            'Python_scripts/Psychopy_Priming.exe',
             '--duration', duration,
             '--blocks', blocks,
             '--port', port,
@@ -478,7 +483,7 @@ def submit_images():
         random = data.get('random')
         sigma = data.get('sigma')
         subprocess.run([
-            'Python_scripts\\Psychopy_Image.exe',
+            'Python_scripts/Psychopy_Image.exe',
             '--duration', duration,
             '--file', file,
             '--port', port,
@@ -519,7 +524,7 @@ def submit_videos():
         random = data.get('random')
         sigma = data.get('sigma')
         subprocess.run([
-            'Python_scripts\\Psychopy_Video.exe',
+            'Python_scripts/Psychopy_Video.exe',
             '--duration', duration,
             '--file', file,
             '--output_file', output_file,
@@ -561,7 +566,7 @@ def submit_audition():
         asound = data.get('ASound')
         sigma = data.get('sigma')
         subprocess.run([
-            'Python_scripts\\Psychopy_Audition.exe',
+            'Python_scripts/Psychopy_Audition.exe',
             '--instruction', instruction,
             '--duration', duration,
             '--activation', str(activation),
@@ -588,12 +593,15 @@ def submit_audition():
 def submit_table():
     data = request.get_json()
     stimuli = json.dumps(data.get("data"))
-
+    print("ici")
+    print(data)
     subprocess.run([
-        'Python_scripts\\Psychopy_everything.exe',
+        'Python_scripts/Psychopy_everything.exe',
         '--data', stimuli,
+        '--paradigm', data.get("paradigm"),
         '--instructions', data.get("instructions"),
         '--mot_fin', data.get("mot_fin"),
+        '--background', data.get("background"),
         '--output_file', data.get("output_file"),
         '--activation', str(data.get("activation")),
         '--random', str(data.get("random")),
@@ -613,7 +621,8 @@ def keep_datas():
     output_data = {
         "data": datas,
         "instructions": data.get("instructions", ""),  # Valeur par défaut si non présente
-        "mot_fin": data.get("mot_fin", "")  # Valeur par défaut si non présente
+        "mot_fin": data.get("mot_fin", ""),  # Valeur par défaut si non présente
+        "background" : data.get("background", "")
     }
     with open(filename, "w") as json_file:
         json.dump(output_data, json_file, indent=4)

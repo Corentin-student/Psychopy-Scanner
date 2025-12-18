@@ -30,7 +30,18 @@ class Priming(Parente):
         self.number_of_blocks = number_of_block
         self.betweenblocks= betweenblocks
         self.output = output
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output)
+        self.information = {}
+        self.information["Paradigme"] = "Priming"
+        self.information["File"] = file
+        self.information["Launching File"] = launching
+        self.information["Stimuli Duration"] = duration
+        self.information["Between Stimuli Duration"] = betweenstimuli
+        self.information["Between Blocks Duration"] = betweenblocks
+        self.information["Number of Blocks"] = number_of_block
+        self.information["Zoom"] = zoom
+        self.information["Random"] = random
+        self.information["Trigger"] = trigger
+        self.filename, self.filename_csv, self.filename_txt = super().preprocessing_tsv_csv(self.output, self.information)
         self.launching = launching
         self.zoom = zoom
         self.file = file
@@ -88,6 +99,7 @@ class Priming(Parente):
                           ['onset', "reaction", "block_index" ,'stim_file','trial_type' ])
         super().launching_texts(self.win, texts, self.trigger)
         super().wait_for_trigger(self.trigger)
+        super().ajouter_date_dans_fichier(self.filename_txt)
         self.global_timer.reset()
         index_of_groups = len(self.real_groups) - 1
         for x in range (self.number_of_blocks):
@@ -117,14 +129,6 @@ class Priming(Parente):
         with open(filename, "r") as fichier:
             ma_liste = [line.strip() for line in fichier]
         return ma_liste
-    def write_tsv(self, onset, duration, block_type, file_stimuli, trial_type, filename="output.tsv"):
-        filename=super().preprocessing_tsv(filename)
-
-        with open(filename, mode='w', newline='') as file:
-            tsv_writer = csv.writer(file, delimiter='\t')
-            tsv_writer.writerow(['onset', "reaction", "block_index" ,'stim_file','trial_type' ])
-            for i in range(len(onset)):
-                tsv_writer.writerow([onset[i], duration[i], self.click_times[i], block_type[i], file_stimuli[i], trial_type[i]])
 
 
     def show_block(self, index, number_per_block):

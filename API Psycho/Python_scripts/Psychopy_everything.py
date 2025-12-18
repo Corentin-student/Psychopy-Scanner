@@ -18,11 +18,11 @@ from multiprocessing.pool import ThreadPool
 class Psychopy_everything (Parente):
 
     def __init__(self, datas, launching_text, ending_text, output_file, hauteur, largeur, port, baudrate,
-                 trigger, activation, random):
+                 trigger, activation, random, background, paradigm):
         self.win = visual.Window(
             size=(800, 600),
             fullscr=True,
-            color=[-0.042607843137254943, 0.0005215686274509665, -0.025607843137254943],
+            #color=background,
             units="norm",
         )
         self.cross_stim = visual.ShapeStim(
@@ -33,7 +33,7 @@ class Psychopy_everything (Parente):
             lineColor="white",
             units='height'
         )
-        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__),'..', '..', 'uploads'))
+        self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..' ,'..', 'uploads'))
         self.global_timer = core.Clock()
         pygame.mixer.init()
         self.fs = 44100
@@ -57,7 +57,11 @@ class Psychopy_everything (Parente):
         self.launching = launching_text
         self.ending_text = ending_text
         self.output_file = output_file
-        self.filename, self.filename_csv = super().preprocessing_tsv_csv(self.output_file)
+        self.information = {}
+        self.information["Paradigme"] = paradigm
+        self.information["Launching File"] = launching_text
+        self.information["Ending File"] = ending_text
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output_file, self.information)
         self.dirname = self.filename[:self.filename.find(".tsv")]
         os.makedirs(self.dirname, exist_ok=True)
         self.record_index = 0
@@ -279,6 +283,8 @@ class Psychopy_everything (Parente):
         texts = super().inputs_texts(os.path.join(self.dossier,self.launching))
         super().launching_texts(self.win, texts,self.trigger)
         super().wait_for_trigger(self.trigger)
+        super().ajouter_date_dans_fichier(self.filename_txt)
+        self.global_timer.reset()
         for x in self.all:
             nbr = self.all[x].count(",")
             if nbr == 0:
@@ -374,8 +380,10 @@ class Psychopy_everything (Parente):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Exécuter le paradigme Psychopy")
     parser.add_argument("--data", type=str, required=True, help="")
+    parser.add_argument("--paradigm", type=str, required=True, help="Nom du paradigme")
     parser.add_argument("--instructions",  type=str, help="Chemin vers le fichier de mots", required=False)
     parser.add_argument("--mot_fin",  type=str, help="Chemin vers le fichier de mots", required=False)
+    parser.add_argument("--background",  type=str, help="Couleur de fond", required=False)
     parser.add_argument("--output_file", type=str, required=True, help="Nom du fichier d'output")
     parser.add_argument("--activation", type=str, required=True, help="Pour le boitier avec les EEG")
     parser.add_argument("--random", type=str, required=True, help="Ordre random stimuli")
@@ -393,7 +401,6 @@ if __name__ == "__main__":
     data = json.loads(args.data)
     E = Psychopy_everything(data, args.instructions, args.mot_fin, args.output_file,
                             args.hauteur, args.largeur, args.port, args.baudrate,
-                            args.trigger, args.activation, args.random)
+                            args.trigger, args.activation, args.random, args.background, args.paradigm)
     E.preprocess()
     E.lancement()
-

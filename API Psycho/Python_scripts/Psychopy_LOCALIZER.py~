@@ -105,7 +105,7 @@ class Localizer(Parente):
             if self.random:
                 self.show_block(random.randint(0, nb_groups - 1), self.number_per_block)
             else:
-                y = x % nb_groups
+                y = x % nb_groups  
                 self.show_block(y, self.number_per_block)
         super().the_end(self.win)
         super().write_tsv_csv(self.filename, self.filename_csv,
