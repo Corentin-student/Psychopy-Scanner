@@ -1,0 +1,11 @@
+Paradigme = Adjectifs
+File = adjectifs.txt
+Launching File = instructions.txt
+Stimuli Duration = 4.0
+Between Stimuli Duration = 5.0
+Blocks = 30
+Entrainement = 5
+Stimulus per blocks = 5
+Zoom = 50.0
+Random = False
+Trigger = s

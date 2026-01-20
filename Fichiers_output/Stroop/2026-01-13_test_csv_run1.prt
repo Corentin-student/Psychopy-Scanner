@@ -1,0 +1,35 @@
+
+FileVersion:        2
+
+ResolutionOfTime:   msec
+
+Experiment:         prt
+
+BackgroundColor:    255 255 51
+TextColor:          255 255 255
+
+TimeCourseColor:    255 255 255
+TimeCourseThick:    3
+ReferenceFuncColor: 192 192 192
+ReferenceFuncThick: 2
+
+NrOfConditions:     2
+
+Stimuli
+5
+  4977 11185
+  16541 21462
+  26394 31497
+  36257 41338
+  46700 56726
+Color: 255 51 255
+
+Fixation
+5
+  0 4977
+  11185 16541
+  21462 26394
+  31497 36257
+  41338 46700
+Color: 255 102 178
+

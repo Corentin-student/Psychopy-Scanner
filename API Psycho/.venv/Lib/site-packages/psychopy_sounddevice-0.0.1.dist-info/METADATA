@@ -1,0 +1,43 @@
+Metadata-Version: 2.1
+Name: psychopy-sounddevice
+Version: 0.0.1
+Summary: Extension for using SoundDevice for audio playback.
+Author-email: Jon Peirce <jon@opensceincetools.org>, Matthew Cutone <mcutone@opensceincetools.org>
+License: GNU General Public License v3 (GPLv3)
+Project-URL: homepage, https://github.com/psychopy/psychopy-sounddevice
+Project-URL: changelog, https://github.com/psychopy/psychopy-sounddevice/blob/main/CHANGELOG.txt
+Project-URL: documentation, https://pages.github.com/psychopy/psychopy-sounddevice
+Project-URL: repository, https://github.com/psychopy/psychopy-sounddevice
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: sounddevice
+Requires-Dist: soundfile
+
+# psychopy-sounddevice
+
+Audio playback backend using the [SoundDevice](https://python-sounddevice.readthedocs.io) library.
+
+## Installing
+
+Install this package with the following shell command:: 
+
+    pip install psychopy-sounddevice
+
+You may also use PsychoPy's builtin package manager to install this package.
+
+## Usage
+
+Once the package is installed, PsychoPy will automatically load it when started and make objects available within the
+`psychopy.sound.backend_sounddevice` namespace. You can select the backend to use for a session by specifying 
+`'sounddevice'` in "Hardware" > "audio library" prefs. 

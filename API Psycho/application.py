@@ -587,8 +587,32 @@ def submit_audition():
         return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
-
-
+"""
+@app.route('/submit-stress', methods=['POST'])
+def submit_stress():
+    try:
+        data = request.get_json()
+        subprocess.run([
+            sys.executable, 'Python_scripts/Psychopy_Stress.py',
+            '--file', data.get('filePath'),
+            '--output_file', data.get('output_file'),
+            '--sigma', data.get('sigma'),
+            '--betweenstimuli', data.get('betweenstimuli'),
+            '--afterfixation', data.get('afterfixation'),
+            '--launching', data.get('launching_text'),
+            '--random', str(data.get('random')),
+            '--activation', str(data.get('activation')),
+            '--trigger', data.get('trigger'),
+            '--hauteur', data.get('hauteur'),
+            '--largeur', data.get('largeur'),
+            '--port', data.get('port'),
+            '--baudrate', str(data.get('baudrate'))
+        ], check=True)
+        
+        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
+"""
 @app.route('/submit-table', methods=['POST'])
 def submit_table():
     data = request.get_json()

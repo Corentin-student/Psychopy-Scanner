@@ -1,0 +1,10 @@
+Paradigme = Stroop
+File = colors_list.txt
+Launching File = instructions.txt
+Stimuli Duration = 4.0
+Between Stimuli Duration = 5.0
+Zoom = 50.0
+Random = True
+Trigger = s
+Sigma = 0.4
+13/01/2026 13:04:32.400

@@ -1,0 +1,14 @@
+onset;trial_type;angle;reaction;stim_file
+0,011782199995650444;Fixation;None;None;None
+5,030822100001387;Stimuli;0.0;None;object12_scr_static.jpeg
+9,033413500001188;Fixation;None;None;None
+14,202784499997506;Stimuli;0.0;None;body17_static.jpeg
+18,205225699995935;Fixation;None;None;None
+23,188015399995493;Stimuli;0.0;None;object13_scr_static.jpeg
+27,190306899996358;Fixation;None;None;None
+32,27802559999691;Stimuli;0.0;None;body6_scr_static.jpeg
+36,280233500001486;Fixation;None;None;None
+41,41581700000097;Stimuli;0.0;None;body16_scr_static.jpeg
+45,418099199996504;Fixation;None;None;None
+50,150857699998596;Stimuli;0.0;None;object10_static.jpeg
+54,15308730000106;Fixation;None;None;None

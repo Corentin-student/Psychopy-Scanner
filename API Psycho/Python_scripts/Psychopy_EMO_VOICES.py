@@ -53,7 +53,7 @@ class voices(Parente):
         )
         self.baudrate = baudrate
         self.trigger = trigger
-        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output, self.information)
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output, self.information, paradigm_name="emo_voices")
         if activation == "True":
             self.activation = True
         else:

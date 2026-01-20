@@ -58,7 +58,7 @@ class Adjectifs(Parente):
         self.information["Zoom"] = zoom
         self.information["Random"] = random
         self.information["Trigger"] = trigger
-        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(output, self.information)
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(output, self.information, paradigm_name="adjectifs")
 
         if activation == "True":
             self.activation = True

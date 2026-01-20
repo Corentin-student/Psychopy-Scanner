@@ -1,0 +1,10 @@
+Paradigme = Images statiques
+File = Sequence1.txt
+Launching File = instruction_static_images.txt
+Stimuli Duration = 4.0
+Between Stimuli Duration = 5.0
+Zoom = 50.0
+Random = True
+Trigger = s
+Sigma = 0.2
+06/01/2026 11:33:16.329

@@ -1,0 +1,11 @@
+Paradigme = Priming
+File = Sequence.txt
+Launching File = instruction.txt
+Stimuli Duration = 2.0
+Between Stimuli Duration = 2.0
+Between Blocks Duration = 2.0
+Number of Blocks = 3
+Zoom = 50.0
+Random = False
+Trigger = s
+13/01/2026 11:28:42.849

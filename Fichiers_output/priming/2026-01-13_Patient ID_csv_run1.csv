@@ -1,0 +1,12 @@
+onset;reaction;block_index;stim_file;trial_type
+0,021481299998413306;None;None;None;Fixation
+2,1658330999998725;None;1;body9_scr_static.jpeg;Stimuli
+4,16801619999751;None;None;None;Fixation
+6,171476799994707;None;1;body13_scr_static.jpeg;Stimuli
+8,17422909999732;None;None;None;Fixation
+10,306373299994448;None;2;face17_static.jpeg;Stimuli
+12,308679599998868;None;None;None;Fixation
+14,311705899999652;None;2;face18_static.jpeg;Stimuli
+16,314181399997324;None;None;None;Fixation
+18,414676399996097;None;3;body2_static.jpeg;Stimuli
+20,41708110000036;None;None;None;Fixation

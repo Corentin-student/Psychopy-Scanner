@@ -33,7 +33,7 @@ class Colors(Parente):
         self.information["Random"] = random
         self.information["Trigger"] = trigger
         self.information["Sigma"] = sigma
-        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output, self.information)
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output, self.information, paradigm_name="Stroop")
         self.dirname = self.filename[:self.filename.find(".tsv")]
         os.makedirs(self.dirname, exist_ok=True)
         self.threshold = 1000  # seuil pour détecter le début de la parole (à ajuster selon votre micro/environnement)

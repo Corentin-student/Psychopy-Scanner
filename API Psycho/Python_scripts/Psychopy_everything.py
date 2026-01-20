@@ -61,7 +61,7 @@ class Psychopy_everything (Parente):
         self.information["Paradigme"] = paradigm
         self.information["Launching File"] = launching_text
         self.information["Ending File"] = ending_text
-        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output_file, self.information)
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output_file, self.information, paradigm_name="everything")
         self.dirname = self.filename[:self.filename.find(".tsv")]
         os.makedirs(self.dirname, exist_ok=True)
         self.record_index = 0

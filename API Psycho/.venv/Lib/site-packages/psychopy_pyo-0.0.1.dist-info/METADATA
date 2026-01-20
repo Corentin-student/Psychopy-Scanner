@@ -1,0 +1,42 @@
+Metadata-Version: 2.1
+Name: psychopy-pyo
+Version: 0.0.1
+Summary: Extension for using Pyo for audio playback.
+Author-email: Jon Peirce <jon@opensceincetools.org>, Matthew Cutone <mcutone@opensceincetools.org>
+License: GNU General Public License v3 (GPLv3)
+Project-URL: homepage, https://github.com/psychopy/psychopy-pyo
+Project-URL: changelog, https://github.com/psychopy/psychopy-pyo/blob/main/CHANGELOG.txt
+Project-URL: documentation, https://pages.github.com/psychopy/psychopy-pyo
+Project-URL: repository, https://github.com/psychopy/psychopy-pyo
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: pyo
+
+# psychopy-pyo
+
+Extension for using [Pyo](http://ajaxsoundstudio.com/software/pyo/) library for audio playback.
+    
+## Installing
+
+Install this package with the following shell command:: 
+
+    pip install psychopy-pyo
+
+You may also use PsychoPy's builtin package manager to install this package.
+
+## Usage
+
+Once the package is installed, PsychoPy will automatically load it when started and make objects available within the
+`psychopy.sound.backend_pyo` namespace. You can select the backend to use for a session by specifying `'pyo'` in 
+"Hardware" > "audio library" prefs. 

@@ -1,0 +1,19 @@
+Metadata-Version: 2.0
+Name: vexmessage
+Version: 0.4.0
+Summary: messaging helper for vexbot
+Home-page: https://github.com/benhoff/vexmessage
+Author: Ben Hoff
+Author-email: beohoff@gmail.com
+License: GPL3
+Platform: UNKNOWN
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Operating System :: OS Independent
+
+UNKNOWN
+
+

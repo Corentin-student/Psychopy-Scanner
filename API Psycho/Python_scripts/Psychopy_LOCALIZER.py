@@ -71,7 +71,7 @@ class Localizer(Parente):
         self.information["Number of Blocks"] = number_of_block
         self.information["Between Blocks"] = betweenblocks
         self.information["Number of Stimuli per Block"] = number_per_block
-        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output,self.information)
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(self.output,self.information, paradigm_name="localizer")
         self.rect = visual.Rect(self.win, width=rect_width, height=rect_height, fillColor='white', lineColor='white',
                                 units='pix')
         self.rect.pos = (self.win.size[0] / 2 - rect_width / 2, self.win.size[1] / 2 - rect_height / 2)

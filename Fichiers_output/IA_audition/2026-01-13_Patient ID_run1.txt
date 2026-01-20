@@ -1,0 +1,9 @@
+Paradigme = IA_Audition
+File = test.txt
+Launching File = instructions.txt
+Stimuli Duration = 9.0
+Between Stimuli Duration = 4.0
+Random = False
+Trigger = s
+Sigma = 0.2
+13/01/2026 11:17:54.072

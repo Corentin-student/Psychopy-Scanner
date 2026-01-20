@@ -11,8 +11,8 @@ import serial
 
 locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
 class Parente(ABC):
-    def preprocessing_tsv_csv(self, filename, informations=None):
-        output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'Fichiers_output'))
+    def preprocessing_tsv_csv(self, filename, informations=None, paradigm_name="Default"):
+        output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'Fichiers_output', paradigm_name))
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         current_date = datetime.now().strftime("%Y-%m-%d")
@@ -37,8 +37,8 @@ class Parente(ABC):
         with open(chemin_fichier, "a", encoding="utf-8") as f:
             f.write(date_formatee + "\n")
 
-    def preprocessing_tsv(self, filename):
-        output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..' 'Fichiers_output'))
+    def preprocessing_tsv(self, filename, paradigm_name:"Default"):
+        output_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'Fichiers_output', paradigm_name))
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         current_date = datetime.now().strftime("%Y-%m-%d")

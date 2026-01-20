@@ -1,0 +1,12 @@
+Paradigme = LOCALIZER
+File = block_order_localizer.txt
+Launching File = Instructions.txt
+Stimuli Duration = 2.0
+Between Stimuli Duration = 1.0
+Zoom = 50.0
+Random = False
+Trigger = s
+Number of Blocks = 3
+Between Blocks = 2.0
+Number of Stimuli per Block = 5
+13/01/2026 11:25:31.531

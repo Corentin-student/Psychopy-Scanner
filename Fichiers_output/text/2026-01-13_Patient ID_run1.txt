@@ -1,0 +1,7 @@
+Paradigme = Text
+File = lapin.txt
+Launching File = Instructions.txt
+Stimuli Duration = 2.0
+Zoom = 30
+Random = True
+Trigger = s

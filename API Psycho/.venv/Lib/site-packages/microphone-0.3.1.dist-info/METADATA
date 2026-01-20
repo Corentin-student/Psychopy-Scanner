@@ -1,0 +1,29 @@
+Metadata-Version: 2.1
+Name: microphone
+Version: 0.3.1
+Summary: Sending microphone data using ZeroMQ
+Home-page: https://github.com/benhoff/microphone
+Author: Ben Hoff
+Author-email: beohoff@gmail.com
+License: GPL3
+Keywords: sound capture to text
+Platform: UNKNOWN
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Topic :: Multimedia :: Sound/Audio :: Capture/Recording
+Classifier: Topic :: Utilities
+Classifier: Operating System :: OS Independent
+Provides-Extra: dev
+Requires-Dist: pluginmanager (>=0.4.1)
+Requires-Dist: PyAudio
+Requires-Dist: pyzmq
+Requires-Dist: vexmessage
+Provides-Extra: dev
+Requires-Dist: flake8; extra == 'dev'
+
+UNKNOWN
+
+

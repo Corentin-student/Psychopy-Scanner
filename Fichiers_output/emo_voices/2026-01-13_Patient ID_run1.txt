@@ -1,0 +1,8 @@
+Paradigme = EMO_VOICES
+File = chemin.txt
+Launching File = Instructions.txt
+Stimuli Duration = 4.0
+Between Stimuli Duration = 5.0
+Random = True
+Trigger = s
+13/01/2026 11:14:24.212

@@ -31,7 +31,7 @@ class PsychoPyParadigm(Parente):
         self.information["Zoom"] = zoom
         self.information["Random"] = random
         self.information["Trigger"] = trigger
-        self.filename, self.filename_csv, self.filename_txt = super().preprocessing_tsv_csv(self.output, self.information)
+        self.filename, self.filename_csv, self.filename_txt = super().preprocessing_tsv_csv(self.output, self.information, paradigm_name="text")
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..', 'Input', 'Paradigme_mots'))
         self.win = visual.Window(size=(800, 600), fullscr=True, color=[-1, -1, -1], units="norm")
         self.win.winHandle.activate()

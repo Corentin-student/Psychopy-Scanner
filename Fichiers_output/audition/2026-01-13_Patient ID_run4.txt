@@ -1,0 +1,9 @@
+Paradigme = Audition
+File = sequence.txt
+Launching File = instruction.txt
+Stimuli Duration = 3.0
+Between Stimuli Duration = 7.0
+Random = True
+Trigger = s
+Sigma = 0.5
+13/01/2026 12:31:12.013

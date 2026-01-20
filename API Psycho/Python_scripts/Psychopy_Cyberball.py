@@ -69,7 +69,7 @@ class launch_cyberball(Parente) :
         new_largeur = largeur*multi
         return new_hauteur, new_largeur
     def write_tsv(self, filename="output1.tsv"):
-        filename = super().preprocessing_tsv(filename)
+        filename = super().preprocessing_tsv(filename, paradigm_name="cyberball")
 
         with open(filename, mode='w', newline='') as file:
             tsv_writer = csv.writer(file, delimiter='\t')

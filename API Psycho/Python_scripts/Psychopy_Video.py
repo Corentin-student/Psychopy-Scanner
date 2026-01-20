@@ -25,7 +25,7 @@ class VideoPsycho(Parente):
         self.information["Random"] = random
         self.information["Trigger"] = trigger
         self.information["Sigma"] = sigma
-        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(output, self.information)
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(output, self.information, paradigm_name="video")
 
         self.dossier = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..', 'Input', 'Paradigme_video'))
         self.dossier_files = os.path.join(self.dossier,'newstimuli')

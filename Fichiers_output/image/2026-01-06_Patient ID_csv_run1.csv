@@ -1,0 +1,8 @@
+onset;trial_type;angle;reaction;stim_file
+0,01017110000248067;Fixation;None;None;None
+5,069085399998585;Stimuli;0.0;None;face16_scr_static.jpeg
+9,071472999996331;Fixation;None;None;None
+13,772859199998493;Stimuli;0.0;None;object21_static.jpeg
+17,775367000002007;Fixation;None;None;None
+22,397882899997057;Stimuli;0.0;None;object4_static.jpeg
+26,400110499998846;Fixation;None;None;None

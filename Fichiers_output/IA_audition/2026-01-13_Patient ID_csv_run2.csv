@@ -1,0 +1,17 @@
+onset;trial_type;key;reaction_time;stim_file;duration
+10;Croix de Fixation;None;None;None;12019
+12029;Beep;None;None;None;541
+12570;Blank;None;None;None;1013
+13583;Stimulus;None;None;6.mp3;1309
+14892;Fin_stimulus;None;None;None;7693
+22585;Croix de Fixation;None;None;None;4565
+27150;Beep;None;None;None;550
+27700;Blank;None;None;None;1013
+28713;Stimulus;None;None;7.mp3;1149
+29862;Fin_stimulus;None;None;None;7852
+37714;Croix de Fixation;None;None;None;4172
+41886;Beep;None;None;None;544
+42430;Blank;None;None;None;1020
+43450;Stimulus;None;None;8.mp3;1512
+44962;Fin_stimulus;None;None;None;7489
+52451;Croix de Fixation;None;None;None;25768

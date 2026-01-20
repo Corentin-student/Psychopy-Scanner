@@ -41,7 +41,7 @@ class Priming(Parente):
         self.information["Zoom"] = zoom
         self.information["Random"] = random
         self.information["Trigger"] = trigger
-        self.filename, self.filename_csv, self.filename_txt = super().preprocessing_tsv_csv(self.output, self.information)
+        self.filename, self.filename_csv, self.filename_txt = super().preprocessing_tsv_csv(self.output, self.information, paradigm_name="priming")
         self.launching = launching
         self.zoom = zoom
         self.file = file

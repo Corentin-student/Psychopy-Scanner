@@ -31,7 +31,7 @@ class IA_image(Parente):
         self.information["Random"] = random
         self.information["Trigger"] = trigger
         self.information["Sigma"] = sigma
-        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(output, self.information)
+        self.filename, self.filename_csv, self.filename_txt  = super().preprocessing_tsv_csv(output, self.information, paradigm_name="IA_image")
         self.win = visual.Window(
             size=(800, 600),
             fullscr=True,
