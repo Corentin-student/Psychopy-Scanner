@@ -56,7 +56,10 @@ class VideoPsycho(Parente):
         rect_height = hauteur
         self.rect = visual.Rect(self.win, width=rect_width, height=rect_height, fillColor='white', lineColor='white',
                                 units='pix')
+        self.rect_black = visual.Rect(self.win, width=rect_width, height=rect_height, fillColor='black', lineColor='black',
+                                units='pix')
         self.rect.pos = (self.win.size[0] / 2 - rect_width / 2, self.win.size[1] / 2 - rect_height / 2)
+        self.rect_black.pos = (self.win.size[0] / 2 - rect_width / 2, self.win.size[1] / 2 - rect_height / 2)
 
 
     def reading(self, filename):
@@ -97,6 +100,7 @@ class VideoPsycho(Parente):
         for x, video_path in enumerate(videos):
             try:
                 cross_stim.draw()
+                self.rect_black.draw()
                 self.win.flip()
                 apparition = global_timer.getTime()
                 random_gaussian = random.gauss(self.betweenstimuli, self.sigma)
@@ -134,6 +138,7 @@ class VideoPsycho(Parente):
                     movie_stim.setAutoDraw(False)
                     movie_stim.seek(0)
                     del movie_stim
+                    self.rect_black.draw()
                     self.win.flip(clearBuffer=True)
                     core.wait(0.1)
                     gc.collect()
@@ -142,8 +147,8 @@ class VideoPsycho(Parente):
                 print(f"Erreur rencontrée : {e}")
                 pass
 
-
         cross_stim.draw()
+        self.rect_black.draw() 
         self.win.flip()
         apparition = global_timer.getTime()
         while global_timer.getTime() < apparition + between_stimuli:

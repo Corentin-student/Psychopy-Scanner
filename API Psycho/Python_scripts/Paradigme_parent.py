@@ -124,12 +124,17 @@ class Parente(ABC):
         win.flip()
         core.wait(4)
     def send_character(self, port, baud_rate):
+        print("okkk")
         char = "t"
         try:
             print(port)
             with serial.Serial(port=port, baudrate=baud_rate, timeout=1) as ser:
+                
+                print("on se connecte")
                 print(f"Connexion ouverte sur {port}. Envoi de '{char}'...")
-                ser.write(char.encode()) #solution pour Ron à St-luc
+                # modif by Seb and Ju - 6th of Feb 2026: we commented the following line and replaced it by ser.write(b't')
+                #ser.write(char.encode()) #solution pour Ron à St-luc
+                ser.write(b't')
                 #ser.write(b'H')
                 #time.sleep(0.5)
                 #ser.write(b'L')
@@ -211,8 +216,11 @@ class Parente(ABC):
         rows.pop()
 
         with open(input_file, mode='w', newline='') as csvfile:
-            fieldnames = reader.fieldnames + ['duration']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=';')
+            #on crée une liste qui exclue la colonne 'rotation'
+            fieldnames_without_rotation = [f for f in reader.fieldnames if f != 'rotation']
+            fieldnames = fieldnames_without_rotation + ['duration']
+            #on utilise extrasaction='ignore' pour que dictWriter ne cherche pas a ecrire la ligne rotation du dictionnaire et ne retourne pas d'erreur
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=';', extrasaction='ignore')
             writer.writeheader()
             writer.writerows(rows)
     def writting_prt(self, filename, col="trial_type"):

@@ -657,5 +657,5 @@ def keep_datas():
 
 if __name__ == '__main__':
     #webbrowser.open('http://127.0.0.1:5000')
-    app.run(debug=True) #si jamais on veut voir le debugger alors il faut mettre les 2 autres lignes en commentaires
+    app.run(debug=False) #si jamais on veut voir le debugger alors il faut mettre les 2 autres lignes en commentaires
     serve(app, host='0.0.0.0', port=5000)
