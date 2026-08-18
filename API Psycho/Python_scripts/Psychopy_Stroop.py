@@ -109,9 +109,6 @@ class Colors(Parente):
             except sr.RequestError as e:
                 print(f"Erreur lors de la demande à Google Speech Recognition; {e}")
                 return "None/pas reconnu"
-            except Exception as e:
-                print(f"Une erreur lié à recognize_google est survenu: {e}")
-                return "None/pas reconnu"
 
     def lancement(self):
         super().file_init(self.filename,self.filename_csv, ['onset', 'stimuli', 'trial_type', 'response','time_before_starting_to_answer'] )

@@ -2,12 +2,19 @@ import argparse
 import copy
 import os
 import random
+import threading
 
 from psychopy import visual, core, event
 from Paradigme_parent import Parente
 import gc  # Garbage Collector
 
 
+def _warm_cache(path):
+    try:
+        with open(path, 'rb') as f:
+            f.read()
+    except Exception:
+        pass
 
 
 class VideoPsycho(Parente):
@@ -98,54 +105,53 @@ class VideoPsycho(Parente):
         thezoom = 0.7 + (0.012 * self.zoom)
 
         for x, video_path in enumerate(videos):
-            try:
-                cross_stim.draw()
-                self.rect_black.draw()
-                self.win.flip()
-                apparition = global_timer.getTime()
-                random_gaussian = random.gauss(self.betweenstimuli, self.sigma)
-                while global_timer.getTime() < apparition + random_gaussian:
-                    pass
-                stimuli = "Fixation"
-                super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), stimuli, "None"])
-                movie_stim = visual.MovieStim(
-                    win=self.win,
-                    filename=video_path,
-                    pos=(0, 0),
-                    size=thezoom,
-                    opacity=1.0,
-                    flipVert=False,
-                    flipHoriz=False,
-                    loop=False,
-                    units='norm',
-                )
+            cross_stim.draw()
+            self.rect_black.draw()
+            self.win.flip()
+            apparition = global_timer.getTime()
+            random_gaussian = random.gauss(self.betweenstimuli, self.sigma)
 
-                apparition = global_timer.getTime()
-                if self.activation:
-                    super().send_character(self.port, self.baudrate)
-                movie_stim.play()
+            movie_stim = visual.MovieStim(
+                win=self.win,
+                filename=video_path,
+                pos=(0, 0),
+                size=thezoom,
+                opacity=1.0,
+                flipVert=False,
+                flipHoriz=False,
+                loop=False,
+                units='norm',
+            )
 
-                while global_timer.getTime() < apparition + duration:
-                    self.rect.draw()
-                    movie_stim.draw()
-                    self.win.flip()
-                stimuli = file[x]
-                super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), "Stimuli", stimuli])
-
-
-                if movie_stim is not None:
-                    movie_stim.stop()
-                    movie_stim.setAutoDraw(False)
-                    movie_stim.seek(0)
-                    del movie_stim
-                    self.rect_black.draw()
-                    self.win.flip(clearBuffer=True)
-                    core.wait(0.1)
-                    gc.collect()
-
-            except Exception as e:
-                print(f"Erreur rencontrée : {e}")
+            while global_timer.getTime() < apparition + random_gaussian:
                 pass
+            stimuli = "Fixation"
+            super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), stimuli, "None"])
+
+            apparition = global_timer.getTime()
+            movie_stim.play()
+            if x + 1 < len(videos):
+                threading.Thread(target=_warm_cache, args=(videos[x + 1],), daemon=True).start()
+            first = True
+            while global_timer.getTime() < apparition + duration:
+                self.rect.draw()
+                movie_stim.draw()
+                self.win.flip()
+                if first and self.activation:
+                    super().send_character(self.port, self.baudrate)
+                    first = False
+            stimuli = file[x]
+            super().write_tsv_csv(self.filename, self.filename_csv, [super().float_to_csv(apparition), "Stimuli", stimuli])
+
+            if movie_stim is not None:
+                movie_stim.stop()
+                movie_stim.setAutoDraw(False)
+                movie_stim.seek(0)
+                del movie_stim
+                self.rect_black.draw()
+                self.win.flip(clearBuffer=True)
+                core.wait(0.1)
+                gc.collect()
 
         cross_stim.draw()
         self.rect_black.draw() 

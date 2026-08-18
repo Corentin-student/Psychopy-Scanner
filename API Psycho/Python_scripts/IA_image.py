@@ -70,10 +70,10 @@ class IA_image(Parente):
     def boucle_dans_la_boucle(self,image):
         image.draw()
         self.rect.draw()
+        self.win.flip()
         if self.first == 0 and self.activation:
             super().send_character(self.port, self.baudrate)
             self.first = 1
-        self.win.flip()
         onset = self.global_timer.getTime()
         while self.global_timer.getTime() < onset + 0.4 :
             pass

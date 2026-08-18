@@ -1,3 +1,42 @@
+function showParadigmResult(status, data) {
+    if (status === 200 && data.status === 'success') {
+        Swal.fire({
+            title: 'Paradigme terminé',
+            text: data.message || 'Succès',
+            icon: 'success',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#4CAF50',
+        });
+    } else if (status === 409 || data.status === 'busy') {
+        Swal.fire({
+            title: 'Paradigme déjà en cours',
+            text: data.message || "Un autre paradigme est en cours d'exécution. Attendez qu'il se termine ou fermez la fenêtre PsychoPy.",
+            icon: 'warning',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#f39c12',
+        });
+    } else {
+        Swal.fire({
+            title: 'Erreur lors du lancement',
+            html: (data.message || 'Erreur inconnue').replace(/\n/g, '<br>'),
+            icon: 'error',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#e74c3c',
+        });
+    }
+}
+
+function showParadigmError(error) {
+    console.error('Error:', error);
+    Swal.fire({
+        title: 'Erreur de communication',
+        text: "Impossible de contacter le serveur. Vérifiez que Flask est toujours lancé.",
+        icon: 'error',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#e74c3c',
+    });
+}
+
 function changeMainContent(section) {
     const mainContent = document.getElementById('main-content');
     let newContent = '';
@@ -650,19 +689,16 @@ function submitText() {
             filePath: fileName // Envoyer la valeur de l'input de fichier comme un simple string
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -718,19 +754,16 @@ function submitVoices(){
             filePath: fileName // Envoyer la valeur de l'input de fichier comme un simple string
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -784,19 +817,16 @@ function submitIaAudition() {
                 port: port
             }),
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        .then(response => response.json().then(data => ({status: response.status, data})))
+        .then(({status, data}) => showParadigmResult(status, data))
+        .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -847,19 +877,16 @@ function submitIaImage() {
                 port: port
             }),
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        .then(response => response.json().then(data => ({status: response.status, data})))
+        .then(({status, data}) => showParadigmResult(status, data))
+        .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -921,19 +948,16 @@ function submitFaces() {
             filePath: fileName // Envoyer la valeur de l'input de fichier comme un simple string
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -996,19 +1020,16 @@ function submitStroop(){
             filePath: fileName // Envoyer la valeur de l'input de fichier comme un simple string
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -1073,19 +1094,16 @@ function submitLocalizer(){
             largeur: largeur
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -1149,19 +1167,16 @@ function submitAudition(){
             largeur: largeur
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -1225,19 +1240,16 @@ function submitpriming(){
             largeur: largeur
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -1303,19 +1315,16 @@ function submitAdjectifs() {
             filePath: fileName // Envoyer la valeur de l'input de fichier comme un simple string
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -1360,19 +1369,16 @@ function submitCyberball(){
             filePath: fileName // Envoyer la valeur de l'input de fichier comme un simple string
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 
 }
@@ -1435,19 +1441,16 @@ function submitImages(){
             filePath: fileName // Envoyer la valeur de l'input de fichier comme un simple string
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 
@@ -1510,19 +1513,16 @@ function submitVideos(){
             filePath: fileName // Envoyer la valeur de l'input de fichier comme un simple string
         }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .then(response => response.json().then(data => ({status: response.status, data})))
+    .then(({status, data}) => showParadigmResult(status, data))
+    .catch(error => showParadigmError(error));
     Swal.fire({
-        title: 'Votre paradigme va se lancer',
-        text: "si vous n'avez oublié aucun paramètre",
-        icon: 'success',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#4CAF50', // Couleur verte
+        title: 'Paradigme en cours...',
+        text: "Ne fermez pas cette fenêtre. PsychoPy va s'ouvrir automatiquement.",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => Swal.showLoading(),
     });
 }
 

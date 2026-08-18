@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, jsonify
 import subprocess
 import sys
 import json
+import threading
 import webbrowser
 from waitress import serve
 
@@ -11,6 +12,93 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'uploads')
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+
+_paradigm_lock = threading.Lock()
+_current_paradigm = {'name': None}
+
+ERROR_PATTERNS = [
+    ('SerialException', "Port série inaccessible. Vérifiez que le câble est bien branché et que le port n'est pas utilisé par un autre logiciel."),
+    ('could not open port', "Impossible d'ouvrir le port série. Vérifiez le nom du port (ex: COM3) et que le boîtier est connecté."),
+    ('PermissionError', "Permission refusée. Le fichier ou le port est peut-être utilisé par un autre programme."),
+    ('FileNotFoundError', "Fichier ou dossier introuvable. Vérifiez que vos fichiers de stimuli sont au bon emplacement."),
+    ('No such file or directory', "Fichier ou dossier introuvable. Vérifiez que vos fichiers de stimuli sont au bon emplacement."),
+    ('ModuleNotFoundError', "Module Python manquant. Lancez `pip install -r requirements.txt` dans le dossier API Psycho."),
+    ('ImportError', "Erreur d'import Python. Vérifiez l'installation des dépendances."),
+    ('PortAudioError', "Problème avec le périphérique audio. Vérifiez que votre microphone/casque est bien connecté."),
+    ('sounddevice', "Problème avec le périphérique audio. Vérifiez que votre microphone/casque est bien connecté."),
+    ('pygame', "Problème avec pygame (audio/vidéo). Redémarrez l'application."),
+    ('MovieStim', "Problème de lecture vidéo. Vérifiez le format de vos fichiers (MP4 recommandé) et les codecs installés."),
+    ('MemoryError', "Mémoire insuffisante. Fermez d'autres programmes ou réduisez le nombre de stimuli."),
+    ('JSONDecodeError', "Erreur de format dans les données envoyées. Rechargez la page et réessayez."),
+    ('KeyError', "Paramètre manquant dans la configuration du paradigme."),
+]
+
+
+def _friendly_error(stderr, returncode):
+    if not stderr or not stderr.strip():
+        return f"Le paradigme s'est terminé avec une erreur (code {returncode}). Aucune information supplémentaire disponible."
+    for pattern, msg in ERROR_PATTERNS:
+        if pattern in stderr:
+            tail = stderr.strip().splitlines()
+            last = tail[-1] if tail else ''
+            return f"{msg}\n\nDétail technique : {last}"
+    lines = [l for l in stderr.strip().splitlines() if l.strip()]
+    last = lines[-1] if lines else ''
+    return f"Erreur lors de l'exécution du paradigme.\n\nDétail technique : {last}"
+
+
+def run_paradigm_subprocess(cmd, paradigm_name=None):
+    """Run a paradigm subprocess with a global lock and user-friendly error handling.
+
+    Returns a (response, status_code) tuple compatible with Flask.
+    - 409 if another paradigm is already running
+    - 500 if the subprocess failed (with a friendly message)
+    - 200 on success
+    """
+    if paradigm_name is None and len(cmd) > 1:
+        paradigm_name = os.path.basename(cmd[1]).replace('.py', '')
+
+    if not _paradigm_lock.acquire(blocking=False):
+        running = _current_paradigm.get('name') or 'inconnu'
+        return jsonify({
+            'status': 'busy',
+            'message': f"Un paradigme est déjà en cours d'exécution ({running}).\n"
+                       f"Attendez qu'il se termine ou fermez la fenêtre PsychoPy avant d'en lancer un autre."
+        }), 409
+    try:
+        _current_paradigm['name'] = paradigm_name or 'paradigme'
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            return jsonify({
+                'status': 'error',
+                'message': _friendly_error(result.stderr, result.returncode),
+                'returncode': result.returncode,
+                'stderr_tail': (result.stderr or '')[-2000:],
+            }), 500
+        return jsonify({'status': 'success', 'message': 'Paradigme exécuté avec succès.'})
+    except FileNotFoundError as e:
+        return jsonify({
+            'status': 'error',
+            'message': f"Script Python introuvable. L'installation est peut-être incomplète.\n\nDétail : {e}"
+        }), 500
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': f"Erreur système inattendue lors du lancement.\n\nDétail : {e}"
+        }), 500
+    finally:
+        _current_paradigm['name'] = None
+        _paradigm_lock.release()
+
+
+@app.route('/api/paradigm_status', methods=['GET'])
+def paradigm_status():
+    running = _paradigm_lock.locked()
+    return jsonify({
+        'running': running,
+        'name': _current_paradigm.get('name') if running else None,
+    })
 
 
 @app.route('/upload', methods=['POST'])
@@ -80,7 +168,7 @@ def home():
 def submit_ia_audition():
     try:
         data = request.get_json()
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/IA_audition.py',
             '--file', data.get("filePath"),
             '--output_file', data.get("output_file"),
@@ -98,18 +186,16 @@ def submit_ia_audition():
             '--port', data.get("port"),
             '--baudrate', str(data.get("baudrate"))
 
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit_ia_image', methods=['POST'])
 def submit_ia_image():
     try:
         data = request.get_json()
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/IA_image.py',
             '--file', data.get("filePath"),
             '--output_file', data.get("output_file"),
@@ -125,11 +211,9 @@ def submit_ia_image():
             '--largeur', data.get("largeur"),
             '--port', data.get("port"),
             '--baudrate', str(data.get("baudrate"))
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit-text', methods=['POST'])
@@ -150,7 +234,7 @@ def submit_text():
         largeur = data.get('largeur')
         random = data.get('random')
         fixation = data.get('fixation')
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_Text.py',
             '--duration', duration,
             '--words', words,
@@ -166,11 +250,9 @@ def submit_text():
             '--largeur', largeur,
             '--output_file', output_file,
             '--zoom', zoom
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit-emo-voice', methods=['POST'])
@@ -189,7 +271,7 @@ def submit_emo_voice():
         largeur = data.get('largeur')
         trigger = data.get('trigger')
         random = data.get('random')
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_EMO_VOICES.py',
             '--duration', duration,
             '--file', file,
@@ -203,11 +285,9 @@ def submit_emo_voice():
             '--random', str(random),
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit-cyberball', methods=['POST'])
@@ -225,7 +305,7 @@ def submit_cyberball():
         output_file = "useless"
         filePath = data.get("filePath")
 
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_Cyberball.py',
             '--premiere_phase', premiere_phase,
             '--exclusion', exclusion,
@@ -237,11 +317,9 @@ def submit_cyberball():
             '--trigger', trigger,
             '--output_file', output_file,
             '--filePath', filePath,
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 
@@ -266,7 +344,7 @@ def submit_emo_faces():
         trigger = data.get('trigger')
         random = data.get('random')
         sigma = data.get('sigma')
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_EMO_FACE.py',
             '--duration', duration,
             '--file', file,
@@ -282,11 +360,9 @@ def submit_emo_faces():
             '--largeur', largeur,
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit-adjectifs', methods=['POST'])
@@ -309,7 +385,7 @@ def submit_adjectifs():
         zoom = data.get('zoom')
         entrainement = data.get('entrainement')
         per_block = data.get('per_block')
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_Adjectifs.py',
             '--duration', duration,
             '--file', file,
@@ -327,11 +403,9 @@ def submit_adjectifs():
             '--per_block', per_block,
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit-stroop', methods=['POST'])
@@ -353,7 +427,7 @@ def submit_stroop():
         launching = data.get('launching_text')
         random = data.get('random')
         sigma = data.get('sigma')
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_Stroop.py',
             '--duration', duration,
             '--file', file,
@@ -370,11 +444,9 @@ def submit_stroop():
             '--choice', choice,
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit-localizer', methods=['POST'])
@@ -397,7 +469,7 @@ def submit_localizer():
         betweenblocks = data.get('betweenblocks')
         random = data.get('random')
         file = data.get('fileName')
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_LOCALIZER.py',
             '--duration', duration,
             '--blocks', blocks,
@@ -415,11 +487,9 @@ def submit_localizer():
             '--betweenstimuli', betweenstimuli,
             '--betweenblocks', betweenblocks,
             '--output_file', output_file,
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit-priming', methods=['POST'])
@@ -441,7 +511,7 @@ def submit_priming():
         betweenblocks = data.get('betweenblocks')
         random = data.get('random')
         file = data.get('fileName')
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_Priming.py',
             '--duration', duration,
             '--blocks', blocks,
@@ -458,10 +528,9 @@ def submit_priming():
             '--betweenstimuli', betweenstimuli,
             '--betweenblocks', betweenblocks,
             '--output_file', output_file,
-        ], check=True)
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit-images', methods=['POST'])
@@ -482,7 +551,7 @@ def submit_images():
         launching = data.get('launching_text')
         random = data.get('random')
         sigma = data.get('sigma')
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_Image.py',
             '--duration', duration,
             '--file', file,
@@ -498,11 +567,9 @@ def submit_images():
             '--output_file', output_file,
             '--betweenstimuli', betweenstimuli,
             '--zoom', zoom
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit-videos', methods=['POST'])
@@ -523,7 +590,7 @@ def submit_videos():
         launching = data.get('launching_text')
         random = data.get('random')
         sigma = data.get('sigma')
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_Video.py',
             '--duration', duration,
             '--file', file,
@@ -539,11 +606,9 @@ def submit_videos():
             '--largeur', largeur,
             '--betweenstimuli', betweenstimuli,
             '--zoom', zoom
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 
 @app.route('/submit-audition', methods=['POST'])
@@ -565,7 +630,7 @@ def submit_audition():
         file = data.get('fileName')
         asound = data.get('ASound')
         sigma = data.get('sigma')
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_Audition.py',
             '--instruction', instruction,
             '--duration', duration,
@@ -582,17 +647,15 @@ def submit_audition():
             '--sigma', sigma,
             '--betweenstimuli', betweenstimuli,
             '--output_file', output_file,
-        ], check=True)
-
-        return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+        ])
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 """
 @app.route('/submit-stress', methods=['POST'])
 def submit_stress():
     try:
         data = request.get_json()
-        subprocess.run([
+        return run_paradigm_subprocess([
             sys.executable, 'Python_scripts/Psychopy_Stress.py',
             '--file', data.get('filePath'),
             '--output_file', data.get('output_file'),
@@ -615,27 +678,27 @@ def submit_stress():
 """
 @app.route('/submit-table', methods=['POST'])
 def submit_table():
-    data = request.get_json()
-    stimuli = json.dumps(data.get("data"))
-    print("ici")
-    print(data)
-    subprocess.run([
-        sys.executable, 'Python_scripts/Psychopy_everything.py',
-        '--data', stimuli,
-        '--paradigm', data.get("paradigm"),
-        '--instructions', data.get("instructions"),
-        '--mot_fin', data.get("mot_fin"),
-        '--background', data.get("background"),
-        '--output_file', data.get("output_file"),
-        '--activation', str(data.get("activation")),
-        '--random', str(data.get("random")),
-        '--trigger', data.get("trigger"),
-        '--hauteur', data.get("hauteur"),
-        '--largeur', data.get("largeur"),
-        '--port', data.get("port"),
-        '--baudrate', str(data.get("baudrate"))
-    ], check=True)
-    return jsonify({'status': 'success', 'message': 'Données reçues et script exécuté'})
+    try:
+        data = request.get_json()
+        stimuli = json.dumps(data.get("data"))
+        return run_paradigm_subprocess([
+            sys.executable, 'Python_scripts/Psychopy_everything.py',
+            '--data', stimuli,
+            '--paradigm', data.get("paradigm"),
+            '--instructions', data.get("instructions"),
+            '--mot_fin', data.get("mot_fin"),
+            '--background', data.get("background"),
+            '--output_file', data.get("output_file"),
+            '--activation', str(data.get("activation")),
+            '--random', str(data.get("random")),
+            '--trigger', data.get("trigger"),
+            '--hauteur', data.get("hauteur"),
+            '--largeur', data.get("largeur"),
+            '--port', data.get("port"),
+            '--baudrate', str(data.get("baudrate"))
+        ])
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': f"Erreur serveur avant le lancement : {e}"}), 500
 
 @app.route('/keep-datas', methods=['POST'])
 def keep_datas():
